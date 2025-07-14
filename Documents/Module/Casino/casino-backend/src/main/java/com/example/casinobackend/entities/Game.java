@@ -3,6 +3,8 @@ package com.example.casinobackend.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +25,7 @@ public class Game {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "game")
     private Set<Playingattempt> playingattempts = new HashSet<>();
 

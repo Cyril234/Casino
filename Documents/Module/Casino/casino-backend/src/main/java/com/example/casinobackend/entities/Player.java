@@ -153,4 +153,19 @@ public class Player {
         this.playingattempts = playingattempts;
     }
 
+    public void incrementCoins(int amount) {
+        if (amount < 0)
+            throw new IllegalArgumentException("Amount must be positive");
+        this.coins += amount;
+    }
+
+    public void decrementCoins(int amount) {
+        if (amount < 0)
+            throw new IllegalArgumentException("Amount must be positive");
+        if (this.coins < amount)
+            throw new IllegalStateException("Not enough coins");
+        this.coins -= amount;
+    }
+    
+
 }
