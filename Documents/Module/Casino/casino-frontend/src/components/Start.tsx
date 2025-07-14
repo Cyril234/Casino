@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router";
 import "../styles/Start.css";
 
-// Beispielbild aus den Assets (Blackjack/21.png), du kannst das Bild nach Wunsch ändern
 import casinoBg from "../assets/Blackjack/21.png";
 import chipImg from "../assets/Blackjack/5.png";
 import cardImg from "../assets/Blackjack/1.png";
@@ -10,7 +9,7 @@ import cardImg2 from "../assets/Blackjack/2.png";
 export default function Start() {
     const navigate = useNavigate();
     function handleLogin() {
-        navigate("/login");
+        navigate("/login-overview");
     }
     return (
         <div className="start-container">
@@ -20,7 +19,7 @@ export default function Start() {
                 <h1 className="start-title">Willkommen im Casino!</h1>
                 <p className="start-desc">Erlebe echtes Casino-Feeling mit modernen Spielen und exklusivem Ambiente.</p>
                 <p className="start-desc">Registriere dich oder melde dich an und starte direkt durch!</p>
-                <button className="start-btn" onClick={handleLogin}>Los legen!</button>
+                <button className="start-btn" onClick={handleLogin}>Loslegen!</button>
                 <div className="start-deco">
                     <img src={chipImg} alt="Chip" className="chip" />
                     <img src={cardImg} alt="Karte" className="card" />
