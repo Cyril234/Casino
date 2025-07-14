@@ -68,8 +68,10 @@ public class BlackJackRepository {
 
         if (score > 21) {
             status = "BUST";
+            stand(player);
         } else if (score == 21) {
             status = "BLACKJACK";
+            stand(player);
         }
 
         return Map.of(
