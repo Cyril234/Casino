@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import'../../styles/LoginWithUsernameAndPassword.css';
 
 export default function LoginWithEmailAndPassword() {
   const [username, setUsername] = useState("");
@@ -32,40 +33,46 @@ export default function LoginWithEmailAndPassword() {
   };
 
   return (
-    <>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="username">Benutzername:</label>
-          <input
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
+    <div className="start-container">
+      <div className="start-card">
+        <div className="login-header">Login</div>
+        <div className="login-divider" />
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="login-group">
+            <label htmlFor="username">Benutzername:</label>
+            <input
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
 
-        <div>
-          <label htmlFor="password">Passwort:</label>
-          <input
-            type={showPw ? "text" : "password"}
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button
-            type="button"
-            onClick={() => setShowPw(!showPw)}
-            style={{ marginLeft: "0.5rem" }}
-          >
-            {showPw ? "Verbergen" : "Anzeigen"}
-          </button>
-        </div>
+          <div className="login-group">
+            <label htmlFor="password">Passwort:</label>
+            <input
+              type={showPw ? "text" : "password"}
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="start-btn"
+              onClick={() => setShowPw(!showPw)}
+              style={{ marginLeft: "0.5rem" }}
+            >
+              {showPw ? "Verbergen" : "Anzeigen"}
+            </button>
+          </div>
 
-        <button type="submit">Anmelden</button>
-      </form>
-
-      {status && <p>{status}</p>}
-    </>
+          <div className="login-buttons">
+            <button type="submit" className="start-btn">Anmelden</button>
+          </div>
+        </form>
+        {status && <div className="login-status">{status}</div>}
+      </div>
+    </div>
   );
 }
