@@ -22,7 +22,7 @@ public class BlackJackRepository {
     private final Map<Long, Deck> decks = new HashMap<>();
 
     @Transactional
-    public Playingattempt startGame(Player player, Game game, int betCoins) {
+    public Map<String, Object> startGame(Player player, Game game, int betCoins) {
         if (player.getCoins() < betCoins) {
             throw new IllegalArgumentException("Nicht genügend Coins");
         }
@@ -50,7 +50,11 @@ public class BlackJackRepository {
         attempt.setSettedcoins(betCoins);
         attempt.setFinishingbalance(player.getCoins());
 
-        return attempt;
+        return Map.of(
+            "attempt", attempt,
+            "playerHand", playerHand,           
+            "dealerHand", dealerHand
+        );
     }
 
     public Map<String, Object> hit(Player player) {
@@ -75,7 +79,7 @@ public class BlackJackRepository {
     }
 
     @Transactional
-    public Playingattempt stand(Player player) {
+    public Map<String, Object> stand(Player player) {
         Long id = player.getPlayerId();
         List<String> dealerHand = dealerHands.get(id);
         List<String> playerHand = playerHands.get(id);
@@ -93,7 +97,7 @@ public class BlackJackRepository {
         int outcome = 0;
         String result;
 
-        if (dealerScore > 21 || playerScore > dealerScore) {
+        if (dealerScore > 21 && playerScore < 21 || playerScore > dealerScore && playerScore <= 21) {
             outcome = 2;
             result = "PLAYER_WINS";
         } else if (dealerScore == playerScore) {
@@ -126,7 +130,12 @@ public class BlackJackRepository {
         dealerHands.remove(id);
         decks.remove(id);
 
-        return resultAttempt;
+         return Map.of(
+            "resultAttempt", resultAttempt,
+            "playerHand", playerHand,
+            "dealerHand", dealerHand,
+            "result", result
+        );
     }
 
     private int calculateScore(List<String> hand) {
