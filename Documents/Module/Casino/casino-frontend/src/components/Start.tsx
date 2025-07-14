@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/Start.css";
 
-// Beispielbild aus den Assets (Blackjack/21.png), du kannst das Bild nach Wunsch ändern
 import casinoBg from "../assets/Blackjack/21.png";
 import chipImg from "../assets/Blackjack/5.png";
 import cardImg from "../assets/Blackjack/1.png";
@@ -10,7 +9,7 @@ import cardImg2 from "../assets/Blackjack/2.png";
 export default function Start() {
     const navigate = useNavigate();
     function handleLogin() {
-        navigate("/login");
+        navigate("/login-overview");
     }
     return (
         <div className="start-container">
