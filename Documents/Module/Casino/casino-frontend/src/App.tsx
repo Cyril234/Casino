@@ -1,33 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Route, Routes } from 'react-router'
+import './styles/App.css'
+import Loginoverview from './components/login/Loginoverview'
+import LoginWithBadge from './components/login/LoginWithBadge'
+import LoginWithEmailAndPassword from './components/login/LoginWithEmailAndPassword'
+import LoginAsGuest from './components/login/LoginAsGuest'
+import Start from './components/Start'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Routes>
+        <Route path='/' element={<Start />} />
+        <Route path='/login-overview' element={<Loginoverview />} />
+        <Route path='/login-with-badge' element={<LoginWithBadge />} />
+        <Route path='/login-as-guest' element={<LoginAsGuest />} />
+        <Route path='/login-with-email-and-password' element={<LoginWithEmailAndPassword />} />
+      </Routes>
     </>
   )
 }
