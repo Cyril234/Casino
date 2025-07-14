@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import "../styles/Start.css";
 
 // Beispielbild aus den Assets (Blackjack/21.png), du kannst das Bild nach Wunsch ändern
