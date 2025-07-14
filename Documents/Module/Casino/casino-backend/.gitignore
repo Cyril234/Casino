@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# MySQL Datenbankdateien ignorieren
+Documents/Module/Casino/datenbank/mysql-data/
+
+
 ### STS ###
 .apt_generated
 .classpath
