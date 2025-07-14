@@ -2,6 +2,8 @@ package com.example.casinobackend.entities;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,9 +31,11 @@ public class Playingattempt {
     private int finishingbalance;
 
     @ManyToOne
+    @JsonIgnoreProperties("playingattempts")
     private Player player;
 
     @ManyToOne
+    @JsonIgnoreProperties("playingattempts")
     private Game game;
 
     public Long getPlayingattemptId() {

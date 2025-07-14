@@ -5,7 +5,10 @@ import java.util.Set;
 
 import com.example.casinobackend.enums.Colortheme;
 import com.example.casinobackend.enums.Soundstatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Builder.Default;
 
 @Entity
 @Table(name = "player")
@@ -34,27 +38,29 @@ public class Player {
     private String password;
 
     @Column(name = "coins", nullable = false)
-    private int coins;
+    private int coins = 500;
 
     @Column(name = "colortheme", nullable = false)
-    private Colortheme colortheme;
+    private Colortheme colortheme = Colortheme.LIGHT;
 
     @Column(name = "volume", nullable = false)
-    private int volume;
+    private int volume = 40;
 
     @Column(name = "soundstatus", nullable = false)
-    private Soundstatus soundstatus;
+    private Soundstatus soundstatus = Soundstatus.ON;
 
-    @Column(name = "badgenumber", nullable = true)
+    @Column(name = "badgenumber")
     private String badgenumber;
 
     @Column(name = "logins", nullable = false)
     private int logins;
 
     @OneToOne(mappedBy = "player")
+    @JsonIgnoreProperties("player")
     private Avatar avatar;
 
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Playingattempt> playingattempts = new HashSet<>();
 
     public Long getPlayerId() {
@@ -166,6 +172,4 @@ public class Player {
             throw new IllegalStateException("Not enough coins");
         this.coins -= amount;
     }
-    
-
 }

@@ -17,8 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.casinobackend.entities.Avatar;
 import com.example.casinobackend.entities.Player;
+import com.example.casinobackend.repositories.AvatarRepository;
 import com.example.casinobackend.repositories.PlayerRepository;
+
+import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/api/players")
@@ -26,6 +30,9 @@ import com.example.casinobackend.repositories.PlayerRepository;
 public class APIPlayerController {
     @Autowired
     PlayerRepository playerRepository;
+
+    @Autowired
+    AvatarRepository avatarRepository;
 
     @GetMapping
     public ResponseEntity<List<Player>> getPlayers() {
@@ -45,25 +52,45 @@ public class APIPlayerController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Player> deletePlayer(@PathVariable long id) {
-        if (playerRepository.findById(id).isPresent()) {
-            playerRepository.deleteById(id);
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
+    @Transactional
+    public ResponseEntity<Void> deletePlayer(@PathVariable Long id) {
+        Optional<Player> optionalPlayer = playerRepository.findById(id);
+        if (optionalPlayer.isPresent()) {
+            Player player = optionalPlayer.get();
+
+            Avatar avatar = player.getAvatar();
+            if (avatar != null) {
+                avatar.setPlayer(null);
+                avatarRepository.save(avatar);
+            }
+
+            player.setAvatar(null);
+            playerRepository.delete(player);
+
+            return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
+            return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping
-    ResponseEntity<Iterable<Player>> deleteAllPlayers() {
+    @Transactional
+    public ResponseEntity<Void> deleteAllPlayers() {
+
+        Iterable<Player> players = playerRepository.findAll();
+
+        for (Player player : players) {
+            Avatar avatar = player.getAvatar();
+            if (avatar != null) {
+                avatar.setPlayer(null);
+                avatarRepository.save(avatar);
+            }
+            player.setAvatar(null);
+        }
+
         playerRepository.deleteAll();
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(playerRepository.findAll());
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping

@@ -7,6 +7,7 @@ import com.example.casinobackend.enums.Shirt;
 import com.example.casinobackend.enums.Shoes;
 import com.example.casinobackend.enums.Skincolor;
 import com.example.casinobackend.enums.Trousers;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,6 +21,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "avatar")
 public class Avatar {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "avatar_id")
@@ -56,7 +58,8 @@ public class Avatar {
     private Shoes shoes;
 
     @OneToOne
-    @JoinColumn(name = "player_id")
+    @JoinColumn(name = "player_id") 
+    @JsonIgnore
     private Player player;
 
     public Long getAvatarId() {
@@ -154,5 +157,4 @@ public class Avatar {
     public void setPlayer(Player player) {
         this.player = player;
     }
-
 }

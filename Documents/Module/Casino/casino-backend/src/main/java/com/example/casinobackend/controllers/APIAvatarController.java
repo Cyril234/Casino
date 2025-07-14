@@ -18,7 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.casinobackend.entities.Avatar;
+import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.AvatarRepository;
+import com.example.casinobackend.repositories.PlayerRepository;
+
+import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/api/avatars")
@@ -27,6 +31,9 @@ public class APIAvatarController {
 
     @Autowired
     AvatarRepository avatarRepository;
+
+    @Autowired
+    PlayerRepository playerRepository;
 
     @GetMapping
     public ResponseEntity<List<Avatar>> getAvatars() {
@@ -46,25 +53,42 @@ public class APIAvatarController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Avatar> deleteAvatar(@PathVariable long id) {
-        if (avatarRepository.findById(id).isPresent()) {
-            avatarRepository.deleteById(id);
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
+    @Transactional
+    public ResponseEntity<Void> deleteAvatar(@PathVariable long id) {
+        Optional<Avatar> optionalAvatar = avatarRepository.findById(id);
+        if (optionalAvatar.isPresent()) {
+            Avatar avatar = optionalAvatar.get();
+
+            Player player = avatar.getPlayer();
+            if (player != null) {
+                player.setAvatar(null);
+                avatar.setPlayer(null);
+                playerRepository.save(player);
+            }
+
+            avatarRepository.delete(avatar);
+            return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
+            return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping
-    ResponseEntity<Iterable<Avatar>> deleteAllvatars() {
+    @Transactional
+    public ResponseEntity<Void> deleteAllAvatars() {
+        Iterable<Avatar> avatars = avatarRepository.findAll();
+
+        for (Avatar avatar : avatars) {
+            Player player = avatar.getPlayer();
+            if (player != null) {
+                player.setAvatar(null);
+                avatar.setPlayer(null);
+                playerRepository.save(player);
+            }
+        }
+
         avatarRepository.deleteAll();
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(avatarRepository.findAll());
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping
