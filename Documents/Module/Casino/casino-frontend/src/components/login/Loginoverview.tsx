@@ -7,6 +7,7 @@ export default function Loginoverview() {
     const goToEmailPwd = () => navigate('/login-with-email-and-password');
     const goToBadge = () => navigate('/login-with-badge');
     const goToGuest = () => navigate('/login-as-guest');
+    const goToRegister = () => navigate('/register');
 
     return (
         <div id="login-container">
@@ -22,6 +23,9 @@ export default function Loginoverview() {
 
                 <button id="guest-login" className="casino-button" onClick={goToGuest}>
                     Anmeldung als Gast
+                </button>
+                <button id="register" className='casino-button' onClick={goToRegister}>
+                    Noch kein Konto? - Registrieren!
                 </button>
             </div>
         </div>
