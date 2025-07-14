@@ -22,6 +22,8 @@ import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.AvatarRepository;
 import com.example.casinobackend.repositories.PlayerRepository;
 
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import jakarta.transaction.Transactional;
 
 @RestController
@@ -93,8 +95,14 @@ public class APIPlayerController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<Player> createPlayer(@RequestBody Player player) {
+        Argon2 argon2 = Argon2Factory.create();
+
+        char[] pw = player.getPassword().toCharArray();
+        player.setPassword(argon2.hash(2, 65536, 1, pw));
+        argon2.wipeArray(pw);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
