@@ -17,7 +17,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Builder.Default;
 
 @Entity
 @Table(name = "player")
@@ -34,8 +33,11 @@ public class Player {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = true)
     private String password;
+    
+    @Column(name = "token", nullable = false)
+    private String token;
 
     @Column(name = "coins", nullable = false)
     private int coins = 500;
@@ -159,6 +161,8 @@ public class Player {
         this.playingattempts = playingattempts;
     }
 
+    
+
     public void incrementCoins(int amount) {
         if (amount < 0)
             throw new IllegalArgumentException("Amount must be positive");
@@ -171,5 +175,13 @@ public class Player {
         if (this.coins < amount)
             throw new IllegalStateException("Not enough coins");
         this.coins -= amount;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
