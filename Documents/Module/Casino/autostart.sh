@@ -1,21 +1,39 @@
 #!/bin/bash
 
 # 1. Sicherstellen, dass Docker läuft
-sudo systemctl start docker
+if ! systemctl is-active --quiet docker; then
+    echo "Docker läuft nicht. Starte Docker..."
+    sudo systemctl start docker
+else
+    echo "Docker läuft bereits."
+fi
 
-# 2. MariaDB-Container starten (falls gestoppt)
-# Ersetze "my-mariadb" durch den echten Namen deines Containers!
-docker start my-mariadb
+# 2. Docker Compose starten (Container erstellen und starten)
+echo "Starte Docker-Container mit docker-compose..."
+docker compose up -d
 
-# 3. Visual Studio Code im Backend-Ordner öffnen
-# Passe den Pfad an dein Backend-Projekt an!
-code /home/pi/dein-backend-ordner
+# 3. Backend starten (Java Maven)
+BACKEND_DIR="/home/casino/Casino/Documents/Module/Casino/casino-backend"
 
-# 4. Backend starten (z.B. Node.js, Python, o.ä.)
-cd /home/pi/dein-backend-ordner
-npm start &
+if [ -d "$BACKEND_DIR" ]; then
+    cd "$BACKEND_DIR" || exit 1
+    echo "Starte Backend mit Maven Wrapper..."
+    ./mvnw spring-boot:run &
+else
+    echo "Backend-Verzeichnis existiert nicht: $BACKEND_DIR"
+    exit 1
+fi
 
-# 5. Warte 5 Sekunden, damit das Backend hochfahren kann
+# 4. Warte 5 Sekunden, damit das Backend hochfahren kann
 sleep 5
 
-# 6. Browser öffnen
+# 5. Browser öffnen für Backend-Seite (NICHT phpMyAdmin)
+WEBPAGE="http://localhost:8080"
+
+if command -v google-chrome > /dev/null; then
+    echo "Starte Browser im Fullscreen-Modus..."
+    google-chrome --start-fullscreen "$WEBPAGE"
+else
+    echo "Google Chrome ist nicht installiert. Öffne Standard-Browser..."
+    xdg-open "$WEBPAGE"
+fi
