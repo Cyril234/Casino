@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,6 +28,7 @@ public class Game {
 
     @JsonIgnore
     @OneToMany(mappedBy = "game")
+    @JsonIgnoreProperties("game")
     private Set<Playingattempt> playingattempts = new HashSet<>();
 
     public Long getGameId() {
