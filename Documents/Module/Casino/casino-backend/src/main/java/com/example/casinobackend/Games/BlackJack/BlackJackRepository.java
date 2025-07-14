@@ -15,6 +15,7 @@ public class BlackJackRepository {
     private final Map<Long, List<String>> dealerHands = new HashMap<>();
     private final Map<Long, Deck> decks = new HashMap<>();
 
+
     @Transactional
     public Playingattempt startGame(Player player, Game game, int betCoins) {
         if (player.getCoins() < betCoins) {
