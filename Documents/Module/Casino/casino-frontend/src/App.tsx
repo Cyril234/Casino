@@ -5,6 +5,8 @@ import LoginWithBadge from './components/login/LoginWithBadge'
 import LoginWithEmailAndPassword from './components/login/LoginWithEmailAndPassword'
 import LoginAsGuest from './components/login/LoginAsGuest'
 import Start from './components/Start'
+import Gameoverview from './components/Gamesoverview'
+import Register from './components/Register'
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path='/login-with-badge' element={<LoginWithBadge />} />
         <Route path='/login-as-guest' element={<LoginAsGuest />} />
         <Route path='/login-with-email-and-password' element={<LoginWithEmailAndPassword />} />
+        <Route path='/gameoverview' element={<Gameoverview />} />
+        <Route path='/register' element={<Register />} />
       </Routes>
     </>
   )
