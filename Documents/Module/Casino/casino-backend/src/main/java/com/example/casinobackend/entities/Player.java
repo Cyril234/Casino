@@ -55,7 +55,7 @@ public class Player {
     private String badgenumber;
 
     @Column(name = "logins", nullable = false)
-    private int logins;
+    private int logins = 0;
 
     @OneToOne(mappedBy = "player")
     @JsonIgnoreProperties("player")
