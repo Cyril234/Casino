@@ -67,10 +67,12 @@ export default function LoginWithEmailAndPassword() {
             >
               {showPw ? "Verbergen" : "Anzeigen"}
             </button>
+           
           </div>
 
           <div className="login-buttons">
             <button type="submit" className="start-btn">Anmelden</button>
+           <button className="start-btn" onClick={() => navigate('/login-overview')}>Zurück</button>
           </div>
         </form>
         {status && <div className="login-status">{status}</div>}
