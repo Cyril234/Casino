@@ -1,9 +1,7 @@
 package com.example.casinobackend.security;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,8 +10,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.PlayerRepository;
 
-import java.io.IOException;
-import java.util.Optional;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class TokenAuthFilter extends OncePerRequestFilter {
@@ -46,7 +46,6 @@ public class TokenAuthFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.equals("/api/login") || path.equals("/api/players/register") || path.startsWith("/api/enums");
-
+        return path.equals("/api/login") || path.equals("/api/loginUID") || path.equals("/api/loginGuest") || path.equals("/api/players/register") || path.startsWith("/api/enums");
     }
 }

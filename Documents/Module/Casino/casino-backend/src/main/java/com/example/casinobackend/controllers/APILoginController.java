@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.casinobackend.dataTransferObject.LoginPasswordRequest;
+import com.example.casinobackend.dataTransferObject.LogoutRequest;
 import com.example.casinobackend.dataTransferObject.TokenResponse;
 import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.PlayerRepository;
@@ -28,6 +29,8 @@ public class APILoginController {
     @Autowired
     PlayerRepository playerRepository;
 
+    private String UID = "";
+
     @PostMapping("api/login")
     public ResponseEntity<TokenResponse> login(@RequestBody LoginPasswordRequest request) {
         Argon2 argon2 = Argon2Factory.create();
@@ -41,6 +44,7 @@ public class APILoginController {
             token = generateToken();
             Player existing = player.get();
             existing.setToken(token);
+            existing.setLogins(existing.getLogins()+1);
             playerRepository.save(existing);
 
             return ResponseEntity
@@ -56,9 +60,105 @@ public class APILoginController {
         }
     }
 
+    @PostMapping("api/loginUID")
+    public ResponseEntity<TokenResponse> login() {
+        Argon2 argon2 = Argon2Factory.create();
+        String token;
+
+        System.out.println("ligin"+UID);
+
+        if (UID != ""){
+            
+            Optional<Player> player = playerRepository.findByToken(argon2.hash(2, 65536, 1, UID.toCharArray()));
+        
+
+            if (player.isPresent()){
+                token = generateToken();
+                Player existing = player.get();
+                existing.setToken(token);
+                existing.setLogins(existing.getLogins()+1);
+                playerRepository.save(existing);
+
+                return ResponseEntity
+                        .status(HttpStatus.CREATED)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(new TokenResponse(token));
+            }else{
+                token = generateToken();
+                Player newPlayer = new Player();
+                newPlayer.setToken(token);
+                newPlayer.setLogins(1);
+                playerRepository.save(newPlayer);
+
+                return ResponseEntity
+                        .status(HttpStatus.CREATED)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(new TokenResponse(token));
+            }
+
+
+        }else{
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(new TokenResponse(""));
+        }
+    }
+
+    @PostMapping("api/loginGuest")
+    public ResponseEntity<TokenResponse> loginGast() {
+        String token;
+
+        Optional<Player> tempOptional = playerRepository.findByUsername("temp");
+        Player temp = tempOptional.get();
+        token = generateToken();
+        temp.setToken(token);
+        temp.setLogins(temp.getLogins()+1);
+        temp.setCoins(10000);
+        playerRepository.save(temp);
+
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(new TokenResponse(token));
+    }
+
+    @PostMapping("/api/logout")
+    public ResponseEntity<String> logout(@RequestBody LogoutRequest logoutRequest) {
+        try {
+            // Just find by the token directly; do not hash!
+            Optional<Player> player = playerRepository.findByToken(logoutRequest.getToken());
+            if (player.isPresent()) {
+                Player player2 = player.get();
+                player2.setToken("");
+                playerRepository.save(player2);
+
+                return ResponseEntity.ok("Logout erfolgreich");
+            } else {
+                return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Kein gültiger Token angegeben");
+            }
+        } catch(Exception e) {
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Fehler beim Logout");
+        }
+    }
+
+
     public static String generateToken() {
         byte[] randomBytes = new byte[32];
         new SecureRandom().nextBytes(randomBytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
+
+    public String getUID() {
+        return UID;
+    }
+
+    public void setUID(String uID) {
+        UID = uID;
+        System.out.println(UID);
+    }    
 }
