@@ -7,8 +7,11 @@ import LoginAsGuest from './components/login/LoginAsGuest'
 import Start from './components/Start'
 import Gameoverview from './components/Gamesoverview'
 import Register from './components/Register'
+import Slideshow from './components/GameOverview/Slideshow'
+import { useEffect } from 'react';
 
 function App() {
+
   return (
     <>
       <Routes>
