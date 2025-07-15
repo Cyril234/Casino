@@ -35,12 +35,14 @@ export default function LoginWithEmailAndPassword() {
   return (
     <div className="start-container">
       <div className="start-card">
+
         <div className="login-header">Login</div>
         <div className="login-divider" />
         <form onSubmit={handleLogin} className="login-form">
           <div className="login-group">
             <label htmlFor="username">Benutzername:</label>
             <input
+              type="text"
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -65,10 +67,12 @@ export default function LoginWithEmailAndPassword() {
             >
               {showPw ? "Verbergen" : "Anzeigen"}
             </button>
+           
           </div>
 
           <div className="login-buttons">
             <button type="submit" className="start-btn">Anmelden</button>
+           <button className="start-btn" onClick={() => navigate('/login-overview')}>Zurück</button>
           </div>
         </form>
         {status && <div className="login-status">{status}</div>}
