@@ -6,9 +6,9 @@ import LoginWithEmailAndPassword from './components/login/LoginWithUsernameAndPa
 import LoginAsGuest from './components/login/LoginAsGuest'
 import Start from './components/Start'
 import Gameoverview from './components/Gamesoverview'
-import Register from './components/Register'
-import Slideshow from './components/GameOverview/Slideshow'
-import { useEffect } from 'react';
+import Register from './components/register/Register'
+import BlackJackGame from './components/Games/BlackJack'
+import CreateAvatar from './components/register/CreateAvatar'
 
 function App() {
 
@@ -22,6 +22,8 @@ function App() {
         <Route path='/login-with-email-and-password' element={<LoginWithEmailAndPassword />} />
         <Route path='/gameoverview' element={<Gameoverview />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/gameoverview/blackjack' element={<BlackJackGame />} />
+        <Route path='/create-avatar' element={<CreateAvatar />} />
       </Routes>
     </>
   )

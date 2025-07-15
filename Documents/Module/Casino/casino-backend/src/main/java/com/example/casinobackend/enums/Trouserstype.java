@@ -2,15 +2,13 @@ package com.example.casinobackend.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum Shirt {
-    WHITE("Weiss"),
-    BLACK("Schwarz"),
-    YELLOW("Gelb"),
-    PURPLE("Violett");
+public enum Trouserstype {
+    LONG("Lang"),
+    SHORT("Kurz");
 
     private final String label;
 
-    Shirt(String label) {
+    Trouserstype(String label) {
         this.label = label;
     }
 

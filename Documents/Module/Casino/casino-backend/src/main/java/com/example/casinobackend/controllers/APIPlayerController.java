@@ -1,5 +1,7 @@
 package com.example.casinobackend.controllers;
 
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +27,7 @@ import com.example.casinobackend.repositories.PlayerRepository;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import jakarta.transaction.Transactional;
+
 
 @RestController
 @RequestMapping("/api/players")
@@ -53,6 +56,15 @@ public class APIPlayerController {
                 .body(value)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/byToken/{token}")
+    public Player getPlayerId(@PathVariable String token) {
+        Optional<Player> player = playerRepository.findByToken(token);
+        if(player.isPresent()){
+            return player.get();
+        }
+        return null;
+    }
+    
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> deletePlayer(@PathVariable Long id) {
@@ -102,7 +114,6 @@ public class APIPlayerController {
         char[] pw = player.getPassword().toCharArray();
         player.setPassword(argon2.hash(2, 65536, 1, pw));
         argon2.wipeArray(pw);
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)

@@ -24,9 +24,9 @@ import com.example.casinobackend.repositories.PlayerRepository;
 
 import jakarta.transaction.Transactional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/avatars")
-@CrossOrigin(origins = "http://localhost:5173")
 public class APIAvatarController {
 
     @Autowired
@@ -113,7 +113,8 @@ public class APIAvatarController {
                     avatar.setEyecolor(newAvatar.getEyecolor());
                     avatar.setHeadgear(newAvatar.getHeadgear());
                     avatar.setShirt(newAvatar.getShirt());
-                    avatar.setTrousers(newAvatar.getTrousers());
+                    avatar.setTrouserstype(newAvatar.getTrouserstype());
+                    avatar.setTrouserscolor(newAvatar.getTrouserscolor());
                     avatar.setShoes(newAvatar.getShoes());
                     avatar.setPlayer(newAvatar.getPlayer());
                     return ResponseEntity

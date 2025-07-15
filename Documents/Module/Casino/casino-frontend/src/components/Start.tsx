@@ -13,7 +13,6 @@ export default function Start() {
     }
     return (
         <div className="start-container">
-            <img src={casinoBg} alt="Casino" className="start-bg" />
             <div className="start-overlay" />
             <div className="start-card modern">
                 <h1 className="start-title">Willkommen im Casino!</h1>

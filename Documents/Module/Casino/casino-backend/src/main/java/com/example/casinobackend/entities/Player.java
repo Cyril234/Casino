@@ -30,13 +30,13 @@ public class Player {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", nullable = true, unique = true)
     private String email;
 
     @Column(name = "password", nullable = true)
     private String password;
-    
-    @Column(name = "token")
+
+    @Column(name = "token", nullable = true)
     private String token;
 
     @Column(name = "coins", nullable = false)
@@ -55,7 +55,7 @@ public class Player {
     private String badgenumber;
 
     @Column(name = "logins", nullable = false)
-    private int logins = 0;
+    private int logins = 1;
 
     @OneToOne(mappedBy = "player")
     @JsonIgnoreProperties("player")
@@ -160,8 +160,6 @@ public class Player {
     public void setPlayingattempts(Set<Playingattempt> playingattempts) {
         this.playingattempts = playingattempts;
     }
-
-    
 
     public void incrementCoins(int amount) {
         if (amount < 0)
