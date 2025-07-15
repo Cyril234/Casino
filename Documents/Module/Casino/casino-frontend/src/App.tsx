@@ -7,6 +7,7 @@ import LoginAsGuest from './components/login/LoginAsGuest'
 import Start from './components/Start'
 import Gameoverview from './components/Gamesoverview'
 import Register from './components/Register'
+import BlackJackGame from './components/Games/BlackJack'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path='/login-with-email-and-password' element={<LoginWithEmailAndPassword />} />
         <Route path='/gameoverview' element={<Gameoverview />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/blackjack' element={<BlackJackGame playerId={1} />} />
       </Routes>
     </>
   )
