@@ -46,6 +46,6 @@ public class TokenAuthFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.equals("/api/login") || path.equals("/api/players/register");
+        return path.equals("/api/login") || path.equals("/api/loginUID") || path.equals("/api/loginGuest") || path.equals("/api/players/register");
     }
 }
