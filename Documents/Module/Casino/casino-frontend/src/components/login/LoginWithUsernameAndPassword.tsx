@@ -35,12 +35,14 @@ export default function LoginWithEmailAndPassword() {
   return (
     <div className="start-container">
       <div className="start-card">
+
         <div className="login-header">Login</div>
         <div className="login-divider" />
         <form onSubmit={handleLogin} className="login-form">
           <div className="login-group">
             <label htmlFor="username">Benutzername:</label>
             <input
+              type="text"
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
