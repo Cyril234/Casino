@@ -1,5 +1,7 @@
 package com.example.casinobackend.controllers;
 
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,7 +104,6 @@ public class APIPlayerController {
         char[] pw = player.getPassword().toCharArray();
         player.setPassword(argon2.hash(2, 65536, 1, pw));
         argon2.wipeArray(pw);
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)

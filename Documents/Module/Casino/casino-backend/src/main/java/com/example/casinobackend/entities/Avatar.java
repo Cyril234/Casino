@@ -6,7 +6,8 @@ import com.example.casinobackend.enums.Headgear;
 import com.example.casinobackend.enums.Shirt;
 import com.example.casinobackend.enums.Shoes;
 import com.example.casinobackend.enums.Skincolor;
-import com.example.casinobackend.enums.Trousers;
+import com.example.casinobackend.enums.Trouserscolor;
+import com.example.casinobackend.enums.Trouserstype;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -51,14 +52,17 @@ public class Avatar {
     @Column(name = "shirt", nullable = false)
     private Shirt shirt;
 
-    @Column(name = "trousers", nullable = false)
-    private Trousers trousers;
+    @Column(name = "trouserstype", nullable = false)
+    private Trouserstype trouserstype;
+
+    @Column(name = "trouserscolor", nullable = false)
+    private Trouserscolor trouserscolor;
 
     @Column(name = "shoes", nullable = false)
     private Shoes shoes;
 
     @OneToOne
-    @JoinColumn(name = "player_id") 
+    @JoinColumn(name = "player_id")
     @JsonIgnore
     private Player player;
 
@@ -134,12 +138,20 @@ public class Avatar {
         this.shirt = shirt;
     }
 
-    public Trousers getTrousers() {
-        return trousers;
+    public Trouserstype getTrouserstype() {
+        return trouserstype;
     }
 
-    public void setTrousers(Trousers trousers) {
-        this.trousers = trousers;
+    public void setTrouserstype(Trouserstype trouserstype) {
+        this.trouserstype = trouserstype;
+    }
+
+    public Trouserscolor getTrouserscolor() {
+        return trouserscolor;
+    }
+
+    public void setTrouserscolor(Trouserscolor trouserscolor) {
+        this.trouserscolor = trouserscolor;
     }
 
     public Shoes getShoes() {
@@ -157,4 +169,5 @@ public class Avatar {
     public void setPlayer(Player player) {
         this.player = player;
     }
+
 }

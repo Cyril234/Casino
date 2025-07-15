@@ -6,7 +6,8 @@ import LoginWithEmailAndPassword from './components/login/LoginWithUsernameAndPa
 import LoginAsGuest from './components/login/LoginAsGuest'
 import Start from './components/Start'
 import Gameoverview from './components/Gamesoverview'
-import Register from './components/Register'
+import Register from './components/register/Register'
+import CreateAvatar from './components/register/CreateAvatar'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path='/login-with-email-and-password' element={<LoginWithEmailAndPassword />} />
         <Route path='/gameoverview' element={<Gameoverview />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/create-avatar' element={<CreateAvatar />} />
       </Routes>
     </>
   )
