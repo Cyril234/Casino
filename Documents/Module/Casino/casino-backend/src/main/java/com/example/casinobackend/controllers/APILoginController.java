@@ -8,20 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.casinobackend.dataTransferObject.LoginPasswordRequest;
+import com.example.casinobackend.dataTransferObject.LogoutRequest;
 import com.example.casinobackend.dataTransferObject.TokenResponse;
 import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.PlayerRepository;
-import com.example.casinobackend.services.NFCReader;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 public class APILoginController {
 
     @Autowired
@@ -103,7 +105,7 @@ public class APILoginController {
         }
     }
 
-    @PostMapping("api/loginGast")
+    @PostMapping("api/loginGuest")
     public ResponseEntity<TokenResponse> loginGast() {
         String token;
 
@@ -119,6 +121,29 @@ public class APILoginController {
             .status(HttpStatus.CREATED)
             .contentType(MediaType.APPLICATION_JSON)
             .body(new TokenResponse(token));
+    }
+
+    @PostMapping("/api/logout")
+    public ResponseEntity<String> logout(@RequestBody LogoutRequest logoutRequest) {
+        try {
+            // Just find by the token directly; do not hash!
+            Optional<Player> player = playerRepository.findByToken(logoutRequest.getToken());
+            if (player.isPresent()) {
+                Player player2 = player.get();
+                player2.setToken("");
+                playerRepository.save(player2);
+
+                return ResponseEntity.ok("Logout erfolgreich");
+            } else {
+                return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Kein gültiger Token angegeben");
+            }
+        } catch(Exception e) {
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Fehler beim Logout");
+        }
     }
 
 

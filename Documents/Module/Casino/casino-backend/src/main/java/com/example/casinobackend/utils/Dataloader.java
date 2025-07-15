@@ -33,6 +33,7 @@ public class Dataloader implements ApplicationRunner {
         player.setLogins(1);
         player.setToken("");
         // Avatar und Playingattempts können bei Bedarf gesetzt werden
+        playerRepository.save(player);
 
         Player player1 = new Player();
         player1.setUsername("cyril");
@@ -46,6 +47,6 @@ public class Dataloader implements ApplicationRunner {
         player1.setLogins(1);
         player1.setToken("");
 
-        playerRepository.save(player);
+        playerRepository.save(player1);
     }
 }

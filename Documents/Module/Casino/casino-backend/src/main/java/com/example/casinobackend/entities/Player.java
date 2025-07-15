@@ -30,13 +30,13 @@ public class Player {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password", nullable = true)
     private String password;
     
-    @Column(name = "token", nullable = false)
+    @Column(name = "token")
     private String token;
 
     @Column(name = "coins", nullable = false)

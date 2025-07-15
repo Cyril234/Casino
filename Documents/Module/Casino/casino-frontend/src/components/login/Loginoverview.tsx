@@ -10,23 +10,24 @@ export default function Loginoverview() {
     const goToRegister = () => navigate('/register');
 
     return (
-        <div id="login-container">
-            <h1 id="login-title">Anmeldevariante wählen...</h1>
-            <div id="button-group">
-                <button id="email-login" className="casino-button" onClick={goToEmailPwd}>
-                    Anmeldung mit Email und Passwort
-                </button>
-
-                <button id="badge-login" className="casino-button" onClick={goToBadge}>
-                    Anmeldung mit Badge
-                </button>
-
-                <button id="guest-login" className="casino-button" onClick={goToGuest}>
-                    Anmeldung als Gast
-                </button>
-                <button id="register" className='casino-button' onClick={goToRegister}>
-                    Noch kein Konto? - Registrieren!
-                </button>
+        <div className="start-container">
+            <div className="start-card">
+                <div className="login-header">Anmeldevariante wählen...</div>
+                <div className="login-divider"></div>
+                <div className="login-buttons">
+                    <button className="start-btn" onClick={goToEmailPwd}>
+                        Anmeldung mit Username und Passwort
+                    </button>
+                    <button className="start-btn" onClick={goToBadge}>
+                        Anmeldung mit Badge
+                    </button>
+                    <button className="start-btn" onClick={goToGuest}>
+                        Anmeldung als Gast
+                    </button>
+                    <button className='start-btn' onClick={goToRegister}>
+                        Noch kein Konto? - Registrieren!
+                    </button>
+                </div>
             </div>
         </div>
     );
