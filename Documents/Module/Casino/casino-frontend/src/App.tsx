@@ -20,7 +20,7 @@ function App() {
         <Route path='/login-with-email-and-password' element={<LoginWithEmailAndPassword />} />
         <Route path='/gameoverview' element={<Gameoverview />} />
         <Route path='/register' element={<Register />} />
-        <Route path='/blackjack' element={<BlackJackGame playerId={1} />} />
+        <Route path='/gameoverview/blackjack' element={<BlackJackGame />} />
       </Routes>
     </>
   )

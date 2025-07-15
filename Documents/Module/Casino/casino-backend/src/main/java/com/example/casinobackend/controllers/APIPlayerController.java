@@ -26,6 +26,7 @@ import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import jakarta.transaction.Transactional;
 
+
 @RestController
 @RequestMapping("/api/players")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -53,6 +54,15 @@ public class APIPlayerController {
                 .body(value)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/byToken/{token}")
+    public Player getPlayerId(@PathVariable String token) {
+        Optional<Player> player = playerRepository.findByToken(token);
+        if(player.isPresent()){
+            return player.get();
+        }
+        return null;
+    }
+    
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> deletePlayer(@PathVariable Long id) {
