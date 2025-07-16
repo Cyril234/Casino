@@ -10,8 +10,8 @@ import Register from './components/register/Register'
 import BlackJackGame from './components/Games/BlackJack'
 import CreateAvatar from './components/register/CreateAvatar'
 import Logout from './components/logout/Logout'
-import Settings from './components/Settings'
 import EditProfile from './components/editProfile/EditProfile'
+import Settings from './components/Settings'
 
 function App() {
 
