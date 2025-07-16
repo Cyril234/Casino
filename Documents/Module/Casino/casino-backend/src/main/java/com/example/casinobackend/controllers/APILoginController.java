@@ -23,6 +23,7 @@ import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 
 @RestController
+
 @CrossOrigin(origins = "http://localhost:5173")
 public class APILoginController {
 
@@ -69,7 +70,7 @@ public class APILoginController {
 
         if (UID != ""){
             
-            Optional<Player> player = playerRepository.findByToken(argon2.hash(2, 65536, 1, UID.toCharArray()));
+            Optional<Player> player = playerRepository.findPlayerByToken(argon2.hash(2, 65536, 1, UID.toCharArray()));
         
 
             if (player.isPresent()){
@@ -127,7 +128,7 @@ public class APILoginController {
     public ResponseEntity<String> logout(@RequestBody LogoutRequest logoutRequest) {
         try {
             // Just find by the token directly; do not hash!
-            Optional<Player> player = playerRepository.findByToken(logoutRequest.getToken());
+            Optional<Player> player = playerRepository.findPlayerByToken(logoutRequest.getToken());
             if (player.isPresent()) {
                 Player player2 = player.get();
                 player2.setToken("");

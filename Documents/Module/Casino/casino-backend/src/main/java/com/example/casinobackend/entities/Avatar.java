@@ -63,7 +63,6 @@ public class Avatar {
 
     @OneToOne
     @JoinColumn(name = "player_id")
-    @JsonIgnore
     private Player player;
 
     public Long getAvatarId() {

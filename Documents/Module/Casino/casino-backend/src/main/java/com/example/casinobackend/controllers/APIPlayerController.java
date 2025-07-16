@@ -1,7 +1,5 @@
 package com.example.casinobackend.controllers;
 
-import java.security.SecureRandom;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.casinobackend.entities.Avatar;
 import com.example.casinobackend.entities.Player;
@@ -27,11 +26,14 @@ import com.example.casinobackend.repositories.PlayerRepository;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import jakarta.transaction.Transactional;
-
-
+ 
+@CrossOrigin (origins = "http://localhost:5173", allowedHeaders = "*", methods = { RequestMethod.GET, 
+    RequestMethod.DELETE, 
+    RequestMethod.PUT, 
+    RequestMethod.POST,
+        RequestMethod.OPTIONS })
 @RestController
 @RequestMapping("/api/players")
-@CrossOrigin(origins = "http://localhost:5173")
 public class APIPlayerController {
     @Autowired
     PlayerRepository playerRepository;
@@ -57,14 +59,14 @@ public class APIPlayerController {
     }
 
     @GetMapping("/byToken/{token}")
-    public Player getPlayerId(@PathVariable String token) {
-        Optional<Player> player = playerRepository.findByToken(token);
-        if(player.isPresent()){
-            return player.get();
-        }
-        return null;
+    public ResponseEntity<Player> getPlayerByToken(@PathVariable String token) {
+        return playerRepository.findPlayerByToken(token)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .build());
     }
-    
+
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> deletePlayer(@PathVariable Long id) {

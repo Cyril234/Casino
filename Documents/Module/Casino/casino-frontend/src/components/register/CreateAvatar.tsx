@@ -39,6 +39,8 @@ export default function CreateAvatar() {
     const [shoesIdx, setShoesIdx] = useState(0);
     const [beard, setBeard] = useState(false);
 
+    const [playerId, setPlayerId] = useState<number | null>(null);
+
     const fetchEnum = async (key: string, setter: (arr: string[]) => void) => {
         try {
             const res = await fetch(`http://localhost:8080/api/enums/${key}`, {
@@ -62,6 +64,38 @@ export default function CreateAvatar() {
         fetchEnum("shoes", setShoesOptions);
     }, []);
 
+    useEffect(() => {
+        const fetchPlayerId = async () => {
+            if (!token) {
+                console.error("Kein Auth-Token gefunden.");
+                return;
+            }
+
+            try {
+                const res = await fetch(`http://localhost:8080/api/players/byToken/${token}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        Accept: "*/*",
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!res.ok) {
+                    throw new Error(`HTTP Fehler: ${res.status}`);
+                }
+
+                const data = await res.json();
+                setPlayerId(data.playerId);
+                console.log(data.playerId)
+            } catch (err) {
+                console.error("Fehler bei dem Bekommen der SpielerId:", err);
+            }
+        };
+
+        fetchPlayerId();
+    }, [token]);
+
     const enumsLoaded =
         haircolorOptions.length &&
         skincolorOptions.length &&
@@ -81,7 +115,9 @@ export default function CreateAvatar() {
         const avatarPayload = {
             name: avatarName,
             description: avatarDescription,
-            playerId: player.id,
+            player: {
+                playerId: playerId
+            },
             haircolor: haircolorOptions[haircolorIdx],
             skincolor: skincolorOptions[skincolorIdx],
             beard,

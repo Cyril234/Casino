@@ -14,14 +14,3 @@ services:
       - ./mysql-data:/var/lib/mysql
     ports:
       - "3306:3306"
-
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: phpmyadmin-casino-v1
-    restart: always
-    environment:
-      PMA_HOST: mariadb
-      PMA_PORT: 3306
-      MYSQL_ROOT_PASSWORD: root123
-    ports:
-      - "8090:80"

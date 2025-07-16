@@ -9,6 +9,7 @@ export default function BlackJackGame() {
   const [gameActive, setGameActive] = useState(false);
   const [playerId, setPlayerId] = useState<number | null>(null);
   const authToken = sessionStorage.getItem("authToken");
+  const [data, setData] = useState({});
 
   useEffect(() => {
     const fetchPlayerId = async () => {
@@ -31,9 +32,10 @@ export default function BlackJackGame() {
         }
 
         const data = await res.json();
+        setData(data);
         setPlayerId(data.playerId);
-        console.log(data.playerId)
       } catch (err) {
+        console.log(data)
         console.error("Fehler bei dem Bekommen der SpielerId:", err);
       }
     };

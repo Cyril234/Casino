@@ -25,6 +25,13 @@ public class TokenAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        if (request.getMethod().equals("OPTIONS")) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+            response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
+            response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+            return;
+        }
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -32,20 +39,21 @@ public class TokenAuthFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
-        Optional<Player> player = playerRepository.findByToken(token);
 
+        Optional<Player> player = playerRepository.findPlayerByToken(token);
         if (player.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-
-        // Token ist gültig, weiter mit dem Request
         filterChain.doFilter(request, response);
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.equals("/api/login") || path.equals("/api/loginUID") || path.equals("/api/loginGuest") || path.equals("/api/players/register") || path.startsWith("/api/enums");
+        return path.equals("/api/login") || path.equals("/api/loginUID") || path.equals("/api/loginGuest")
+                || path.equals("/api/players/register")
+                || path.startsWith("/api/players/byToken/")
+                || path.startsWith("/api/enums");
     }
 }

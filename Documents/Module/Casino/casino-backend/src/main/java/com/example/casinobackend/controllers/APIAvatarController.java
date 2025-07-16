@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.casinobackend.entities.Avatar;
@@ -24,7 +25,11 @@ import com.example.casinobackend.repositories.PlayerRepository;
 
 import jakarta.transaction.Transactional;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin (origins = "http://localhost:5173", allowedHeaders = "*", methods = { RequestMethod.GET, 
+    RequestMethod.DELETE, 
+    RequestMethod.PUT, 
+    RequestMethod.POST,
+        RequestMethod.OPTIONS })
 @RestController
 @RequestMapping("/api/avatars")
 public class APIAvatarController {

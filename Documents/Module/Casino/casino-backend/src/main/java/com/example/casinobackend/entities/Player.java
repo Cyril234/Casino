@@ -55,10 +55,11 @@ public class Player {
     private String badgenumber;
 
     @Column(name = "logins", nullable = false)
-    private int logins = 1;
+    private int logins = 0;
 
     @OneToOne(mappedBy = "player")
     @JsonIgnoreProperties("player")
+    @JsonIgnore
     private Avatar avatar;
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)

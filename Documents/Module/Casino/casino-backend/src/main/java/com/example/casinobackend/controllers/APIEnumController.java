@@ -16,6 +16,7 @@ import com.example.casinobackend.enums.Trouserstype;
 
 @RestController
 @RequestMapping("/api/enums")
+
 @CrossOrigin(origins = "http://localhost:5173")
 public class APIEnumController {
 
