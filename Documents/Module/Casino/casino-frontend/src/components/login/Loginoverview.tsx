@@ -9,6 +9,13 @@ export default function Loginoverview() {
     const goToGuest = () => navigate('/login-as-guest');
     const goToRegister = () => navigate('/register');
 
+    if (sessionStorage.getItem("authToken")) {
+        sessionStorage.removeItem("authToken");
+    }
+    if (sessionStorage.getItem("username")) {
+        sessionStorage.removeItem("username");
+    }
+
     return (
         <div className="start-container">
             <div className="start-card">
