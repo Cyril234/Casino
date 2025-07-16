@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router";
 import "../styles/Start.css";
 
-import chipImg from "../assets/Blackjack/6♥.png";
-import cardImg from "../assets/Blackjack/1deckred.png";
-import cardImg2 from "../assets/Blackjack/3♥.png";
+import casinoBg from "../assets/Blackjack/2♠.png";
+import chipImg from "../assets/Blackjack/3♠.png";
+import cardImg from "../assets/Blackjack/4♠.png";
+import cardImg2 from "../assets/Blackjack/5♠.png";
 
 export default function Start() {
     const navigate = useNavigate();

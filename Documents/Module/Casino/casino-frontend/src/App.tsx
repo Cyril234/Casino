@@ -11,6 +11,7 @@ import BlackJackGame from './components/Games/BlackJack'
 import CreateAvatar from './components/register/CreateAvatar'
 
 function App() {
+
   return (
     <>
       <Routes>
