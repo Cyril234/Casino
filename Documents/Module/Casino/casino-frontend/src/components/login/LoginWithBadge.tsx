@@ -1,4 +1,4 @@
-import { redirect, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import '../../styles/LoginWithBadge.css';
 export default function LoginWithBadge() {
         const navigate = useNavigate();

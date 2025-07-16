@@ -1,10 +1,10 @@
 .slide {
     width: 1400px;
-    height: 800px;
+    height: 900px;
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
-    padding: 32px;
+    padding: 1px;
     text-align: center;
     display: flex;
     justify-content: center;  /* Zentriert horizontal */
@@ -12,13 +12,16 @@
 }
 
 .slide-content {
+    height: 100%;
+    width: 100%;
     min-height: 80px;
     font-size: 32px;
-    margin-top: 40px;
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    border-radius: 12px;
 }
 
 .slide-controls {

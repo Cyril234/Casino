@@ -37,17 +37,17 @@ html, body {
 .orange-blob {
   width: 2250px;
   height: 2250px;
-  left: 0px;
-  top: 0px;
+  left: -800px;
+  top: -800px;
   background: radial-gradient(circle, orange 0%, rgba(255, 165, 0, 0.8) 30%, rgba(255, 165, 0, 0.4) 60%, transparent 100%);
 }
 
 .pink-blob {
   width: 2250px;
   height: 2250px;
-  left: 0px;
-  top: 0px;
-  background: radial-gradient(circle, #ff4ccd 0%, rgba(255, 76, 205, 0.8) 25%, rgba(255, 76, 205, 0.4) 50%, transparent 100%);
+  left: 160px;
+  top: -80px;
+  background: radial-gradient(circle, #ff4ccd 0%, rgba(255, 76, 205, 0.8) 30%, rgba(255, 76, 205, 0.4) 60%, transparent 100%);
 }
 
 @keyframes blob-pulse {

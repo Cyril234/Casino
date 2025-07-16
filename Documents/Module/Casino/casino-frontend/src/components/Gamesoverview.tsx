@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import "../styles/Gameoverview.css"
-import Slideshow from "./GameOverview/Slideshow";
 import { useNavigate } from "react-router-dom";
+import "../styles/Gameoverview.css";
+import Slideshow from "./GameOverview/Slideshow";
 
 export default function Gameoverview() {
   const [posXPink, setPosXPink] = useState(-2000);
@@ -66,16 +66,22 @@ export default function Gameoverview() {
 
   // Keyboard-Handling
   useEffect(() => {
+    const token = sessionStorage.getItem("authToken");
+    if (!token) {
+      navigate("/");
+      return;
+    }
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "Enter") {
         setLastKey(e.key);
       }
     };
+
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [navigate]);
 
-  // Callback für das Child, um den Key zurückzusetzen
   const handleKeyUsed = () => setLastKey(null);
 
   // Blob Bewegung mit useEffect + Intervall
@@ -117,9 +123,6 @@ export default function Gameoverview() {
     return () => clearInterval(intervalId);
   }, []); // nur einmal beim Mounten!
 
-  function logout(){
-
-  }
 
   return (
     <div className="gameoverview diagonal-grid">
@@ -133,7 +136,7 @@ export default function Gameoverview() {
         <div className="content">
             <Slideshow input={lastKey} onKeyUsed={handleKeyUsed} />
         </div>
-        <button className="logoutButton" onClick={logout}>logout</button>
+        <button className="logoutButton" onClick={() => navigate('/logout')}>logout</button>
     </div>
   );
 }

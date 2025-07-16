@@ -38,14 +38,14 @@ public class APILoginController {
         String token;
 
         Optional<Player> player = playerRepository.findByUsername(request.getUsername());
-        
+
         System.out.println(player);
 
-        if (player.isPresent() && argon2.verify(player.get().getPassword(), request.getPassword().toCharArray())){
+        if (player.isPresent() && argon2.verify(player.get().getPassword(), request.getPassword().toCharArray())) {
             token = generateToken();
             Player existing = player.get();
             existing.setToken(token);
-            existing.setLogins(existing.getLogins()+1);
+            existing.setLogins(existing.getLogins() + 1);
             playerRepository.save(existing);
 
             return ResponseEntity
@@ -53,7 +53,7 @@ public class APILoginController {
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(new TokenResponse(token));
 
-        }else{
+        } else {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -66,25 +66,24 @@ public class APILoginController {
         Argon2 argon2 = Argon2Factory.create();
         String token;
 
-        System.out.println("ligin"+UID);
+        System.out.println("ligin" + UID);
 
-        if (UID != ""){
-            
+        if (UID != "") {
+
             Optional<Player> player = playerRepository.findPlayerByToken(argon2.hash(2, 65536, 1, UID.toCharArray()));
-        
 
-            if (player.isPresent()){
+            if (player.isPresent()) {
                 token = generateToken();
                 Player existing = player.get();
                 existing.setToken(token);
-                existing.setLogins(existing.getLogins()+1);
+                existing.setLogins(existing.getLogins() + 1);
                 playerRepository.save(existing);
 
                 return ResponseEntity
                         .status(HttpStatus.CREATED)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(new TokenResponse(token));
-            }else{
+            } else {
                 token = generateToken();
                 Player newPlayer = new Player();
                 newPlayer.setToken(token);
@@ -97,8 +96,7 @@ public class APILoginController {
                         .body(new TokenResponse(token));
             }
 
-
-        }else{
+        } else {
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -106,22 +104,22 @@ public class APILoginController {
         }
     }
 
-    @PostMapping("api/loginGuest")
+    @PostMapping("api/loginAsGuest")
     public ResponseEntity<TokenResponse> loginGast() {
         String token;
 
-        Optional<Player> tempOptional = playerRepository.findByUsername("temp");
-        Player temp = tempOptional.get();
+        Optional<Player> gastOptional = playerRepository.findByUsername("gast");
+        Player gast = gastOptional.get();
         token = generateToken();
-        temp.setToken(token);
-        temp.setLogins(temp.getLogins()+1);
-        temp.setCoins(10000);
-        playerRepository.save(temp);
+        gast.setToken(token);
+        gast.setLogins(gast.getLogins() + 1);
+        gast.setCoins(10000);
+        playerRepository.save(gast);
 
         return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(new TokenResponse(token));
+                .status(HttpStatus.CREATED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new TokenResponse(token));
     }
 
     @PostMapping("/api/logout")
@@ -137,16 +135,15 @@ public class APILoginController {
                 return ResponseEntity.ok("Logout erfolgreich");
             } else {
                 return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Kein gültiger Token angegeben");
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Kein gültiger Token angegeben");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Fehler beim Logout");
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Fehler beim Logout");
         }
     }
-
 
     public static String generateToken() {
         byte[] randomBytes = new byte[32];
@@ -161,5 +158,5 @@ public class APILoginController {
     public void setUID(String uID) {
         UID = uID;
         System.out.println(UID);
-    }    
+    }
 }

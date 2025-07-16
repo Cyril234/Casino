@@ -4,9 +4,10 @@ import "../../styles/Slideshow.css";
 import { useNavigate } from "react-router-dom";
 
 const slides = [
-  { id: 1, text: "Willkommen zur Slideshow!", link:'/register' },
-  { id: 2, text: "Das ist die zweite Folie.", link:'/register' },
-  { id: 3, text: "Und das ist die letzte Folie.", link:'/register' },
+  { id: 1, img: "/blackjackTitelbild.png", link:'/' },
+  { id: 2, img: "/rouletteTitelbild.png", link:'/' },
+  { id: 3, img: "/horseRacingTitelbild.png", link:'/' },
+  { id: 4, img: "/slotMachineTitelbild.png", link:'/' },
 ];
 
 interface SlideshowProps {
@@ -38,7 +39,11 @@ export default function Slideshow({ input, onKeyUsed }: SlideshowProps) {
   return (
     <div className="slide">
       <div className="slide-content">
-        {slides[current].text}
+        <img 
+          src={slides[current].img} 
+          alt="Testbild"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
       </div>
     </div>
   );
