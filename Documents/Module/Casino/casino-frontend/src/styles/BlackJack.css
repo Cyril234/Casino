@@ -15,25 +15,25 @@ body {
  
 /* Spielfeld-Hintergrund */
 .blackjack-table {
-  width: 790px;
-  height: 512px;
+  width: 1960px;
+  height: 1080px;
   background-size: cover;
-  background-position: center;
+  
   position: relative;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
   border-radius: 12px;
 }
  
-/* Karten allgemeiner Stil */
+/* Karten-Styling */
 .card {
-  width: 60px;
-  height: 90px;
+  width: 120px;
+  height: 180px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.6);
   background-size: cover;
   background-position: center;
-  /* NICHT absolut positionieren! */
+  z-index: 1;
 }
  
 /* Kartenbereiche */
@@ -43,20 +43,18 @@ body {
   display: flex;
   gap: 8px;
 }
- 
 .dealer-hand {
   top: 100px;
   left: 50%;
   transform: translateX(-50%);
 }
- 
 .player-hand {
   bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
 }
  
-/* Punkteanzeigen */
+/* Punktestand */
 .score {
   position: absolute;
   background: rgba(0, 0, 0, 0.6);
@@ -66,18 +64,27 @@ body {
   font-weight: bold;
   font-size: 1rem;
   box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+  z-index: 10;
 }
- 
 .score.dealer {
-  top: 75px;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.score.player {
+  bottom: 90px;
   left: 50%;
   transform: translateX(-50%);
 }
  
-.score.player {
-  bottom: 75px;
-  left: 50%;
-  transform: translateX(-50%);
+/* Wertanzeige unter dem Score */
+.hand-value {
+  font-size: 1.2rem;
+  margin-top: 2px;
+  opacity: 0.85;
+  color: #ffd700;
+  position: relative;
+  z-index: 11;
 }
  
 /* Button-Leiste */
@@ -89,24 +96,21 @@ body {
   display: flex;
   gap: 20px;
 }
- 
 .controls button {
   background: linear-gradient(145deg, #ffe97f, #d6a431);
   border: none;
   border-radius: 10px;
   padding: 10px 20px;
-  font-size: 1rem;
+  font-size: 1.75rem;
   font-weight: bold;
   color: #222;
   cursor: pointer;
   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.5);
   transition: transform 0.1s, box-shadow 0.1s;
 }
- 
 .controls button:hover {
   background: linear-gradient(145deg, #fff8b0, #ddb84a);
 }
- 
 .controls button:active {
   transform: translateY(2px);
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.6);
@@ -115,8 +119,10 @@ body {
 /* Einsatzbereich */
 .bet-area {
   position: absolute;
-  top: 50%;
-  right: 20px;
+  width: 15rem;
+  height: 9rem;
+  top: 40%;
+  right: 150px;
   transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.1);
   padding: 10px;
@@ -125,17 +131,18 @@ body {
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
- 
 .bet-area input {
-  width: 60px;
-  padding: 6px;
+  width: 90px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 12px;
   border: none;
   border-radius: 4px;
   text-align: center;
   font-size: 1rem;
+  
   margin-bottom: 6px;
 }
- 
 .bet-area button {
   width: 100%;
   padding: 6px 0;
@@ -143,161 +150,102 @@ body {
   border: none;
   border-radius: 4px;
   font-weight: bold;
+  font-size: 1.5rem;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
  
-/* Statusbox */
-.status-box {
+/* Guthaben-Anzeige */
+.balance-area {
   position: absolute;
   top: 10px;
-  left: 10px;
+  right: 10px;
   background: rgba(0,0,0,0.6);
+  color: #fff;
   padding: 0.5rem 1rem;
   border-radius: 6px;
-  color: #fff;
+  font-weight: bold;
+  font-size: 2rem;
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  z-index: 10;
 }
-/* Status-Box Grundstil */
+ 
+/* Fehlernachricht */
+.error {
+  color: red;
+  margin-top: 0.5rem;
+}
+ 
+/* Ergebnis-Popup (Fade In/Out 2s) */
 .status-box {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   padding: 0.75rem 1.25rem;
   border-radius: 8px;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: bold;
   color: #fff;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  display: inline-block;
-  transition: transform 0.2s;
+  z-index: 100;
+  opacity: 0;
+  animation: fadeInOut 2s forwards;
 }
- 
-/* Spezifische Farben */
-.status-box.win {
-  background: rgba(75, 181, 67, 0.9);
-}
-.status-box.lose {
-  background: rgba(181, 67, 67, 0.9);
-}
-.status-box.draw {
-  background: rgba(200, 180, 50, 0.9);
-}
-.status-box.error {
-  background: rgba(120, 120, 120, 0.9);
-}
- 
-/* Sanfte Pop‑Animation bei Einblenden */
-.status-box.win,
-.status-box.lose,
-.status-box.draw,
-.status-box.error {
-  transform: scale(0);
-  animation: popIn 0.3s forwards;
-}
-@keyframes popIn {
-  to { transform: scale(1); }
-}
- 
-/* Kleine Münz-Anzeige bei Gewinn */
-.status-box .coins {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  opacity: 0.85;
-}
-/* ... alles bisherige ... */
- 
-/* Guthaben-Anzeige */
-
-.balance-area {
-
-  position: absolute;
-
-  top: 10px;
-
-  right: 10px;
-
-  background: rgba(0,0,0,0.6);
-
-  color: #fff;
-
-  padding: 0.5rem 1rem;
-
-  border-radius: 6px;
-
-  font-weight: bold;
-
-  box-shadow: 0 0 6px rgba(0,0,0,0.4);
-
-}
- 
-/* Status-Box Farben & Animation (wie vorher) */
-
-.status-box { /* ... */ }
-
 .status-box.win { background: rgba(75,181,67,0.9); }
-
 .status-box.lose { background: rgba(181,67,67,0.9); }
-
-.status-box.draw { background: rgba(200,180,50,0.9); }
-
-.status-box.error { background: rgba(120,120,120,0.9); }
  
-/* Münzen-Zusatz bei Gewinn */
-
-.status-box .coins {
-
-  margin-top: 0.5rem;
-
-  font-size: 0.9rem;
-
-  opacity: 0.85;
-
+@keyframes fadeInOut {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { opacity: 0; }
 }
-/* Hand-Wert unter dem Score */
-.hand-value {
-  font-size: 0.85rem;
-  margin-top: 2px;
-  opacity: 0.85;
-  color: #ffd700;
+/* kleines Münz‑Icon in der Balance */
+.coin-small {
+  width: 3rem;
+  height: 3rem;
+  vertical-align: middle;
+  margin-left: 0.5em;
 }
  
-/* Coins-Anzeige bei Verlust */
-.status-box .coins {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  opacity: 0.85;
+/* Münz‑Icon im Ergebnis‑Popup hat feste Größe */
+.coin-fixed {
+  width: 3rem;
+  height: 3rem;
+  margin-left: 0.5em;
 }
  
-/* Balance-Anzeige (wie gehabt) */
-.balance-area {
+/* Popup‑Box zentriert mit Fade‑Animation */
+.status-box {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1.3rem;
   font-weight: bold;
-  box-shadow: 0 0 6px rgba(0,0,0,0.4);
-}
-.card {
-  z-index: 1;
-}
- 
-/* Score-Boxen über den Karten */
-.score {
-  position: absolute; /* bleibt wie gehabt */
-  z-index: 10;        /* <-- hier */
-  background: rgba(0, 0, 0, 0.6);
-  /* … restliche Styles … */
+  color: #fff;
+  text-align: center;
+  z-index: 100;
+  opacity: 0;
+  animation: fadeInOut 2s forwards; /* startet bei 0 und endet bei 0 nach 2s */
 }
  
-/* Hand-Wert innerhalb der Score-Box */
-.hand-value {
-  position: relative; /* damit z-index greift */
-  z-index: 11;        /* noch eins drüber */
-  font-size: 0.85rem;
-  margin-top: 2px;
-  opacity: 0.85;
-  color: #ffd700;
+.status-box.win { background: rgba( 75,181, 67,0.9); }
+.status-box.lose{ background: rgba(181, 67, 67,0.9); }
+ 
+.result-amount {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+ 
+@keyframes fadeInOut {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { opacity: 0; }
 }

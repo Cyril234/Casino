@@ -41,20 +41,12 @@ public class Dataloader implements ApplicationRunner {
         player1.setLogins(1);
         player1.setToken("");
 
-        playerRepository.save(player1);
-        // Spiel "Blackjack" immer hinzufügen
-        if (gameRepository.findByTitle("Blackjack").isPresent()) {
-            return;
-        };
-
-        Game blackjack = new Game();
-        blackjack.setTitle("Blackjack");
-        gameRepository.save(blackjack);
-
         if (playerRepository.findByUsername("gast").isPresent()) {
             return;
         };
-
+        playerRepository.save(player1);
+        // Spiel "Blackjack" immer hinzufügen
+        
         Player player = new Player();
         player.setUsername("gast");
         player.setCoins(1000);
@@ -65,7 +57,15 @@ public class Dataloader implements ApplicationRunner {
         player.setToken("");
         playerRepository.save(player);
 
-        
+        if (gameRepository.findByTitle("Blackjack").isPresent()) {
+            return;
+        };
+
+        Game blackjack = new Game();
+        blackjack.setTitle("Blackjack");
+        gameRepository.save(blackjack);
+
+
 
         
     }
