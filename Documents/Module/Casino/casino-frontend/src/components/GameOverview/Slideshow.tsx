@@ -8,6 +8,8 @@ const slides = [
   { id: 2, img: "/rouletteTitelbild.png", link:'/' },
   { id: 3, img: "/horseRacingTitelbild.png", link:'/' },
   { id: 4, img: "/slotMachineTitelbild.png", link:'/' },
+  { id: 5, img: "/minenfeldTitelbild.png", link:'/' },
+  { id: 6, img: "/pokerTitelbild.png", link:'/' },
 ];
 
 interface SlideshowProps {
