@@ -2,12 +2,14 @@ package com.example.casinobackend.Games.BlackJack;
 
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.casinobackend.entities.Game;
 import com.example.casinobackend.entities.Player;
@@ -31,7 +33,8 @@ public class BlackJackController {
 
     @PostMapping("/{playerId}/start")
     public Map<String, Object> startGame(@PathVariable Long playerId, @RequestParam int coins) {
-        Player player = playerRepo.findById(playerId).orElseThrow();
+        Player player = playerRepo.findById(playerId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found"));
         Game game = gameRepo.findByTitle("Blackjack").orElseThrow();
         return blackjackRepo.startGame(player, game, coins);
     }

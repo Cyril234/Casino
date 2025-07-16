@@ -3,9 +3,11 @@ package com.example.casinobackend.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component; // Wichtig!
+import org.springframework.stereotype.Component;
 
+import com.example.casinobackend.entities.Game;
 import com.example.casinobackend.entities.Player;
+import com.example.casinobackend.repositories.GameRepository;
 import com.example.casinobackend.repositories.PlayerRepository;
 
 import de.mkammerer.argon2.Argon2;
@@ -16,10 +18,18 @@ public class Dataloader implements ApplicationRunner {
 
     @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
+    private GameRepository gameRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Argon2 argon2 = Argon2Factory.create();
+
+        // Spiel "Blackjack" immer hinzufügen
+        if (gameRepository.findByTitle("Blackjack").isPresent()) return;
+        Game blackjack = new Game();
+        blackjack.setTitle("Blackjack");
+        gameRepository.save(blackjack);
 
         // Prüfen, ob User existiert (optional, aber sinnvoll)
         if (playerRepository.findByUsername("cyril").isPresent()) return;
@@ -48,5 +58,7 @@ public class Dataloader implements ApplicationRunner {
         player1.setToken("");
 
         playerRepository.save(player1);
+
+        
     }
 }
