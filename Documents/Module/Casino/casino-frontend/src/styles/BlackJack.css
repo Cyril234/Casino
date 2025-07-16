@@ -1,0 +1,303 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ 
+body {
+  background-color: #1a1a1a;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+ 
+/* Spielfeld-Hintergrund */
+.blackjack-table {
+  width: 790px;
+  height: 512px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+  border-radius: 12px;
+}
+ 
+/* Karten allgemeiner Stil */
+.card {
+  width: 60px;
+  height: 90px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.6);
+  background-size: cover;
+  background-position: center;
+  /* NICHT absolut positionieren! */
+}
+ 
+/* Kartenbereiche */
+.dealer-hand,
+.player-hand {
+  position: absolute;
+  display: flex;
+  gap: 8px;
+}
+ 
+.dealer-hand {
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+ 
+.player-hand {
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+ 
+/* Punkteanzeigen */
+.score {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+}
+ 
+.score.dealer {
+  top: 75px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+ 
+.score.player {
+  bottom: 75px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+ 
+/* Button-Leiste */
+.controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+}
+ 
+.controls button {
+  background: linear-gradient(145deg, #ffe97f, #d6a431);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #222;
+  cursor: pointer;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.5);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+ 
+.controls button:hover {
+  background: linear-gradient(145deg, #fff8b0, #ddb84a);
+}
+ 
+.controls button:active {
+  transform: translateY(2px);
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.6);
+}
+ 
+/* Einsatzbereich */
+.bet-area {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+ 
+.bet-area input {
+  width: 60px;
+  padding: 6px;
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+ 
+.bet-area button {
+  width: 100%;
+  padding: 6px 0;
+  background: #f9d342;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+ 
+/* Statusbox */
+.status-box {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0,0,0,0.6);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: #fff;
+}
+/* Status-Box Grundstil */
+.status-box {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  display: inline-block;
+  transition: transform 0.2s;
+}
+ 
+/* Spezifische Farben */
+.status-box.win {
+  background: rgba(75, 181, 67, 0.9);
+}
+.status-box.lose {
+  background: rgba(181, 67, 67, 0.9);
+}
+.status-box.draw {
+  background: rgba(200, 180, 50, 0.9);
+}
+.status-box.error {
+  background: rgba(120, 120, 120, 0.9);
+}
+ 
+/* Sanfte Pop‑Animation bei Einblenden */
+.status-box.win,
+.status-box.lose,
+.status-box.draw,
+.status-box.error {
+  transform: scale(0);
+  animation: popIn 0.3s forwards;
+}
+@keyframes popIn {
+  to { transform: scale(1); }
+}
+ 
+/* Kleine Münz-Anzeige bei Gewinn */
+.status-box .coins {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+/* ... alles bisherige ... */
+ 
+/* Guthaben-Anzeige */
+
+.balance-area {
+
+  position: absolute;
+
+  top: 10px;
+
+  right: 10px;
+
+  background: rgba(0,0,0,0.6);
+
+  color: #fff;
+
+  padding: 0.5rem 1rem;
+
+  border-radius: 6px;
+
+  font-weight: bold;
+
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+
+}
+ 
+/* Status-Box Farben & Animation (wie vorher) */
+
+.status-box { /* ... */ }
+
+.status-box.win { background: rgba(75,181,67,0.9); }
+
+.status-box.lose { background: rgba(181,67,67,0.9); }
+
+.status-box.draw { background: rgba(200,180,50,0.9); }
+
+.status-box.error { background: rgba(120,120,120,0.9); }
+ 
+/* Münzen-Zusatz bei Gewinn */
+
+.status-box .coins {
+
+  margin-top: 0.5rem;
+
+  font-size: 0.9rem;
+
+  opacity: 0.85;
+
+}
+/* Hand-Wert unter dem Score */
+.hand-value {
+  font-size: 0.85rem;
+  margin-top: 2px;
+  opacity: 0.85;
+  color: #ffd700;
+}
+ 
+/* Coins-Anzeige bei Verlust */
+.status-box .coins {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+ 
+/* Balance-Anzeige (wie gehabt) */
+.balance-area {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: bold;
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+}
+.card {
+  z-index: 1;
+}
+ 
+/* Score-Boxen über den Karten */
+.score {
+  position: absolute; /* bleibt wie gehabt */
+  z-index: 10;        /* <-- hier */
+  background: rgba(0, 0, 0, 0.6);
+  /* … restliche Styles … */
+}
+ 
+/* Hand-Wert innerhalb der Score-Box */
+.hand-value {
+  position: relative; /* damit z-index greift */
+  z-index: 11;        /* noch eins drüber */
+  font-size: 0.85rem;
+  margin-top: 2px;
+  opacity: 0.85;
+  color: #ffd700;
+}
