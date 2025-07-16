@@ -1,19 +1,16 @@
 html, body {
   height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+  width: auto;
+  margin-left: -1rem;
   overflow: hidden;
-  background: #181724; /* Blau ganz unten */
+  background: #181724; 
 }
 
-/* --- LINIEN (oben drüber) --- */
 .bg-lines {
   position: fixed;
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  /* Die Linien sind als eigener Hintergrund */
   background:
     repeating-linear-gradient(140deg, #ffffff 0, #ffffff 2px, transparent 2px, transparent 50px),
     repeating-linear-gradient(215deg, #ffffff 0, #ffffff 2px, transparent 2px, transparent 50px);
