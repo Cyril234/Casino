@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 
 import "../../styles/BlackJack.css";
+import coinImg from "../../../public/pokergeld.png";
 
 import tableImage from "../../assets/TableBlackJack/table.png";
  
-// Kartenbilder synchron laden
+// 1) Alle Kartenbilder synchron laden
 
-const cardModules = import.meta.glob("../../assets/Blackjack/*.png", { eager: true }) as Record<
+const cardModules = import.meta.glob(
 
-  string,
+  "../../assets/Blackjack/*.png",
 
-  { default: string }
->;
+  { eager: true }
 
+) as Record<string, { default: string }>;
+ 
 const cardImages: Record<string, string> = {};
 
 Object.entries(cardModules).forEach(([path, m]) => {
@@ -24,14 +26,14 @@ Object.entries(cardModules).forEach(([path, m]) => {
   cardImages[name] = m.default;
 
 });
-
+ 
 function getCardImage(n: string) {
 
   return cardImages[n] || "";
 
 }
  
-// Hilfs-Function: Hand-Wert berechnen, Ass = 1 oder 11
+// 2) Hand‑Wert berechnen (Ass = 1 oder 11)
 
 function calculateHandValue(hand: string[]): number {
 
@@ -41,13 +43,13 @@ function calculateHandValue(hand: string[]): number {
 
   hand.forEach(card => {
 
-    const rank = card.slice(0, -1); // z.B. "A", "K", "10", …
+    const rank = card.slice(0, -1);
 
     if (rank === "A") {
 
       aces += 1;
 
-      total += 1; // erst mal als 1 zählen
+      total += 1;
 
     } else if (["K", "Q", "J"].includes(rank)) {
 
@@ -60,8 +62,6 @@ function calculateHandValue(hand: string[]): number {
     }
 
   });
-
-  // Versuche, so viele Asse wie möglich als 11 zu werten
 
   while (aces > 0 && total + 10 <= 21) {
 
@@ -91,13 +91,17 @@ export default function BlackJackGame() {
 
   const [coinsBalance, setCoinsBalance] = useState(0);
 
-  const [coinsWon, setCoinsWon] = useState<number | null>(null);
-
   const [errorMessage, setErrorMessage] = useState("");
+ 
+  // NEU: fixierter Ergebnisbetrag & Anzeige-Flag
 
+  const [resultAmount, setResultAmount] = useState<number | null>(null);
+
+  const [showResult, setShowResult] = useState(false);
+ 
   const authToken = sessionStorage.getItem("authToken");
  
-  // Beim Mount: Spieler‑ID und Guthaben holen
+  // Spieler‑ID & Guthaben beim Mount holen
 
   useEffect(() => {
 
@@ -121,7 +125,11 @@ export default function BlackJackGame() {
 
         setPlayerId(data.playerId);
 
-        if (typeof data.coins === "number") setCoinsBalance(data.coins);
+        if (typeof data.coins === "number") {
+
+          setCoinsBalance(data.coins);
+
+        }
 
       } catch (err) {
 
@@ -134,48 +142,6 @@ export default function BlackJackGame() {
     fetchPlayer();
 
   }, [authToken]);
- 
-  // CSS-Klassen und Statustext
-
-  const statusClass =
-
-    status === "PLAYER_WINS"
-
-      ? "win"
-
-      : status === "DEALER_WINS"
-
-      ? "lose"
-
-      : status === "DRAW"
-
-      ? "draw"
-
-      : status === "FEHLER"
-
-      ? "error"
-
-      : "";
-
-  const statusText =
-
-    status === "PLAYER_WINS"
-
-      ? "Du hast gewonnen 🎉"
-
-      : status === "DEALER_WINS"
-
-      ? "Du hast verloren 😞"
-
-      : status === "DRAW"
-
-      ? "Unentschieden"
-
-      : status === "FEHLER"
-
-      ? errorMessage || "Fehler im Spiel"
-
-      : "";
  
   // Spiel starten
 
@@ -213,7 +179,7 @@ export default function BlackJackGame() {
 
       setGameActive(true);
 
-      setCoinsWon(null);
+      setResultAmount(null);
 
     } catch {
 
@@ -253,7 +219,11 @@ export default function BlackJackGame() {
 
       setStatus(data.status);
 
-      if (data.status !== "IN_PROGRESS") await stand();
+      if (data.status !== "IN_PROGRESS") {
+
+        await stand();
+
+      }
 
     } catch {
 
@@ -283,8 +253,6 @@ export default function BlackJackGame() {
 
         setStatus("FEHLER");
 
-        setErrorMessage(await res.text());
-
         return;
 
       }
@@ -297,52 +265,66 @@ export default function BlackJackGame() {
 
       setStatus(data.result);
 
-      setCoinsWon(data.coinsWon);
-
       setGameActive(false);
-
-      setErrorMessage("");
  
-      // Guthaben aktualisieren
+      // Ergebnisbetrag festhalten und Guthaben anpassen
 
       if (data.result === "PLAYER_WINS" && typeof data.coinsWon === "number") {
 
-        setCoinsBalance(prev => prev + data.coinsWon);
+        setResultAmount(data.coinsWon);
+
+        setCoinsBalance(prev => prev + (data.coinsWon / 2 ));
 
       } else if (data.result === "DEALER_WINS") {
 
+        setResultAmount(-bet);
+
         setCoinsBalance(prev => prev - bet);
 
-      }
+      } else {
 
+        setResultAmount(0);
+
+      }
+ 
+      // Popup anzeigen und nach 2 Sek. ausblenden
+
+      setShowResult(true);
+
+      setTimeout(() => setShowResult(false), 2000);
+ 
     } catch {
 
       setStatus("FEHLER");
-
-      setErrorMessage("Server nicht erreichbar");
 
     }
 
   };
  
-  // Werte anzeigen
+  // Hand-Werte
 
   const playerValue = calculateHandValue(playerHand);
 
-  const dealerValue = status !== "IN_PROGRESS" ? calculateHandValue(dealerHand) : undefined;
+  const dealerValue =
+
+    status !== "IN_PROGRESS" ? calculateHandValue(dealerHand) : undefined;
  
+
+
+    
   return (
 <div className="blackjack-table" style={{ backgroundImage: `url(${tableImage})` }}>
 
       {/* Guthaben */}
 <div className="balance-area">
 
-        Dein Guthaben: <strong>{coinsBalance} Coins</strong>
+        Dein Guthaben: <strong>{coinsBalance} </strong>
+      <img src={coinImg} alt="Münze" className="coin-small" />
 </div>
  
       {/* Einsatz */}
 <div className="bet-area">
-<label htmlFor="bet">Einsatz</label><br />
+<label htmlFor="bet" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Einsatz</label><br />
 <input
 
           id="bet"
@@ -351,12 +333,15 @@ export default function BlackJackGame() {
 
           value={bet}
 
-          onChange={e => setBet(+e.target.value)}
+          onChange={e => setBet(Number(e.target.value))}
 
           disabled={gameActive}
 
         />
-<button onClick={startGame} disabled={gameActive || bet <= 0}>Start</button>
+<button onClick={startGame} disabled={gameActive || bet <= 0}>
+
+          Spiel starten
+</button>
 
         {errorMessage && <div className="error">{errorMessage}</div>}
 </div>
@@ -374,7 +359,7 @@ export default function BlackJackGame() {
 <div className="hand-value">Wert: {playerValue}</div>
 </div>
  
-      {/* Dealer-Karten */}
+      {/* Karten */}
 <div className="dealer-hand">
 
         {dealerHand.map((c, i) => (
@@ -390,8 +375,6 @@ export default function BlackJackGame() {
 
         ))}
 </div>
- 
-      {/* Spieler-Karten */}
 <div className="player-hand">
 
         {playerHand.map((c, i) => (
@@ -418,26 +401,21 @@ export default function BlackJackGame() {
 
       )}
  
-      {/* Ergebnis-Meldung */}
+      {/* Kurz-Popup mit Gewinn/Verlust */}
 
-      {status && (
-<div className={`status-box ${statusClass}`}>
+      {showResult && resultAmount != null && (
+<div className={`status-box ${resultAmount >= 0 ? "win" : "lose"}`}>
 
-          {statusText}
+          {resultAmount >= 0 ? `+${resultAmount}` :`${resultAmount} `}
+                <img src={coinImg} alt="Münze" className="coin-small" />
 
-          {coinsWon != null && status === "PLAYER_WINS" && (
-<div className="coins">+{coinsWon} Coins</div>
-
-          )}
-
-          {status === "DEALER_WINS" && (
-<div className="coins">-{bet} Coins</div>
-
-          )}
 </div>
 
       )}
 </div>
 
   );
+
 }
+
+ 
