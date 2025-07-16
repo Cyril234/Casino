@@ -3,7 +3,7 @@ package com.example.casinobackend.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component; // Wichtig!
+import org.springframework.stereotype.Component;
 
 import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.PlayerRepository;
@@ -21,20 +21,25 @@ public class Dataloader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         Argon2 argon2 = Argon2Factory.create();
 
-        // Prüfen, ob User existiert (optional, aber sinnvoll)
-        if (playerRepository.findByUsername("cyril").isPresent()) return;
+        if (playerRepository.findByUsername("gast").isPresent()) {
+            return;
+        }
+        ;
 
         Player player = new Player();
-        player.setUsername("temp");
+        player.setUsername("gast");
         player.setCoins(1000);
         player.setColortheme(com.example.casinobackend.enums.Colortheme.LIGHT);
         player.setVolume(40);
         player.setSoundstatus(com.example.casinobackend.enums.Soundstatus.ON);
         player.setLogins(1);
         player.setToken("");
-        // Avatar und Playingattempts können bei Bedarf gesetzt werden
         playerRepository.save(player);
 
+        if (playerRepository.findByUsername("cyril").isPresent()) {
+            return;
+        }
+        ;
         Player player1 = new Player();
         player1.setUsername("cyril");
         player1.setEmail("cyril@example.com");

@@ -54,6 +54,7 @@ public class TokenAuthFilter extends OncePerRequestFilter {
         return path.equals("/api/login") || path.equals("/api/loginUID") || path.equals("/api/loginGuest")
                 || path.equals("/api/players/register")
                 || path.startsWith("/api/players/byToken/")
-                || path.startsWith("/api/enums");
+                || path.startsWith("/api/enums")
+                || path.equals("/api/loginAsGuest");
     }
 }
