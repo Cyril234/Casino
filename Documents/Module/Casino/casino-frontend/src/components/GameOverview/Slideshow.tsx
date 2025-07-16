@@ -4,7 +4,7 @@ import "../../styles/Slideshow.css";
 import { useNavigate } from "react-router-dom";
 
 const slides = [
-  { id: 1, img: "/blackjackTitelbild.png", link:'/' },
+  { id: 1, img: "/blackjackTitelbild.png", link:'/blackjack' },
   { id: 2, img: "/rouletteTitelbild.png", link:'/' },
   { id: 3, img: "/horseRacingTitelbild.png", link:'/' },
   { id: 4, img: "/slotMachineTitelbild.png", link:'/' },
