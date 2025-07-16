@@ -32,52 +32,50 @@ export default function LoginWithEmailAndPassword() {
         }
     };
 
-  return (
-    <div className="start-container">
-      <div className="start-card">
+ return (
+    <main className="register-page">
+      <h1 className="register-title">Anmelden</h1>
+      <form className="register-form" onSubmit={handleLogin}>
+        <label htmlFor="username" className="form-label">Benutzername</label>
+        <input
+          id="username"
+          type="text"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          required
+          style={{ width: "97%" }}
+        />
 
-        <div className="login-header">Login</div>
-        <div className="login-divider" />
-        <form onSubmit={handleLogin} className="login-form">
-          <div className="login-group">
-            <label htmlFor="username">Benutzername:</label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="login-group">
-            <label htmlFor="password">Passwort:</label>
-            <input
-              type={showPw ? "text" : "password"}
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button
-              type="button"
-              className="start-btn"
-              onClick={() => setShowPw(!showPw)}
-              style={{ marginLeft: "0.5rem" }}
-            >
-              {showPw ? "Verbergen" : "Anzeigen"}
-            </button>
-           
-          </div>
-
-          <div className="login-buttons">
-            <button type="submit" className="start-btn">Anmelden</button>
-           <button className="start-btn" onClick={() => navigate('/login-overview')}>Zurück</button>
-          </div>
-        </form>
-        {status && <div className="login-status">{status}</div>}
-      </div>
-    </div>
+        <label htmlFor="password" className="form-label">Passwort</label>
+        <div style={{ width: "100%" }}>
+          <input
+            id="password"
+            type={showPw ? "text" : "password"}
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            style={{ width: "96%" }}
+          />
+          <button
+            type="button"
+            className="start-btn"
+            style={{ width: "100%", marginTop: "0.5rem", padding: "0.7rem 1rem" }}
+            onClick={() => setShowPw((v) => !v)}
+          >
+            {showPw ? "Verbergen" : "Anzeigen"}
+          </button>
+        </div>
+        <button className="next-btn" type="submit">Anmelden</button>
+        <button
+          className="next-btn"
+          type="button"
+          style={{ marginTop: "1rem" }}
+          onClick={() => navigate('/login-overview')}
+        >
+          Zurück
+        </button>
+      </form>
+    </main>
   );
 }
 

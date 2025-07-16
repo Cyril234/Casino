@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../../styles/Register.css";
 import { useNavigate } from "react-router-dom";
 
 interface PlayerDto {
@@ -17,6 +18,7 @@ export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPw, setShowPw] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleNext = async (e: React.FormEvent) => {
@@ -66,34 +68,53 @@ export default function Register() {
         <label htmlFor="username" className="form-label">Username</label>
         <input
           id="username"
-          className="form-input"
+          type="text"
           value={username}
           onChange={e => setUsername(e.target.value)}
           required
+          style={{ width: "97%" }}
         />
 
         <label htmlFor="email" className="form-label">E-Mail</label>
         <input
           id="email"
-          className="form-input"
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
+          style={{ width: "97%" }}
         />
 
         <label htmlFor="password" className="form-label">Passwort</label>
-        <input
-          id="password"
-          className="form-input"
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
+        <div style={{ width: "100%" }}>
+          <input
+            id="password"
+            type={showPw ? "text" : "password"}
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            style={{ width: "96%" }}
+          />
+          <button
+            type="button"
+            className="start-btn"
+            style={{ width: "100%", marginTop: "0.5rem", padding: "0.7rem 1rem" }}
+            onClick={() => setShowPw((v) => !v)}
+          >
+            {showPw ? "Verbergen" : "Anzeigen"}
+          </button>
+        </div>
         {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
 
         <button className="next-btn" type="submit">Weiter</button>
+        <button
+          className="next-btn"
+          type="button"
+          style={{ marginTop: "1rem" }}
+          onClick={() => navigate('/login-overview')}
+        >
+          Zurück
+        </button>
       </form>
     </main>
   );

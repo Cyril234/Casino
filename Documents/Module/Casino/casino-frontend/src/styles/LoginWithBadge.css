@@ -65,6 +65,7 @@
     color: #7b1e1e;
     transform: scale(1.07);
     box-shadow: 0 4px 24px rgba(212,175,55,0.28), 0 0 16px #d7263d;
+    text-shadow: 0 1px 4px #fffbe6;
 }
 
 @keyframes fadeIn {
