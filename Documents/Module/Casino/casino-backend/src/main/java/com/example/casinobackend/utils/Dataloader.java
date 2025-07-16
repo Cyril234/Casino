@@ -24,7 +24,24 @@ public class Dataloader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Argon2 argon2 = Argon2Factory.create();
+    
+        if (playerRepository.findByUsername("cyril").isPresent()) {
+            return;
+        };
+        
+        Player player1 = new Player();
+        player1.setUsername("cyril");
+        player1.setEmail("cyril@example.com");
+        player1.setPassword(argon2.hash(2, 65536, 1, "cyril234".toCharArray()));
+        player1.setCoins(500);
+        player1.setColortheme(com.example.casinobackend.enums.Colortheme.LIGHT);
+        player1.setVolume(40);
+        player1.setSoundstatus(com.example.casinobackend.enums.Soundstatus.ON);
+        player1.setBadgenumber("12345");
+        player1.setLogins(1);
+        player1.setToken("");
 
+        playerRepository.save(player1);
         // Spiel "Blackjack" immer hinzufügen
         if (gameRepository.findByTitle("Blackjack").isPresent()) {
             return;
@@ -48,23 +65,7 @@ public class Dataloader implements ApplicationRunner {
         player.setToken("");
         playerRepository.save(player);
 
-        if (playerRepository.findByUsername("cyril").isPresent()) {
-            return;
-        };
         
-        Player player1 = new Player();
-        player1.setUsername("cyril");
-        player1.setEmail("cyril@example.com");
-        player1.setPassword(argon2.hash(2, 65536, 1, "cyril234".toCharArray()));
-        player1.setCoins(500);
-        player1.setColortheme(com.example.casinobackend.enums.Colortheme.LIGHT);
-        player1.setVolume(40);
-        player1.setSoundstatus(com.example.casinobackend.enums.Soundstatus.ON);
-        player1.setBadgenumber("12345");
-        player1.setLogins(1);
-        player1.setToken("");
-
-        playerRepository.save(player1);
 
         
     }
