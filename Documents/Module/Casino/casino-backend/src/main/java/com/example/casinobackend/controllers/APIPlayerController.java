@@ -26,11 +26,11 @@ import com.example.casinobackend.repositories.PlayerRepository;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import jakarta.transaction.Transactional;
- 
-@CrossOrigin (origins = "http://localhost:5173", allowedHeaders = "*", methods = { RequestMethod.GET, 
-    RequestMethod.DELETE, 
-    RequestMethod.PUT, 
-    RequestMethod.POST,
+
+@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = { RequestMethod.GET,
+        RequestMethod.DELETE,
+        RequestMethod.PUT,
+        RequestMethod.POST,
         RequestMethod.OPTIONS })
 @RestController
 @RequestMapping("/api/players")
@@ -126,6 +126,11 @@ public class APIPlayerController {
     public ResponseEntity<Player> updatePlayer(@PathVariable long id,
             @RequestBody Player newPlayer) {
         Optional<Player> currentPlayer = playerRepository.findById(id);
+        Argon2 argon2 = Argon2Factory.create();
+
+        char[] pw = newPlayer.getPassword().toCharArray();
+        newPlayer.setPassword(argon2.hash(2, 65536, 1, pw));
+        argon2.wipeArray(pw);
 
         return currentPlayer
                 .map(player -> {
