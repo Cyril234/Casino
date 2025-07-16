@@ -26,25 +26,32 @@ public class Dataloader implements ApplicationRunner {
         Argon2 argon2 = Argon2Factory.create();
 
         // Spiel "Blackjack" immer hinzufügen
-        if (gameRepository.findByTitle("Blackjack").isPresent()) return;
+        if (gameRepository.findByTitle("Blackjack").isPresent()) {
+            return;
+        };
+
         Game blackjack = new Game();
         blackjack.setTitle("Blackjack");
         gameRepository.save(blackjack);
 
-        // Prüfen, ob User existiert (optional, aber sinnvoll)
-        if (playerRepository.findByUsername("cyril").isPresent()) return;
+        if (playerRepository.findByUsername("gast").isPresent()) {
+            return;
+        };
 
         Player player = new Player();
-        player.setUsername("temp");
+        player.setUsername("gast");
         player.setCoins(1000);
         player.setColortheme(com.example.casinobackend.enums.Colortheme.LIGHT);
         player.setVolume(40);
         player.setSoundstatus(com.example.casinobackend.enums.Soundstatus.ON);
         player.setLogins(1);
         player.setToken("");
-        // Avatar und Playingattempts können bei Bedarf gesetzt werden
         playerRepository.save(player);
 
+        if (playerRepository.findByUsername("cyril").isPresent()) {
+            return;
+        };
+        
         Player player1 = new Player();
         player1.setUsername("cyril");
         player1.setEmail("cyril@example.com");
