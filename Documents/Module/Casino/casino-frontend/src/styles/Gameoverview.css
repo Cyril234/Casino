@@ -15,9 +15,8 @@ html, body {
   pointer-events: none;
   /* Die Linien sind als eigener Hintergrund */
   background:
-    repeating-linear-gradient(140deg, #ffffff 0, #ffffff 2px, transparent 2px, transparent 50px),
-    repeating-linear-gradient(215deg, #ffffff 0, #ffffff 2px, transparent 2px, transparent 50px);
-}
+  repeating-linear-gradient(140deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 2px, transparent 2px, transparent 50px),
+  repeating-linear-gradient(215deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 2px, transparent 2px, transparent 50px);        }
 
 /* --- BLOBS (darunter) --- */
 .bg-blobs {
@@ -32,31 +31,29 @@ html, body {
   border-radius: 50%;
   filter: blur(18px);
   opacity: 0.7;
-  animation: blob-pulse 7s infinite alternate;
+  animation: blob-pulse 42s infinite alternate;
 }
 
 .orange-blob {
-  width: 460px;
-  height: 460px;
-  left: 0;
-  top: 0;
-  background: radial-gradient(circle, orange 55%, transparent 100%);
-  box-shadow: 0 0 140px 80px orange;
+  width: 2250px;
+  height: 2250px;
+  left: 0px;
+  top: 0px;
+  background: radial-gradient(circle, orange 0%, rgba(255, 165, 0, 0.8) 30%, rgba(255, 165, 0, 0.4) 60%, transparent 100%);
 }
 
 .pink-blob {
-  width: 400px;
-  height: 400px;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle, #ff4ccd 50%, transparent 100%);
-  box-shadow: 0 0 180px 100px #ff4ccd;
+  width: 2250px;
+  height: 2250px;
+  left: 0px;
+  top: 0px;
+  background: radial-gradient(circle, #ff4ccd 0%, rgba(255, 76, 205, 0.8) 25%, rgba(255, 76, 205, 0.4) 50%, transparent 100%);
 }
 
 @keyframes blob-pulse {
   0% { transform: scale(1);}
-  65% { transform: scale(1.12);}
-  100% { transform: scale(0.95);}
+  50% { transform: scale(1.2);}
+  100% { transform: scale(1);}
 }
 
 .content {
@@ -64,6 +61,34 @@ html, body {
   z-index: 10;
   color: #fff;
   text-align: center;
-  margin-top: 10vh;
+  /* margin-top: 10vh; entfernt für bessere Zentrierung */
   font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin-top: 120px;
+}
+
+.pokergeld {
+  z-index: 10;
+  position: absolute;  /* or relative, depending on your layout needs */
+  left: 50px;
+  top: 50px;
+}
+
+.cointext{
+  z-index: 10;
+  position: absolute;  /* or relative, depending on your layout needs */
+  left: 170px;
+  top: 35px;
+  color: #fff;
+}
+
+.logoutButton{
+  z-index: 10;
+  position: absolute;  /* or relative, depending on your layout needs */
+  right: 50px;
+  top: 35px;
 }
