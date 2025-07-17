@@ -10,10 +10,11 @@ import Register from './components/register/Register'
 import BlackJackGame from './components/Games/BlackJack'
 import CreateAvatar from './components/register/CreateAvatar'
 import Logout from './components/logout/Logout'
+import EditProfile from './components/editProfile/EditProfile'
+import Settings from './components/Settings'
 
- 
 function App() {
- 
+
   return (
     <>
       <Routes>
@@ -27,11 +28,11 @@ function App() {
         <Route path='/gameoverview/blackjack' element={<BlackJackGame />} />
         <Route path='/create-avatar' element={<CreateAvatar />} />
         <Route path='/logout' element={<Logout />} />
-
+        <Route path='/edit-profile' element={<EditProfile />} />
+        <Route path='/settings' element={<Settings />} />
       </Routes>
     </>
   )
 }
- 
+
 export default App
- 

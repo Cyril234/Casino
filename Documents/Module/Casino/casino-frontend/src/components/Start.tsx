@@ -27,8 +27,8 @@ export default function Start() {
                 <button className="start-btn" onClick={handleLogin}>Loslegen!</button>
                 <div className="start-deco">
                     <img src={chipImg} alt="Chip" className="chip" />
-                    <img src={cardImg} alt="Karte" className="card" />
-                    <img src={cardImg2} alt="Karte 2" className="card card2" />
+                    <img src={cardImg} alt="Karte" className="chip" />
+                    <img src={cardImg2} alt="Karte 2" className="chip" />
                 </div>
             </div>
         </div>

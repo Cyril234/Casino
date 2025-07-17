@@ -19,9 +19,9 @@ export default function Gameoverview() {
   const [open, setOpen] = useState(false);
  
   const token = sessionStorage.getItem("authToken");
- 
+
   const navigate = useNavigate();
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,11 +33,11 @@ export default function Gameoverview() {
             "Content-Type": "application/json"
           }
         });
- 
+
         if (!response.ok) {
           throw new Error(`HTTP Fehler: ${response.status}`);
         }
- 
+
         const data = await response.json();
         setUsername(data.username);
         setCoins(data.coins);
@@ -45,7 +45,7 @@ export default function Gameoverview() {
         console.error(err);
       }
     };
- 
+
     fetchData();
   }, [token]);
 
@@ -93,35 +93,35 @@ export default function Gameoverview() {
   // Blob Bewegung mit useEffect + Intervall
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if(posXPink < -400){
+      if (posXPink < -400) {
         setPosXPink(prev => prev + Math.floor(Math.random() * (5 - 0 + 1)) + 0);
-      }else if(posXPink > 2320){
+      } else if (posXPink > 2320) {
         setPosXPink(prev => prev + Math.floor(Math.random() * (0 - -5 + 1)) + -5);
-      }else{
+      } else {
         setPosXPink(prev => prev + Math.floor(Math.random() * (5 - -5 + 1)) + -5);
       }
 
-      if(posXPink < -400){
+      if (posXPink < -400) {
         setPosYPink(prev => prev + Math.floor(Math.random() * (5 - 0 + 1)) + 0);
-      }else if(posXPink > 1480){
+      } else if (posXPink > 1480) {
         setPosYPink(prev => prev + Math.floor(Math.random() * (0 - -5 + 1)) + -5);
-      }else{
+      } else {
         setPosYPink(prev => prev + Math.floor(Math.random() * (5 - -5 + 1)) + -5);
       }
 
-      if(posXPink < -400){
+      if (posXPink < -400) {
         setPosXOrange(prev => prev + Math.floor(Math.random() * (5 - 0 + 1)) + 0);
-      }else if(posXPink > 2320){
+      } else if (posXPink > 2320) {
         setPosXOrange(prev => prev + Math.floor(Math.random() * (0 - -5 + 1)) + -5);
-      }else{
+      } else {
         setPosXOrange(prev => prev + Math.floor(Math.random() * (5 - -5 + 1)) + -5);
       }
 
-      if(posXPink < -400){
+      if (posXPink < -400) {
         setPosYOrange(prev => prev + Math.floor(Math.random() * (5 - 0 + 1)) + 0);
-      }else if(posXPink > 1480){
+      } else if (posXPink > 1480) {
         setPosYOrange(prev => prev + Math.floor(Math.random() * (0 - -5 + 1)) + -5);
-      }else{
+      } else {
         setPosYOrange(prev => prev + Math.floor(Math.random() * (5 - -5 + 1)) + -5);
       }
     }, 50);
