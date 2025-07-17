@@ -4,6 +4,12 @@ export default function LoginAsGuest() {
 
     const navigate = useNavigate();
 
+    if (sessionStorage.getItem("authToken")) {
+        sessionStorage.removeItem("authToken");
+    }
+    if (sessionStorage.getItem("username")) {
+        sessionStorage.removeItem("username");
+    }
 
     async function goToGameoverview() {
         try {

@@ -69,8 +69,26 @@ export default function EditProfile() {
             if (!res) {
                 console.log("Fehler beim Bearbeiten!")
             }
-            alert("Profil erfolgreich aktualisiert!")
             navigate("/gameoverview");
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleDeleteProfile = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${currentToken}`,
+                    "Content-Type": "application/json"
+                }
+            });
+            if (!res) {
+                console.log("Fehler beim Löschen!")
+            }
+            navigate("/");
         } catch (err) {
             console.error(err);
         }
@@ -107,6 +125,7 @@ export default function EditProfile() {
                     />
                 </div>
                 <button className="next-btn" type="submit">Änderungen speichern</button>
+                <button className="next-btn" onClick={handleDeleteProfile}>Profil löschen</button>
                 <button
                     className="next-btn"
                     type="button"

@@ -119,7 +119,6 @@ public class APILoginController {
                     .body(new TokenResponse(""));
         }
         }catch(Error e){} catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
