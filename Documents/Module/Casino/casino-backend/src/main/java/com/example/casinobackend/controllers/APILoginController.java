@@ -1,7 +1,10 @@
 package com.example.casinobackend.controllers;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import com.example.casinobackend.dataTransferObject.LogoutRequest;
 import com.example.casinobackend.dataTransferObject.TokenResponse;
 import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.PlayerRepository;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.UUIDGenerator;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
@@ -62,15 +66,25 @@ public class APILoginController {
     }
 
     @PostMapping("api/loginUID")
-    public ResponseEntity<TokenResponse> login() {
-        Argon2 argon2 = Argon2Factory.create();
+    public ResponseEntity<TokenResponse> loginUID(@RequestBody Map<String, String> body) {
+
+        try{
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        byte[] hashBytes = md.digest(body.get("uid").getBytes());
         String token;
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hashBytes) {
+            sb.append(String.format("%02x", b));
+        }
+        String UID = sb.toString();
 
         System.out.println("ligin" + UID);
 
         if (UID != "") {
 
-            Optional<Player> player = playerRepository.findPlayerByToken(argon2.hash(2, 65536, 1, UID.toCharArray()));
+            System.out.println("test:"+UID);
+
+            Optional<Player> player = playerRepository.findPlayerByBadgenumber(UID);
 
             if (player.isPresent()) {
                 token = generateToken();
@@ -87,7 +101,9 @@ public class APILoginController {
                 token = generateToken();
                 Player newPlayer = new Player();
                 newPlayer.setToken(token);
+                newPlayer.setUsername("pleasCange");
                 newPlayer.setLogins(1);
+                newPlayer.setBadgenumber(UID);
                 playerRepository.save(newPlayer);
 
                 return ResponseEntity
@@ -102,6 +118,11 @@ public class APILoginController {
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(new TokenResponse(""));
         }
+        }catch(Error e){} catch (NoSuchAlgorithmException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @PostMapping("api/loginAsGuest")

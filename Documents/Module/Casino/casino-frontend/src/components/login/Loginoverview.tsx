@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router';
 import '../../styles/Loginoverview.css';
+import { useCallback } from 'react';
+import { useBadgeScanner } from './LoginBage';
 
 export default function Loginoverview() {
     const navigate = useNavigate();
@@ -9,6 +11,10 @@ export default function Loginoverview() {
     const goToGuest = () => navigate('/login-as-guest');
     const goToRegister = () => navigate('/register');
 
+        // Badge-Scan Callback
+        const handleBadgeScan = useCallback((scan: string) => {}, []);
+        useBadgeScanner(handleBadgeScan);
+
     if (sessionStorage.getItem("authToken")) {
         sessionStorage.removeItem("authToken");
     }
@@ -16,6 +22,7 @@ export default function Loginoverview() {
         sessionStorage.removeItem("username");
     }
 
+    
     return (
         <div className="start-container">
             <div className="start-card">

@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router';
 import '../../styles/LoginWithBadge.css';
+import { useCallback } from 'react';
+import { useBadgeScanner } from './LoginBage';
 export default function LoginWithBadge() {
     const navigate = useNavigate();
 
@@ -10,6 +12,10 @@ export default function LoginWithBadge() {
         sessionStorage.removeItem("username");
     }
 
+
+    // Badge-Scan Callback
+    const handleBadgeScan = useCallback((scan: string) => { }, []);
+    useBadgeScanner(handleBadgeScan);
     return (
         <>
             <div className="start-container">
