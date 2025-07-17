@@ -42,7 +42,8 @@ body {
 /* Grid mittig */
 .grid {
   display: grid;
-  gap: 16px;
+    margin-right: 10rem;
+  gap: 20px;
   justify-content: center;
   align-items: center;
   max-width: 90vw;
@@ -50,8 +51,8 @@ body {
 
 /* Spielfelder */
 .grid button {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 10px;
   background-color: #bdc3c7;
   border: none;

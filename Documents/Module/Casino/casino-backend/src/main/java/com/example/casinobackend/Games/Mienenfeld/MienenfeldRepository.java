@@ -24,6 +24,7 @@ import jakarta.transaction.Transactional;
 public class MienenfeldRepository {
 
     private static class MineGameSession {
+
         List<Boolean> fieldMap;
         Set<Integer> revealed = new HashSet<>();
         int bombCount;
@@ -72,11 +73,11 @@ public class MienenfeldRepository {
         sessions.put(player.getPlayerId(), session);
 
         return Map.of(
-            "message", "Spiel gestartet",
-            "fields", fields,
-            "bombs", bombs,
-            "bet", coins,
-            "playerBalance", player.getCoins()
+                "message", "Spiel gestartet",
+                "fields", fields,
+                "bombs", bombs,
+                "bet", coins,
+                "playerBalance", player.getCoins()
         );
     }
 
@@ -99,18 +100,18 @@ public class MienenfeldRepository {
             sessions.remove(player.getPlayerId());
 
             return Map.of(
-                "status", "LOSE",
-                "message", "Bombe getroffen!",
-                "revealed", session.revealed
+                    "status", "LOSE",
+                    "message", "Bombe getroffen!",
+                    "revealed", session.revealed
             );
         } else {
-            double multiplier = 1.0 + (0.3 * session.revealed.size()) * ((double) session.bombCount / session.totalFields);
+            double multiplier = 1.0 + (0.65 * session.revealed.size()) * ((double) session.bombCount / session.totalFields);
             session.currentProfit = (int) Math.round(session.bet * multiplier);
 
             return Map.of(
-                "status", "IN_PROGRESS",
-                "revealed", session.revealed,
-                "currentProfit", session.currentProfit
+                    "status", "IN_PROGRESS",
+                    "revealed", session.revealed,
+                    "currentProfit", session.currentProfit
             );
         }
     }
@@ -135,10 +136,10 @@ public class MienenfeldRepository {
         playingattemptRepository.save(result);
 
         return Map.of(
-            "status", "CASHED_OUT",
-            "profit", session.currentProfit,
-            "finalBalance", player.getCoins(),
-            "revealed", session.revealed
+                "status", "CASHED_OUT",
+                "profit", session.currentProfit,
+                "finalBalance", player.getCoins(),
+                "revealed", session.revealed
         );
     }
 }

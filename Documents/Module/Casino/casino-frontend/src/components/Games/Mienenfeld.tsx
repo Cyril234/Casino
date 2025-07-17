@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Mienenfeld.css";
-import tableBg from "../../../public/MienenfeldHintergrund.png";
+import tableBg from "../../../public/MinenfedlHintergrund.png";
 import bombImg from"../../../public/bombe.png";
 import coinImg from "../../../public/pokergeld.png";
 import { useNavigate } from "react-router-dom";
+import { MdInfo } from "react-icons/md";
 
 export default function MinesGame() {
   const authToken = sessionStorage.getItem("authToken");
@@ -52,7 +53,7 @@ const navigate = useNavigate();
     setErrorMessage("");
     try {
       const res = await fetch(
-        `http://localhost:8080/mienenfeld/${playerId}/start?coins=${bet}&bombs=${bombs}&fields=${fields}`,
+        `http://localhost:8080/mienenfeld/${playerId}/start?coins=${bet}&bombs=${bombs}&fields=25`,
         { method: "POST", headers: { Authorization: `Bearer ${authToken}` } }
       );
       if (!res.ok) {
@@ -154,27 +155,27 @@ const renderGrid = () => {
 
 
 return (
+  
 <div
+
+
       className={`mines-container ${status === "LOSE" ? "lost" : ""}`}
       style={{ backgroundImage: `url(${tableBg})` }}
 >
-<h2>💣 Mines</h2>
+  <div className="top-left">
+    <button className="back-button" onClick={() => navigate("/gameoverview")}>
+      Zurück
+    </button>
+    <button className="info-button" onClick={() => navigate("/gameoverview/blackjack/info")}>
+      <MdInfo />
+    </button>
+  </div>
 <div className="balance-area">
         Guthaben: <strong>{coinsBalance}</strong>
 <img src={coinImg} alt="Münze" className="coin-small" />
 </div>
       {!gameActive && (
 <div className="config-area">
-<label>
-            Felder:
-<input
-              type="number"
-              value={fields}
-              min={5}
-              max={105}
-              onChange={e => setFields(parseInt(e.target.value))}
-            />
-</label>
 <label>
             Bomben:
 <input
@@ -205,6 +206,7 @@ return (
   <img src={coinImg} alt="Münze" className="coin-small" />
 </p>
 <button onClick={cashout}>Cashout</button>
+
 </div>
       )}
       {status === "LOSE" && <div className="status-box lose">Verloren!</div>}

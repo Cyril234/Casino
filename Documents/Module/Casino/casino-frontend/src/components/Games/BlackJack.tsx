@@ -293,15 +293,6 @@ export default function BlackJackGame() {
             </div>
 
           )}
-
-
-
-          disabled={gameActive}
-
-      
-       
-
-        {errorMessage && <div className="error">{errorMessage}</div>}
       </div>
 
       {/* Punktestand & Wert */}
