@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import AvatarPreview from "../avatarpreview/AvatarPreview";
 
 interface PlayerDto {
     id: number;
@@ -11,8 +12,9 @@ interface PlayerDto {
 export default function CreateAvatar() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { player } = (location.state || {}) as { player?: PlayerDto; };
+    const { player } = (location.state || {}) as { player?: PlayerDto };
     const token = sessionStorage.getItem("authToken");
+
     useEffect(() => {
         if (!player || !token) navigate("/", { replace: true });
     }, [player, token, navigate]);
@@ -66,33 +68,23 @@ export default function CreateAvatar() {
 
     useEffect(() => {
         const fetchPlayerId = async () => {
-            if (!token) {
-                console.error("Kein Auth-Token gefunden.");
-                return;
-            }
-
+            if (!token) return;
             try {
                 const res = await fetch(`http://localhost:8080/api/players/byToken/${token}`, {
                     method: "GET",
                     headers: {
-                        "Authorization": `Bearer ${token}`,
+                        Authorization: `Bearer ${token}`,
                         Accept: "*/*",
                         "Content-Type": "application/json"
                     }
                 });
-
-                if (!res.ok) {
-                    throw new Error(`HTTP Fehler: ${res.status}`);
-                }
-
+                if (!res.ok) throw new Error(`HTTP Fehler: ${res.status}`);
                 const data = await res.json();
                 setPlayerId(data.playerId);
-                console.log(data.playerId)
             } catch (err) {
                 console.error("Fehler bei dem Bekommen der SpielerId:", err);
             }
         };
-
         fetchPlayerId();
     }, [token]);
 
@@ -115,9 +107,7 @@ export default function CreateAvatar() {
         const avatarPayload = {
             name: avatarName,
             description: avatarDescription,
-            player: {
-                playerId: playerId
-            },
+            player: { playerId },
             haircolor: haircolorOptions[haircolorIdx],
             skincolor: skincolorOptions[skincolorIdx],
             beard,
@@ -142,13 +132,11 @@ export default function CreateAvatar() {
 
             if (!res.ok) {
                 const msg = await res.text();
-                console.error("Avatar-POST fehlgeschlagen:", msg);
                 throw new Error(msg);
             }
 
             navigate("/gameoverview");
         } catch (err) {
-            console.log(avatarPayload)
             console.error(err);
             alert("Avatar konnte nicht erstellt werden.");
         }
@@ -173,6 +161,16 @@ export default function CreateAvatar() {
         </div>
     );
 
+    const layerStyle: React.CSSProperties = {
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        imageRendering: "pixelated"
+    };
+
     return (
         <main className="create-avatar-page">
             <h1 className="create-avatar-title">Konfiguriere deinen Avatar!</h1>
@@ -181,6 +179,7 @@ export default function CreateAvatar() {
                 <input id="avatar-name" className="form-input" value={avatarName} onChange={e => setAvatarName(e.target.value)} required />
                 <label className="form-label" htmlFor="avatar-description">Beschreibung</label>
                 <input id="avatar-description" className="form-input" value={avatarDescription} onChange={e => setAvatarDescription(e.target.value)} required />
+
                 <ArrowSelector id="haircolor-select" label="Haarfarbe" options={haircolorOptions} index={haircolorIdx} setIndex={setHaircolorIdx} />
                 <ArrowSelector id="skincolor-select" label="Hautfarbe" options={skincolorOptions} index={skincolorIdx} setIndex={setSkincolorIdx} />
                 <ArrowSelector id="eyecolor-select" label="Augenfarbe" options={eyecolorOptions} index={eyecolorIdx} setIndex={setEyecolorIdx} />
@@ -189,10 +188,23 @@ export default function CreateAvatar() {
                 <ArrowSelector id="trouserstype-select" label="Hosenart" options={trouserstypeOptions} index={trouserstypeIdx} setIndex={setTrouserstypeIdx} />
                 <ArrowSelector id="trouserscolor-select" label="Hosenfarbe" options={trouserscolorOptions} index={trouserscolorIdx} setIndex={setTrouserscolorIdx} />
                 <ArrowSelector id="shoes-select" label="Schuhe" options={shoesOptions} index={shoesIdx} setIndex={setShoesIdx} />
+
                 <div className="beard-toggle">
                     <label className="form-label" htmlFor="beard-checkbox">Bart</label>
                     <input id="beard-checkbox" type="checkbox" checked={beard} onChange={e => setBeard(e.target.checked)} />
                 </div>
+                <AvatarPreview
+                    skincolor={skincolorOptions[skincolorIdx]}
+                    eyecolor={eyecolorOptions[eyecolorIdx]}
+                    haircolor={haircolorOptions[haircolorIdx]}
+                    headgear={headgearOptions[headgearIdx]}
+                    shirt={shirtOptions[shirtIdx]}
+                    trouserstype={trouserstypeOptions[trouserstypeIdx]}
+                    trouserscolor={trouserscolorOptions[trouserscolorIdx]}
+                    shoes={shoesOptions[shoesIdx]}
+                    beard={beard}
+                />
+
                 <button className="submit-btn" type="submit" disabled={!enumsLoaded}>Registrieren</button>
             </form>
         </main>

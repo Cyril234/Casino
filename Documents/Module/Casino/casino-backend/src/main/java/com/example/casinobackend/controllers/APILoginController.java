@@ -21,7 +21,6 @@ import com.example.casinobackend.dataTransferObject.LogoutRequest;
 import com.example.casinobackend.dataTransferObject.TokenResponse;
 import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.PlayerRepository;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators.UUIDGenerator;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;

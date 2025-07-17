@@ -4,12 +4,12 @@ import "../../styles/Slideshow.css";
 import { useNavigate } from "react-router-dom";
 
 const slides = [
-  { id: 1, img: "/blackjackTitelbild.png", link: '/gameoverview/blackjack' },
-  { id: 2, img: "/rouletteTitelbild.png", link: '/' },
-  { id: 3, img: "/horseRacingTitelbild.png", link: '/' },
-  { id: 4, img: "/slotMachineTitelbild.png", link: '/' },
-  { id: 5, img: "/minenfeldTitelbild.png", link: '/' },
-  { id: 6, img: "/pokerTitelbild.png", link: '/' },
+  { id: 1, img: "./public/titelbilder/blackjackTitelbild.png", link: '/gameoverview/blackjack' },
+  { id: 2, img: "./public/titelbilder/horseRacingTitelbild.png", link: '/' },
+  { id: 3, img: "./public/titelbilder/minenfeldTitelbild.png", link: '/' },
+  { id: 4, img: "./public/titelbilder/pokerTitelbild.png", link: '/' },
+  { id: 5, img: "./public/titelbilder/rouletteTitelbild.png", link: '/' },
+  { id: 6, img: "./public/titelbilder/slotMachineTitelbild.png", link: '/' },
 ];
 
 interface SlideshowProps {
