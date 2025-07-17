@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router';
 import '../../styles/Loginoverview.css';
+import { useCallback } from 'react';
+import { useBadgeScanner } from './LoginBage';
 
 export default function Loginoverview() {
     const navigate = useNavigate();
@@ -8,6 +10,10 @@ export default function Loginoverview() {
     const goToBadge = () => navigate('/login-with-badge');
     const goToGuest = () => navigate('/login-as-guest');
     const goToRegister = () => navigate('/register');
+
+        // Badge-Scan Callback
+        const handleBadgeScan = useCallback((scan: string) => {}, []);
+        useBadgeScanner(handleBadgeScan);
 
     return (
         <div className="start-container">
