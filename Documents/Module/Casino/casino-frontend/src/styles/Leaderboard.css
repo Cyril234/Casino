@@ -1,0 +1,228 @@
+/* --- Bestehende Styles bleiben erhalten --- */
+html, body {
+  z-index: 1;
+  height: 100%;
+  width: auto;
+  overflow: hidden;
+  background: #181724; 
+}
+
+.bg-lines {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.20;
+  background:
+    repeating-linear-gradient(140deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 2px, transparent 2px, transparent 50px),
+    repeating-linear-gradient(215deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 2px, transparent 2px, transparent 50px);
+}
+
+.bg-blobs {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(18px);
+  opacity: 0.7;
+  animation: blob-pulse 42s infinite alternate;
+}
+
+.orange-blob {
+  width: 2250px;
+  height: 2250px;
+  background: radial-gradient(circle, orange 0%, rgba(255, 165, 0, 0.8) 30%, rgba(255, 165, 0, 0.4) 60%, transparent 100%);
+}
+
+.pink-blob {
+  width: 2250px;
+  height: 2250px;
+  background: radial-gradient(circle, #ff4ccd 0%, rgba(255, 76, 205, 0.8) 30%, rgba(255, 76, 205, 0.4) 60%, transparent 100%);
+}
+
+@keyframes blob-pulse {
+  0% { transform: scale(1);}
+  50% { transform: scale(1.2);}
+  100% { transform: scale(1);}
+}
+
+/* --- Leaderboard Modern Layout Styles --- */
+.leaderboard-root {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: #181724;
+}
+
+.leaderboard-back-btn {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 20;
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.20);
+  padding: 0.75rem;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.leaderboard-back-btn:hover {
+  background: rgba(255,255,255,0.20);
+}
+
+.leaderboard-back-btn-selected {
+  background: #ffe066 !important;
+  color: #232323 !important;
+  box-shadow: 0 0 0 4px #ffe06655, 0 2px 16px #ffd70099;
+  border: 2px solid #ffd700;
+}
+
+.leaderboard-content-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.leaderboard-content {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(4px);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  padding: 2rem;
+  width: 140vh;
+  border: 1px solid rgba(255,255,255,0.20);
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+}
+.leaderboard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.leaderboard-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #232323;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.leaderboard-subtitle {
+  color: #666;
+  font-size: 1rem;
+}
+
+.leaderboard-list-wrapper {
+  flex: 1 1 auto;
+  max-height: 80vh;
+  overflow-y: auto;
+  margin-bottom: 2rem;
+}
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s;
+  font-size: 1.15rem;
+}
+.leaderboard-gold {
+  background: linear-gradient(90deg, #ffe066 0%, #ffd700 100%);
+  color: #fff;
+  font-weight: bold;
+}
+.leaderboard-silver {
+  background: linear-gradient(90deg, #e0e0e0 0%, #b0b0b0 100%);
+  color: #fff;
+  font-weight: bold;
+}
+.leaderboard-bronze {
+  background: linear-gradient(90deg, #ffb347 0%, #ff8800 100%);
+  color: #fff;
+  font-weight: bold;
+}
+.leaderboard-default {
+  background: #fff;
+  color: #232323;
+}
+.leaderboard-row-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.leaderboard-rank {
+  font-size: 1.5rem;
+  font-weight: bold;
+  min-width: 3rem;
+  text-align: center;
+}
+.leaderboard-username {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+.leaderboard-row-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.leaderboard-coins {
+  font-size: 1.35rem;
+  font-weight: bold;
+}
+.leaderboard-coins-label {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.leaderboard-footer {
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+.leaderboard-footer-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  color: #666;
+  font-size: 1rem;
+}
+.leaderboard-footer-stat {
+  text-align: center;
+}
+.leaderboard-footer-value {
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: #232323;
+}
+
+/* Custom Scrollbar */
+.leaderboard-list-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+.leaderboard-list-wrapper::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 3px;
+}
+.leaderboard-list-wrapper::-webkit-scrollbar-track {
+  background-color: #f3f4f6;
+  border-radius: 3px;
+}
