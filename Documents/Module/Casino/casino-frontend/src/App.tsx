@@ -8,6 +8,7 @@ import Start from './components/Start'
 import Gameoverview from './components/Gamesoverview'
 import Register from './components/register/Register'
 import BlackJackGame from './components/Games/BlackJack'
+import Minenfeld from './components/Games/Mienenfeld'
 import CreateAvatar from './components/register/CreateAvatar'
 import Logout from './components/logout/Logout'
 import EditProfile from './components/editProfile/EditProfile'
@@ -26,6 +27,7 @@ function App() {
         <Route path='/gameoverview' element={<Gameoverview />} />
         <Route path='/register' element={<Register />} />
         <Route path='/gameoverview/blackjack' element={<BlackJackGame />} />
+        <Route path='/gameoverview/mienenfeld' element={<Minenfeld />} />
         <Route path='/create-avatar' element={<CreateAvatar />} />
         <Route path='/logout' element={<Logout />} />
         <Route path='/edit-profile' element={<EditProfile />} />
