@@ -35,7 +35,16 @@ export default function Register() {
         body: JSON.stringify({ username, email, password })
       });
 
-      if (!regRes.ok) throw new Error(await regRes.text());
+      if (!regRes.ok) {
+        const errorText = await regRes.text();
+        if (regRes.status === 409) {
+          setErrorMsg("Diese E-Mail-Adresse ist bereits registriert.");
+        } else {
+          setErrorMsg("Registrierung fehlgeschlagen: " + errorText);
+        }
+        return;
+      }
+
       const newPlayer: PlayerDto = await regRes.json();
 
       const loginRes = await fetch("http://localhost:8080/api/login", {
@@ -47,7 +56,12 @@ export default function Register() {
         body: JSON.stringify({ username, password })
       });
 
-      if (!loginRes.ok) throw new Error(await loginRes.text());
+      if (!loginRes.ok) {
+        const loginErrorText = await loginRes.text();
+        setErrorMsg("Login fehlgeschlagen: " + loginErrorText);
+        return;
+      }
+
       const { token }: TokenResponse = await loginRes.json();
       sessionStorage.setItem("authToken", token);
 
@@ -57,9 +71,10 @@ export default function Register() {
 
     } catch (error: any) {
       console.error("Registrierung oder Login fehlgeschlagen:", error);
-      setErrorMsg("Registrierung oder Login fehlgeschlagen. Bitte überprüfe deine Eingaben.");
+      setErrorMsg("Serverfehler. Bitte versuche es später erneut.");
     }
   };
+
 
   return (
     <main className="register-page">

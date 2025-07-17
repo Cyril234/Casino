@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -110,16 +111,19 @@ public class APIPlayerController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Player> createPlayer(@RequestBody Player player) {
+    public ResponseEntity<?> createPlayer(@RequestBody Player player) {
         Argon2 argon2 = Argon2Factory.create();
-
         char[] pw = player.getPassword().toCharArray();
         player.setPassword(argon2.hash(2, 65536, 1, pw));
         argon2.wipeArray(pw);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(playerRepository.save(player));
+
+        try {
+            Player saved = playerRepository.save(player);
+            return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Diese E-Mail-Adresse ist bereits registriert.");
+        }
     }
 
     @PutMapping("/{id}")
