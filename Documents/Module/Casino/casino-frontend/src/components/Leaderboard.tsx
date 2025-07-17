@@ -119,7 +119,7 @@ export default function Leaderboard() {
         ref={backBtnRef}
         tabIndex={-1}
       >
-       Zurück
+        Zurück
       </button>
       {/* Main Content */}
       <div className="leaderboard-content-wrapper">
