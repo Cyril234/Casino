@@ -11,6 +11,7 @@ export default function EditProfile() {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [coins, setCoins] = useState(0);
 
     useEffect(() => {
         if (!currentToken) {
@@ -45,6 +46,7 @@ export default function EditProfile() {
                 setPlayerId(data.playerId);
                 setUsername(data.username);
                 setEmail(data.email);
+                setCoins(data.coins);
 
             } catch (err) {
                 console.error("Fehler bei dem Bekommen der SpielerId:", err);
@@ -64,7 +66,7 @@ export default function EditProfile() {
                     "Authorization": `Bearer ${currentToken}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username, email, password }),
+                body: JSON.stringify({ username, email, password, coins }),
             });
             if (!res) {
                 console.log("Fehler beim Bearbeiten!")

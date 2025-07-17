@@ -9,6 +9,10 @@ import com.example.casinobackend.entities.Player;
 public interface PlayerRepository extends JpaRepository<Player, Long> {
 
     Optional<Player> findByUsername(String username);
+
     Optional<Player> findPlayerByToken(String token);
+
     Optional<Player> findPlayerByBadgenumber(String badgenumber);
+
+    boolean existsByEmail(String email);
 }
