@@ -101,6 +101,7 @@ export default function Settings() {
                 <span>{sound ? "An" : "Aus"}</span>
 
                 <button type="submit">Einstellungen speichern</button>
+                <button onClick={() => navigate("/gameoverview")}>Abbrechen</button>
             </form>
         </>
     );

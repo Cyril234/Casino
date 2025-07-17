@@ -5,6 +5,7 @@ import coinImg from "../../../public/pokergeld.png";
 
 import tableImage from "../../assets/TableBlackJack/table.png";
 import { useNavigate } from "react-router";
+import { MdInfo } from "react-icons/md";
 
 
 // 1) Alle Kartenbilder synchron laden
@@ -330,6 +331,7 @@ export default function BlackJackGame() {
       {/* Guthaben */}
       <div className="balance-area">
         <button onClick={() => navigate("/gameoverview")}>Zurück</button>
+        <button onClick={() => navigate("/gameoverview/blackjack/info")}><MdInfo /></button>
 
         Dein Guthaben: <strong>{coinsBalance} </strong>
         <img src={coinImg} alt="Münze" className="coin-small" />

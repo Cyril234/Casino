@@ -15,6 +15,8 @@ export default function Gameoverview() {
   const [posXOrange, setPosXOrange] = useState(2000);
   const [posYOrange, setPosYOrange] = useState(2000);
   const [username, setUsername] = useState<String>("");
+  const [volume, setVolume] = useState(0);
+  const [soundstatus, setSoundstatus] = useState(false);
   const [coins, setCoins] = useState<Number>(0);
   const [lastKey, setLastKey] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
@@ -42,6 +44,8 @@ export default function Gameoverview() {
         const data = await response.json();
         setUsername(data.username);
         setCoins(data.coins);
+        setVolume(data.volume);
+        setSoundstatus(data.soundstatus);
       } catch (err) {
         console.error(err);
       }
