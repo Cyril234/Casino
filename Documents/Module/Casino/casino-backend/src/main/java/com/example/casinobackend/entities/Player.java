@@ -30,7 +30,7 @@ public class Player {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "email", nullable = true, unique = true)
+    @Column(name = "email", nullable = true)
     private String email;
 
     @Column(name = "password", nullable = true)
