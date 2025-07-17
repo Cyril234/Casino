@@ -4,7 +4,9 @@ import "../../styles/BlackJack.css";
 import coinImg from "../../../public/pokergeld.png";
 
 import tableImage from "../../assets/TableBlackJack/table.png";
- 
+import { useNavigate } from "react-router";
+
+
 // 1) Alle Kartenbilder synchron laden
 
 const cardModules = import.meta.glob(
@@ -14,7 +16,7 @@ const cardModules = import.meta.glob(
   { eager: true }
 
 ) as Record<string, { default: string }>;
- 
+
 const cardImages: Record<string, string> = {};
 
 Object.entries(cardModules).forEach(([path, m]) => {
@@ -26,13 +28,13 @@ Object.entries(cardModules).forEach(([path, m]) => {
   cardImages[name] = m.default;
 
 });
- 
+
 function getCardImage(n: string) {
 
   return cardImages[n] || "";
 
 }
- 
+
 // 2) Hand‑Wert berechnen (Ass = 1 oder 11)
 
 function calculateHandValue(hand: string[]): number {
@@ -74,7 +76,7 @@ function calculateHandValue(hand: string[]): number {
   return total;
 
 }
- 
+
 export default function BlackJackGame() {
 
   const [bet, setBet] = useState(0);
@@ -92,15 +94,18 @@ export default function BlackJackGame() {
   const [coinsBalance, setCoinsBalance] = useState(0);
 
   const [errorMessage, setErrorMessage] = useState("");
- 
+
   // NEU: fixierter Ergebnisbetrag & Anzeige-Flag
 
   const [resultAmount, setResultAmount] = useState<number | null>(null);
 
   const [showResult, setShowResult] = useState(false);
- 
+
+
   const authToken = sessionStorage.getItem("authToken");
- 
+
+  const navigate = useNavigate();
+
   // Spieler‑ID & Guthaben beim Mount holen
 
   useEffect(() => {
@@ -142,7 +147,14 @@ export default function BlackJackGame() {
     fetchPlayer();
 
   }, [authToken]);
- 
+
+  useEffect(() => {
+    if (!authToken) {
+      navigate("/");
+      return;
+    }
+  })
+
   // Spiel starten
 
   const startGame = async () => {
@@ -188,7 +200,7 @@ export default function BlackJackGame() {
     }
 
   };
- 
+
   // Hit
 
   const hit = async () => {
@@ -232,7 +244,7 @@ export default function BlackJackGame() {
     }
 
   };
- 
+
   // Stand
 
   const stand = async () => {
@@ -266,14 +278,14 @@ export default function BlackJackGame() {
       setStatus(data.result);
 
       setGameActive(false);
- 
+
       // Ergebnisbetrag festhalten und Guthaben anpassen
 
       if (data.result === "PLAYER_WINS" && typeof data.coinsWon === "number") {
 
         setResultAmount(data.coinsWon);
 
-        setCoinsBalance(prev => prev + (data.coinsWon / 2 ));
+        setCoinsBalance(prev => prev + (data.coinsWon / 2));
 
       } else if (data.result === "DEALER_WINS") {
 
@@ -286,13 +298,13 @@ export default function BlackJackGame() {
         setResultAmount(0);
 
       }
- 
+
       // Popup anzeigen und nach 2 Sek. ausblenden
 
       setShowResult(true);
 
       setTimeout(() => setShowResult(false), 2000);
- 
+
     } catch {
 
       setStatus("FEHLER");
@@ -300,7 +312,7 @@ export default function BlackJackGame() {
     }
 
   };
- 
+
   // Hand-Werte
 
   const playerValue = calculateHandValue(playerHand);
@@ -308,24 +320,25 @@ export default function BlackJackGame() {
   const dealerValue =
 
     status !== "IN_PROGRESS" ? calculateHandValue(dealerHand) : undefined;
- 
 
 
-    
+
+
   return (
-<div className="blackjack-table" style={{ backgroundImage: `url(${tableImage})` }}>
+    <div className="blackjack-table" style={{ backgroundImage: `url(${tableImage})` }}>
 
       {/* Guthaben */}
-<div className="balance-area">
+      <div className="balance-area">
+        <button onClick={() => navigate("/gameoverview")}>Zurück</button>
 
         Dein Guthaben: <strong>{coinsBalance} </strong>
-      <img src={coinImg} alt="Münze" className="coin-small" />
-</div>
- 
+        <img src={coinImg} alt="Münze" className="coin-small" />
+      </div>
+
       {/* Einsatz */}
-<div className="bet-area">
-<label htmlFor="bet" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Einsatz</label><br />
-<input
+      <div className="bet-area">
+        <label htmlFor="bet" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Einsatz</label><br />
+        <input
 
           id="bet"
 
@@ -338,32 +351,32 @@ export default function BlackJackGame() {
           disabled={gameActive}
 
         />
-<button onClick={startGame} disabled={gameActive || bet <= 0}>
+        <button onClick={startGame} disabled={gameActive || bet <= 0}>
 
           Spiel starten
-</button>
+        </button>
 
         {errorMessage && <div className="error">{errorMessage}</div>}
-</div>
- 
+      </div>
+
       {/* Punktestand & Wert */}
-<div className="score dealer">
+      <div className="score dealer">
 
         Dealer: {dealerHand.length}
 
         {dealerValue != null && <div className="hand-value">Wert: {dealerValue}</div>}
-</div>
-<div className="score player">
+      </div>
+      <div className="score player">
 
         Du: {playerHand.length}
-<div className="hand-value">Wert: {playerValue}</div>
-</div>
- 
+        <div className="hand-value">Wert: {playerValue}</div>
+      </div>
+
       {/* Karten */}
-<div className="dealer-hand">
+      <div className="dealer-hand">
 
         {dealerHand.map((c, i) => (
-<div
+          <div
 
             key={`d-${i}`}
 
@@ -374,11 +387,11 @@ export default function BlackJackGame() {
           />
 
         ))}
-</div>
-<div className="player-hand">
+      </div>
+      <div className="player-hand">
 
         {playerHand.map((c, i) => (
-<div
+          <div
 
             key={`p-${i}`}
 
@@ -389,33 +402,32 @@ export default function BlackJackGame() {
           />
 
         ))}
-</div>
- 
+      </div>
+
       {/* Controls */}
 
       {gameActive && (
-<div className="controls">
-<button onClick={hit}>Hit</button>
-<button onClick={stand}>Stand</button>
-</div>
+        <div className="controls">
+          <button onClick={hit}>Hit</button>
+          <button onClick={stand}>Stand</button>
+        </div>
 
       )}
- 
+
       {/* Kurz-Popup mit Gewinn/Verlust */}
 
       {showResult && resultAmount != null && (
-<div className={`status-box ${resultAmount >= 0 ? "win" : "lose"}`}>
+        <div className={`status-box ${resultAmount >= 0 ? "win" : "lose"}`}>
 
-          {resultAmount >= 0 ? `+${resultAmount}` :`${resultAmount} `}
-                <img src={coinImg} alt="Münze" className="coin-small" />
+          {resultAmount >= 0 ? `+${resultAmount}` : `${resultAmount} `}
+          <img src={coinImg} alt="Münze" className="coin-small" />
 
-</div>
+        </div>
 
       )}
-</div>
+    </div>
 
   );
 
 }
 
- 

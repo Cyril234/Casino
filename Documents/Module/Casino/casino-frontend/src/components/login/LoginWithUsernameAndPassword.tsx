@@ -32,51 +32,51 @@ export default function LoginWithEmailAndPassword() {
     }
   };
 
- return (
-  <>
-    <main className="register-page">
-      <h1 className="register-title">Anmelden</h1>
-      <form className="register-form" onSubmit={handleLogin}>
-        <label htmlFor="username" className="form-label">Benutzername</label>
-        <input
-          id="username"
-          type="text"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          required
-          style={{ width: "97%" }}
-        />
-
-        <label htmlFor="password" className="form-label">Passwort</label>
-        <div style={{ width: "100%" }}>
+  return (
+    <>
+      <main className="register-page">
+        <h1 className="register-title">Anmelden</h1>
+        <form className="register-form" onSubmit={handleLogin}>
+          <label htmlFor="username" className="form-label">Benutzername</label>
           <input
-            id="password"
-            type={showPw ? "text" : "password"}
-            value={password}
-            onChange={e => setPassword(e.target.value)}
+            id="username"
+            type="text"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
             required
-            style={{ width: "96%" }}
+            style={{ width: "97%" }}
           />
+
+          <label htmlFor="password" className="form-label">Passwort</label>
+          <div style={{ width: "100%" }}>
+            <input
+              id="password"
+              type={showPw ? "text" : "password"}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              style={{ width: "96%" }}
+            />
+            <button
+              type="button"
+              className="start-btn"
+              style={{ width: "100%", marginTop: "0.5rem", padding: "0.7rem 1rem" }}
+              onClick={() => setShowPw((v) => !v)}
+            >
+              {showPw ? "Verbergen" : "Anzeigen"}
+            </button>
+          </div>
+          <button className="next-btn" type="submit">Anmelden</button>
           <button
+            className="next-btn"
             type="button"
-            className="start-btn"
-            style={{ width: "100%", marginTop: "0.5rem", padding: "0.7rem 1rem" }}
-            onClick={() => setShowPw((v) => !v)}
+            style={{ marginTop: "1rem" }}
+            onClick={() => navigate('/login-overview')}
           >
-            {showPw ? "Verbergen" : "Anzeigen"}
+            Zurück
           </button>
-        </div>
-        <button className="next-btn" type="submit">Anmelden</button>
-        <button
-          className="next-btn"
-          type="button"
-          style={{ marginTop: "1rem" }}
-          onClick={() => navigate('/login-overview')}
-        >
-          Zurück
-        </button>
-      </form>
-    </main>   
+        </form>
+      </main>
     </>
   );
 }

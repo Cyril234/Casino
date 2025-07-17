@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Gameoverview.css";
 import Slideshow from "./GameOverview/Slideshow";
-import { MdLogout } from 'react-icons/md'; 
+import { MdLogout } from 'react-icons/md';
 import { MdSettings } from 'react-icons/md';
+import { FaUser } from "react-icons/fa";
 
 
 
@@ -17,7 +18,7 @@ export default function Gameoverview() {
   const [coins, setCoins] = useState<Number>(0);
   const [lastKey, setLastKey] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
- 
+
   const token = sessionStorage.getItem("authToken");
 
   const navigate = useNavigate();
@@ -137,13 +138,22 @@ export default function Gameoverview() {
         <div className="blob pink-blob"></div>
       </div>
       <div className="bg-lines"></div>
-      <img src="public/pokergeld.png" alt="Testbild" width="100" height="100" className="pokergeld"/>
+      <img src="public/pokergeld.png" alt="Testbild" width="100" height="100" className="pokergeld" />
       <h1 className="cointext">{coins !== null ? coins.toString() : ''}</h1>
       <details className="dropdown">
         <summary>{username}</summary>
         <ul>
-          <li><a href="http://localhost:5173/logout" target="_blank" rel="noopener noreferrer"><MdLogout />logout</a></li>
-          <li><a href="http://localhost:5173/settings" target="_blank" rel="noopener noreferrer"><MdSettings />setings</a></li>
+          <li><button onClick={() => navigate("/logout")}><MdLogout /> Abmelden</button></li>
+          <li><button onClick={() => navigate("/settings")}><MdSettings /> Einstellungen</button></li>
+          <li>
+            <button
+              onClick={() => navigate("/edit-profile")}
+              disabled={username === "gast"}
+            >
+              <FaUser /> Profil
+            </button>
+          </li>
+
         </ul>
       </details>
       <div className="content">
