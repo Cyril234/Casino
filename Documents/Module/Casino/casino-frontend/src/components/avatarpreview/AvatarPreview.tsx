@@ -19,7 +19,6 @@ const layerStyle: React.CSSProperties = {
     position: "absolute",
     top: 0,
     left: 0,
-    bottom: 0,
     imageRendering: "pixelated",
 };
 
@@ -34,14 +33,21 @@ export default function AvatarPreview({
     shoes,
     beard,
 }: AvatarPreviewProps) {
+    // Alle Werte in Kleinbuchstaben für sichere Pfade
     const skin = skincolor?.toLowerCase() || "weiss";
     const eyes = eyecolor?.toLowerCase() || "blau";
     const hair = haircolor?.toLowerCase() || "braun";
-    const hat = headgear?.toLowerCase() || "none";
+    const hat = headgear?.toLowerCase() || "";
     const top = shirt?.toLowerCase() || "weiss";
-    const trousersType = trouserstype?.toLowerCase() || "lang";
+    const trousersType = trouserstype?.toLowerCase() || "kurz";
     const trousersColor = trouserscolor?.toLowerCase() || "grau";
     const shoesType = shoes?.toLowerCase() || "sneakers";
+
+    // Hose: z. B. "kurz_pink.png" oder "lang_blau.png"
+    const trousersFile = `${trousersType}_${trousersColor}.png`;
+
+    // Schuhe mit Hautfarbe: z. B. "flipflops_weiss.png" oder "sneakers_braun.png"
+    const shoesFile = `${shoesType}_${skin}.png`;
 
     return (
         <div
@@ -54,26 +60,33 @@ export default function AvatarPreview({
             }}
         >
             <div style={{ width: "512px", height: "1800px", position: "relative" }}>
-                {/* Hautfarbe Kopf */}
+                {/* Haut (Kopf) */}
                 <img
                     src={`/avatars/base/skin_head/${skin}.png`}
                     alt="Skin Head"
-                    style={{ ...layerStyle, zIndex: 1 }}
+                    style={{
+                        ...layerStyle,
+                        zIndex: 1,
+                        transform: "translate(-40px, -470px)", // X und Y korrigiert
+                    }}
                 />
+
+
 
                 {/* Augen */}
                 <img
                     src={`/avatars/eyes/${eyes}.png`}
                     alt="Eyes"
-                    style={{ ...layerStyle, zIndex: 2 }}
+                    style={{ ...layerStyle, zIndex: 2, transform: "translate(70px, 75px)" }}
+
                 />
 
-                {/* Bart, falls aktiviert */}
+                {/* Bart */}
                 {beard && (
                     <img
                         src="/avatars/beard/default.png"
                         alt="Beard"
-                        style={{ ...layerStyle, zIndex: 3 }}
+                        style={{ ...layerStyle, zIndex: 9, transform: "translate(-40px, -480px)" }}
                     />
                 )}
 
@@ -85,7 +98,7 @@ export default function AvatarPreview({
                 />
 
                 {/* Kopfbedeckung */}
-                {hat !== "none" && (
+                {hat && (
                     <img
                         src={`/avatars/headgear/${hat}.png`}
                         alt="Headgear"
@@ -100,36 +113,19 @@ export default function AvatarPreview({
                     style={{ ...layerStyle, zIndex: 6 }}
                 />
 
-                {/* Beine sichtbar bei kurzen Hosen */}
-                {trousersType === "kurz" && (
-                    <img
-                        src={`/avatars/base/skin_legs/${skin}.png`}
-                        alt="Skin Legs"
-                        style={{ ...layerStyle, zIndex: 8 }}
-                    />
-                )}
+                {/* Schuhe mit Beinen/Füßen */}
+                <img
+                    src={`/avatars/shoes/${shoesFile}`}
+                    alt="Shoes"
+                    style={{ ...layerStyle, zIndex: 7 }}
+                />
 
                 {/* Hose */}
                 <img
-                    src={`/avatars/trousers/${trousersType}_${trousersColor}.png`}
+                    src={`/avatars/trousers/${trousersFile}`}
                     alt="Trousers"
                     style={{ ...layerStyle, zIndex: 8 }}
                 />
-
-                {/* Schuhe oder Flipflops */}
-                {shoesType === "flipflops" ? (
-                    <img
-                        src={`/avatars/shoes/flipflops_${skin}.png`}
-                        alt="Flipflops"
-                        style={{ ...layerStyle, zIndex: 7 }}
-                    />
-                ) : (
-                    <img
-                        src={`/avatars/shoes/${shoesType}.png`}
-                        alt="Shoes"
-                        style={{ ...layerStyle, zIndex: 9 }}
-                    />
-                )}
             </div>
         </div>
     );

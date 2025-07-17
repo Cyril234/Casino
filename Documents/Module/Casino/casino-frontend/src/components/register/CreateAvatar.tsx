@@ -204,7 +204,6 @@ export default function CreateAvatar() {
                     shoes={shoesOptions[shoesIdx]}
                     beard={beard}
                 />
-
                 <button className="submit-btn" type="submit" disabled={!enumsLoaded}>Registrieren</button>
             </form>
         </main>
