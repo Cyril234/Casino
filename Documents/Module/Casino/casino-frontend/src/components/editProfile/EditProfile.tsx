@@ -56,9 +56,12 @@ export default function EditProfile() {
         fetchPlayerId();
     }, [currentToken]);
 
+    const [errorMsg, setErrorMsg] = useState("");
 
     const editProfile = async (e: React.FormEvent) => {
         e.preventDefault();
+        setErrorMsg(""); // Vorherige Fehlermeldungen löschen
+
         try {
             const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
                 method: "PUT",
@@ -68,14 +71,25 @@ export default function EditProfile() {
                 },
                 body: JSON.stringify({ username, email, password, coins }),
             });
-            if (!res) {
-                console.log("Fehler beim Bearbeiten!")
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                if (res.status === 409) {
+                    setErrorMsg(errorText); // kommt vom Backend: z. B. "Username existiert bereits"
+                } else {
+                    setErrorMsg("Fehler beim Bearbeiten: " + errorText);
+                }
+                return;
             }
+
             navigate("/gameoverview");
+
         } catch (err) {
-            console.error(err);
+            console.error("Serverfehler:", err);
+            setErrorMsg("Verbindung zum Server fehlgeschlagen.");
         }
     };
+
 
     const handleDeleteProfile = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -126,6 +140,7 @@ export default function EditProfile() {
                         onChange={e => setPassword(e.target.value)}
                     />
                 </div>
+                {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
                 <button className="next-btn" type="submit">Änderungen speichern</button>
                 <button className="next-btn" onClick={handleDeleteProfile}>Profil löschen</button>
                 <button

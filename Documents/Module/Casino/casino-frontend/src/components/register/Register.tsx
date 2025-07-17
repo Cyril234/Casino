@@ -37,8 +37,16 @@ export default function Register() {
 
       if (!regRes.ok) {
         const errorText = await regRes.text();
+
         if (regRes.status === 409) {
-          setErrorMsg("Diese E-Mail-Adresse ist bereits registriert.");
+          // Prüfe auf konkrete Fehlertexte vom Backend
+          if (errorText.includes("E-Mail")) {
+            setErrorMsg("Diese E-Mail-Adresse ist bereits registriert.");
+          } else if (errorText.includes("Benutzername") || errorText.includes("Username")) {
+            setErrorMsg("Dieser Benutzername ist bereits vergeben.");
+          } else {
+            setErrorMsg("Registrierung fehlgeschlagen: " + errorText);
+          }
         } else {
           setErrorMsg("Registrierung fehlgeschlagen: " + errorText);
         }

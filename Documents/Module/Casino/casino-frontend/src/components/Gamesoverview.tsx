@@ -4,7 +4,7 @@ import "../styles/Gameoverview.css";
 import Slideshow from "./GameOverview/Slideshow";
 import { MdLogout } from 'react-icons/md';
 import { MdSettings } from 'react-icons/md';
-import { FaUser } from "react-icons/fa";
+import { FaTrophy, FaUser } from "react-icons/fa";
 
 
 
@@ -149,6 +149,7 @@ export default function Gameoverview() {
         <ul>
           <li><button onClick={() => navigate("/logout")}><MdLogout /> Abmelden</button></li>
           <li><button onClick={() => navigate("/settings")}><MdSettings /> Einstellungen</button></li>
+          <li><button onClick={() => navigate("/leaderboard")}><FaTrophy /> Rangliste</button></li>
           <li>
             <button
               onClick={() => navigate("/edit-profile")}
