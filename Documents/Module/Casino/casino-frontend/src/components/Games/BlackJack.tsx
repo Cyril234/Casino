@@ -218,35 +218,88 @@ export default function BlackJackGame() {
   return (
     <div className="blackjack-table" style={{ backgroundImage: `url(${tableImage})` }}>
 
-      {/* Guthaben */}
-      <div className="balance-area">
-        <button onClick={() => navigate("/gameoverview")}>Zurück</button>
-        <button onClick={() => navigate("/gameoverview/blackjack/info")}><MdInfo /></button>
+   {/* Zurück-Button links */}
+<div className="top-left">
+  <button className="back-button" onClick={() => navigate("/gameoverview")}>
+    Zurück
+  </button>
+  <button className="info-button" onClick={() => navigate("/gameoverview/blackjack/info")}>
+    <MdInfo />
+  </button>
+</div>
 
-        Dein Guthaben: <strong>{coinsBalance} </strong>
-        <img src={coinImg} alt="Münze" className="coin-small" />
-      </div>
+{/* Guthaben & Info rechts */}
+<div className="balance-area">
+  
+  Dein Guthaben: <strong>{coinsBalance}</strong>
+  <img src={coinImg} alt="Münze" className="coin-small" />
+</div>
 
-      {/* Einsatz */}
       <div className="bet-area">
-        <label htmlFor="bet" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Einsatz</label><br />
-        <input
+  <h3>Einsatz</h3>
+  <input
+    id="bet"
+    type="number"
+    value={bet}
+    onChange={(e) => setBet(Number(e.target.value))}
+    disabled={gameActive}
+    placeholder="Einsatz eingeben"
+  />
+  <button onClick={startGame} disabled={gameActive || bet <= 0}>
+    Spiel starten
+  </button>
+  {errorMessage && <div className="error">{errorMessage}</div>}
+</div>
+<div>
 
-          id="bet"
+        <div className="score player">
+            Du: {playerHand.length}
+            <div className="hand-value">Wert: {playerValue}</div>
+        </div>
+    
+        <div className="dealer-hand">
+            {dealerHand.map((c, i) => (
+        <div
+              key={`d-${i}`}
+              className="card"
+              style={{ backgroundImage: `url(${getCardImage(c)})` }}
+              />
+            ))}
+        </div>
+        <div className="player-hand">
 
-          type="number"
+            {playerHand.map((c, i) => (
+                <div
+                    key={`p-${i}`}
+                    className="card"
+                    style={{ backgroundImage: `url(${getCardImage(c)})` }}
+                />
+            ))}
+        </div>
+        <div className="player-hand">
 
-          value={bet}
+            {playerHand.map((c, i) => (
+                <div
+                    key={`p-${i}`}
+                    className="card"
+                    style={{ backgroundImage: `url(${getCardImage(c)})` }}
+                />
+            ))}
+        </div>
+        {gameActive && (
+            <div className="controls">
+                <button onClick={hit}>Hit</button>
+                <button onClick={stand}>Stand</button>
+            </div>
 
-          onChange={e => setBet(Number(e.target.value))}
+          )}
+
+
 
           disabled={gameActive}
 
-        />
-        <button onClick={startGame} disabled={gameActive || bet <= 0}>
-
-          Spiel starten
-        </button>
+      
+       
 
         {errorMessage && <div className="error">{errorMessage}</div>}
       </div>
@@ -318,7 +371,6 @@ export default function BlackJackGame() {
 
       )}
     </div>
-
   );
 }
 
