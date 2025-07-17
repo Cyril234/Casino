@@ -1,8 +1,18 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 export default function BlackJackInfo() {
 
+    const currentToken = sessionStorage.getItem("authToken");
+
     const navigate = useNavigate();
+    
+    useEffect(() => {
+        if (!currentToken) {
+            navigate("/");
+        }
+    })
+
     return (
         <>
             <h1>Blackjack Spielanleitung</h1>
