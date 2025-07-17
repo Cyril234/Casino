@@ -5,6 +5,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import com.example.casinobackend.entities.Game;
 import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.GameRepository;
 import com.example.casinobackend.repositories.PlayerRepository;
@@ -176,26 +177,32 @@ if (!playerRepository.findByUsername("mia").isPresent()) {
 
 
         if (playerRepository.findByUsername("gast").isPresent()) {
+            Player player = new Player();
+            player.setUsername("gast");
+            player.setCoins(1000);
+            player.setColortheme(com.example.casinobackend.enums.Colortheme.LIGHT);
+            player.setVolume(40);
+            player.setSoundstatus(com.example.casinobackend.enums.Soundstatus.ON);
+            player.setLogins(1);
+            player.setToken("");
+            playerRepository.save(player);
             return;
         };
         
-
-        // Spiel "Blackjack" immer hinzufügen
         
-        Player player = new Player();
-        player.setUsername("gast");
-        player.setCoins(1000);
-        player.setColortheme(com.example.casinobackend.enums.Colortheme.LIGHT);
-        player.setVolume(40);
-        player.setSoundstatus(com.example.casinobackend.enums.Soundstatus.ON);
-        player.setLogins(1);
-        player.setToken("");
-        playerRepository.save(player);
-
-        if (gameRepository.findByTitle("Blackjack").isPresent()) {
+        if (!gameRepository.findByTitle("Blackjack").isPresent()) {
+            Game game1 = new Game();
+            game1.setTitle("Blackjack");
+            gameRepository.save(game1);
             return;
         }
 
+        if (!gameRepository.findByTitle("Mienenfeld").isPresent()) {
+            Game game2 = new Game();
+            game2.setTitle("Mienenfeld");
+            gameRepository.save(game2);
+            return;
+        }
         
     }
 }
