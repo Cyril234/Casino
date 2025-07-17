@@ -12,7 +12,9 @@ import CreateAvatar from './components/register/CreateAvatar'
 import Logout from './components/logout/Logout'
 import EditProfile from './components/editProfile/EditProfile'
 import Settings from './components/Settings'
+import BlackJackInfo from './components/gameinformations/BlackjackInfo'
 import Leaderboard from './components/Leaderboard'
+
 
 function App() {
 
@@ -31,7 +33,9 @@ function App() {
         <Route path='/logout' element={<Logout />} />
         <Route path='/edit-profile' element={<EditProfile />} />
         <Route path='/settings' element={<Settings />} />
+        <Route path='/gameoverview/blackjack/info' element={<BlackJackInfo />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
+
       </Routes>
     </>
   )

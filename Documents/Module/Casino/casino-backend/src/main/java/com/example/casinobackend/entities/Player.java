@@ -62,7 +62,7 @@ public class Player {
     @JsonIgnore
     private Avatar avatar;
 
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "player", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
     private Set<Playingattempt> playingattempts = new HashSet<>();
 

@@ -4,6 +4,7 @@ import "../styles/Start.css";
 import chipImg from "../assets/Blackjack/3♠.png";
 import cardImg from "../assets/Blackjack/4♠.png";
 import cardImg2 from "../assets/Blackjack/5♠.png";
+import { useEffect } from "react";
 import { useCallback } from "react";
 import { useBadgeScanner } from "./login/LoginBage";
 
@@ -14,6 +15,16 @@ export default function Start() {
     const handleBadgeScan = useCallback((scan: string) => {}, []);
     useBadgeScanner(handleBadgeScan);
 
+    
+    useEffect(() => {
+        if (sessionStorage.getItem("authToken")) {
+            sessionStorage.removeItem("authToken")
+        }
+        if (sessionStorage.getItem("username")) {
+            sessionStorage.removeItem("username")
+        }
+    })
+    
     function handleLogin() {
         navigate("/login-overview");
     }

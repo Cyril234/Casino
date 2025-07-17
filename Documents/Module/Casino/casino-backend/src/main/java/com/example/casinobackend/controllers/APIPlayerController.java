@@ -154,4 +154,23 @@ public class APIPlayerController {
                             .body(playerRepository.save(newPlayer));
                 });
     }
+
+    @PutMapping("/settings/{id}")
+    public ResponseEntity<Player> updateSoundAndVolume(@PathVariable long id,
+            @RequestBody Player newPlayer) {
+        Optional<Player> currentPlayer = playerRepository.findById(id);
+
+        return currentPlayer
+                .map(player -> {
+                    player.setVolume(newPlayer.getVolume());
+                    player.setSoundstatus(newPlayer.getSoundstatus());
+                    return ResponseEntity
+                            .status(HttpStatus.OK)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(playerRepository.save(player));
+                }).orElseGet(() -> ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .build());
+    }
+
 }

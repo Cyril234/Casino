@@ -8,8 +8,6 @@ const Logout: React.FC = () => {
         const doLogout = async () => {
             const currentToken = sessionStorage.getItem("authToken");
 
-
-
             if (!currentToken) {
                 alert("Du bist noch gar nicht eingeloggt!");
                 navigate("/");

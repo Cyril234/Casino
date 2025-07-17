@@ -19,31 +19,31 @@ interface SlideshowProps {
 }
 
 export default function Slideshow({ input, onKeyUsed }: SlideshowProps) {
-    const [current, setCurrent] = useState(0);
-    const navigate = useNavigate();
+  const [current, setCurrent] = useState(0);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (input === "ArrowLeft") {
-            setCurrent(prev => (prev - 1 + slides.length) % slides.length);
-            onKeyUsed();
-        } else if (input === "ArrowRight") {
-            setCurrent(prev => (prev + 1) % slides.length);
-            onKeyUsed();
-        }
-    }, [input]);
+  useEffect(() => {
+    if (input === "ArrowLeft") {
+      setCurrent(prev => (prev - 1 + slides.length) % slides.length);
+      onKeyUsed();
+    } else if (input === "ArrowRight") {
+      setCurrent(prev => (prev + 1) % slides.length);
+      onKeyUsed();
+    }
+  }, [input]);
 
-    useEffect(() => {
-        if (input === "Enter") {
-            navigate(slides[current].link);
-            onKeyUsed();
-        }
-    }, [input, current]);
+  useEffect(() => {
+    if (input === "Enter") {
+      navigate(slides[current].link);
+      onKeyUsed();
+    }
+  }, [input, current]);
 
   return (
     <div className="slide">
       <div className="slide-content">
-        <img 
-          src={slides[current].img} 
+        <img
+          src={slides[current].img}
           alt="Testbild"
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
