@@ -1,9 +1,23 @@
 import { useNavigate } from 'react-router';
 import '../../styles/LoginWithBadge.css';
+import { useCallback } from 'react';
+import { useBadgeScanner } from './LoginBage';
 export default function LoginWithBadge() {
-        const navigate = useNavigate();
+    const navigate = useNavigate();
+
+    if (sessionStorage.getItem("authToken")) {
+        sessionStorage.removeItem("authToken");
+    }
+    if (sessionStorage.getItem("username")) {
+        sessionStorage.removeItem("username");
+    }
+
+
+    // Badge-Scan Callback
+    const handleBadgeScan = useCallback((scan: string) => { }, []);
+    useBadgeScanner(handleBadgeScan);
     return (
-        <>       
+        <>
             <div className="start-container">
                 <div className="start-card">
                     <div className="start-title">Badge-Login</div>
@@ -11,6 +25,6 @@ export default function LoginWithBadge() {
                     <button className="start-btn" onClick={() => navigate('/login-overview')}>Zurück</button>
                 </div>
             </div>
-            </>
+        </>
     )
 }
