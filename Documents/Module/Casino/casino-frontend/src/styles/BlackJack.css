@@ -250,7 +250,6 @@ body {
   height: 3rem;
   margin-left: 0.5em;
 }
-
 .top-left {
   position: absolute;
   top: 10px;
@@ -272,18 +271,17 @@ body {
   font-size: 1.1rem;
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.5);
   transition: background 0.2s ease, transform 0.1s;
 }
 
 .back-button:hover {
   background: (145deg, #3a3a3a, #2a2a2a);
 }
-
 .info-button {
   width: 44px;
   height: 44px;
-
+  
   font-size: 1.5rem;
   border-radius: 50%;
   cursor: pointer;
@@ -296,13 +294,10 @@ body {
 }
 
 .info-button:hover {
-  background: inherit;
-  /* keine neue Farbe */
-  transform: scale(1.05);
-  /* optional für leichten Effekt */
+  background: inherit; /* keine neue Farbe */
+  transform: scale(1.05); /* optional für leichten Effekt */
   box-shadow: none;
 }
-
 .info-button {
   background: (145deg, #ffe97f, #d6a431);
   border: none;
@@ -337,14 +332,10 @@ body {
   background: linear-gradient(145deg, #fff8b0, #ddb84a);
   transform: scale(1.1);
 }
-
 .error {
-  background: rgba(255, 80, 80, 0.15);
-  /* sanfter roter Hintergrund */
-  color: #ff4d4d;
-  /* gut sichtbares Hellrot */
-  border-left: 4px solid #ff4d4d;
-  /* roter Balken links */
+  background: rgba(255, 80, 80, 0.15);     /* sanfter roter Hintergrund */
+  color: #ff4d4d;                          /* gut sichtbares Hellrot */
+  border-left: 4px solid #ff4d4d;          /* roter Balken links */
   padding: 10px 12px;
   border-radius: 6px;
   font-size: 1rem;

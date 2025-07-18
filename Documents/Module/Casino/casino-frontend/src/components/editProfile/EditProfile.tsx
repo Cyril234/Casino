@@ -87,6 +87,7 @@ export default function EditProfile() {
                 return;
             }
 
+            sessionStorage.setItem("username", username);
             navigate("/gameoverview");
 
         } catch (err) {
@@ -115,48 +116,48 @@ export default function EditProfile() {
         }
     };
 
-   return (
-    <div className="page-wrapper">
-        <h1>Mein Profil</h1>
-        <form className="register-form" onSubmit={editProfile}>
-            <label htmlFor="username" className="form-label">Benutzername</label>
-            <input
-                id="username"
-                type="text"
-                value={username}
-                placeholder={username}
-                onChange={e => setUsername(e.target.value)}
-            />
-            <label htmlFor="email" className="form-label">Email</label>
-            <input
-                id="email"
-                type="email"
-                value={email}
-                placeholder={email}
-                onChange={e => setEmail(e.target.value)}
-            />
-            <label htmlFor="password" className="form-label">Passwort</label>
-            <div style={{ width: "100%" }}>
+    return (
+        <div className="page-wrapper">
+            <h1>Mein Profil</h1>
+            <form className="register-form" onSubmit={editProfile}>
+                <label htmlFor="username" className="form-label">Benutzername</label>
                 <input
-                    id="password"
-                    type={"password"}
-                    value={password}
-                    placeholder="Gib dein neues Passwort hier ein"
-                    onChange={e => setPassword(e.target.value)}
+                    id="username"
+                    type="text"
+                    value={username}
+                    placeholder={username}
+                    onChange={e => setUsername(e.target.value)}
                 />
-            </div>
-            {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
-            <button className="next-btn" type="submit">Änderungen speichern</button>
-            <button className="next-btn" onClick={handleDeleteProfile}>Profil löschen</button>
-            <button
-                className="next-btn"
-                type="button"
-                onClick={() => navigate('/gameoverview')}
-            >
-                Zurück
-            </button>
-        </form>
-    </div>
-);
+                <label htmlFor="email" className="form-label">Email</label>
+                <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    placeholder={email}
+                    onChange={e => setEmail(e.target.value)}
+                />
+                <label htmlFor="password" className="form-label">Passwort</label>
+                <div style={{ width: "100%" }}>
+                    <input
+                        id="password"
+                        type={"password"}
+                        value={password}
+                        placeholder="Gib dein neues Passwort hier ein"
+                        onChange={e => setPassword(e.target.value)}
+                    />
+                </div>
+                {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
+                <button className="next-btn" type="submit">Änderungen speichern</button>
+                <button className="next-btn" onClick={handleDeleteProfile}>Profil löschen</button>
+                <button
+                    className="next-btn"
+                    type="button"
+                    onClick={() => navigate('/gameoverview')}
+                >
+                    Zurück
+                </button>
+            </form>
+        </div>
+    );
 
 }
