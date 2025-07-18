@@ -14,7 +14,6 @@ body {
   overflow: hidden;
 }
 
-/* Spielfeld-Hintergrund */
 .blackjack-table {
   width: 1960px;
   height: 1080px;
@@ -26,7 +25,6 @@ body {
   overflow: hidden;
 }
 
-/* Karten */
 .card {
   width: 120px;
   height: 180px;
@@ -38,7 +36,6 @@ body {
   z-index: 1;
 }
 
-/* Kartenbereiche */
 .dealer-hand,
 .player-hand {
   position: absolute;
@@ -58,7 +55,6 @@ body {
   transform: translateX(-50%);
 }
 
-/* Punktestand */
 .score {
   position: absolute;
   background: rgba(0, 0, 0, 0.6);
@@ -92,7 +88,6 @@ body {
   z-index: 11;
 }
 
-/* Steuerung */
 .controls {
   position: absolute;
   bottom: 20px;
@@ -124,7 +119,6 @@ body {
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.6);
 }
 
-/* 🟨 Einsatzbereich links unten */
 .bet-area {
   position: absolute;
   bottom: 20px;
@@ -182,7 +176,6 @@ body {
   margin-top: 0.5rem;
 }
 
-/* Guthaben */
 .balance-area {
   position: absolute;
   top: 10px;
@@ -197,13 +190,11 @@ body {
   z-index: 10;
 }
 
-/* Fehler */
 .error {
   color: red;
   margin-top: 0.5rem;
 }
 
-/* Ergebnis */
 .status-box {
   position: absolute;
   top: 50%;
@@ -236,8 +227,6 @@ body {
   font-size: 1.1rem;
 }
 
-
-/* Münz-Icons */
 .coin-small {
   width: 3rem;
   height: 3rem;
@@ -250,6 +239,7 @@ body {
   height: 3rem;
   margin-left: 0.5em;
 }
+
 .top-left {
   position: absolute;
   top: 10px;
@@ -271,17 +261,18 @@ body {
   font-size: 1.1rem;
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 2px 4px 8px rgba(0,0,0,0.5);
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
   transition: background 0.2s ease, transform 0.1s;
 }
 
 .back-button:hover {
   background: (145deg, #3a3a3a, #2a2a2a);
 }
+
 .info-button {
   width: 44px;
   height: 44px;
-  
+
   font-size: 1.5rem;
   border-radius: 50%;
   cursor: pointer;
@@ -294,10 +285,11 @@ body {
 }
 
 .info-button:hover {
-  background: inherit; /* keine neue Farbe */
-  transform: scale(1.05); /* optional für leichten Effekt */
+  background: inherit;
+  transform: scale(1.05);
   box-shadow: none;
 }
+
 .info-button {
   background: (145deg, #ffe97f, #d6a431);
   border: none;
@@ -332,10 +324,11 @@ body {
   background: linear-gradient(145deg, #fff8b0, #ddb84a);
   transform: scale(1.1);
 }
+
 .error {
-  background: rgba(255, 80, 80, 0.15);     /* sanfter roter Hintergrund */
-  color: #ff4d4d;                          /* gut sichtbares Hellrot */
-  border-left: 4px solid #ff4d4d;          /* roter Balken links */
+  background: rgba(255, 80, 80, 0.15);
+  color: #ff4d4d;
+  border-left: 4px solid #ff4d4d;
   padding: 10px 12px;
   border-radius: 6px;
   font-size: 1rem;

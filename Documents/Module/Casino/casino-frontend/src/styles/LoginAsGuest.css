@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -14,7 +15,6 @@ html, body {
   align-items: center;
 }
 
-/* Container */
 .guest-login-container {
   position: fixed;
   top: 0;
@@ -29,7 +29,6 @@ html, body {
   box-sizing: border-box;
 }
 
-/* Karte (Formularbox) */
 .guest-login-card {
   background: #1a0000;
   border-radius: 20px;
@@ -43,7 +42,6 @@ html, body {
   width: 100%;
 }
 
-/* Titel */
 .guest-login-title {
   font-size: 3rem;
   font-weight: bold;
@@ -56,7 +54,6 @@ html, body {
   margin-bottom: 1.5rem;
 }
 
-/* Beschreibungstext (unter Titel) */
 .guest-login-desc {
   color: #ffcc00;
   text-align: center;
@@ -66,29 +63,6 @@ html, body {
   text-shadow: 0 0 8px #ff6600;
 }
 
-/* Formular (falls benötigt in Zukunft) */
-.guest-login-form {
-  width: 100%;
-  max-width: 1000px;
-  padding: 4rem 5rem;
-  box-sizing: border-box;
-  background: #1a0000;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-  color: #ffcc00;
-}
-
-/* Label */
-.guest-login-label {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #ffaa00;
-  text-shadow: 0 0 6px #ff6600;
-}
-
-/* Input */
 .guest-login-input {
   padding: 1rem;
   font-size: 1.1rem;
@@ -109,13 +83,12 @@ html, body {
     inset 0 0 20px #ffaa00;
 }
 
-/* Button Basis */
 .guest-login-button {
   background: linear-gradient(90deg, #ff6600, #ffcc00);
   color: #1a0000;
   border: none;
-  padding: 1.2rem 2rem;         /* Weniger Höhe */
-  font-size: 1.3rem;            /* Kleinere Schrift */
+  padding: 1.2rem 2rem;
+  font-size: 1.3rem;
   font-weight: 700;
   border-radius: 12px;
   box-shadow:
@@ -124,14 +97,12 @@ html, body {
   cursor: pointer;
   text-transform: uppercase;
   transition: all 0.3s ease;
-  width: 300px;                 /* Etwas schmaler */
+  width: 300px;
   text-align: center;
   display: block;
   margin: 0.8rem auto;
 }
 
-
-/* Hover Effekt */
 .guest-login-button:hover {
   background: linear-gradient(90deg, #ffcc00, #ff3300);
   color: #1a0000;
@@ -141,7 +112,6 @@ html, body {
     0 0 40px #ff3300;
 }
 
-/* Button Gruppe zentriert */
 .guest-login-buttons {
   display: flex;
   flex-direction: column;

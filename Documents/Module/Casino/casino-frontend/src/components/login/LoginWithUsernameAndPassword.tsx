@@ -84,7 +84,5 @@ export default function LoginWithEmailAndPassword() {
       </section>
     </main>
   );
-
-
 }
 

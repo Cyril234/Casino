@@ -65,7 +65,7 @@ export default function EditProfile() {
 
     const editProfile = async (e: React.FormEvent) => {
         e.preventDefault();
-        setErrorMsg(""); // Vorherige Fehlermeldungen löschen
+        setErrorMsg("");
 
         try {
             const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
@@ -80,7 +80,7 @@ export default function EditProfile() {
             if (!res.ok) {
                 const errorText = await res.text();
                 if (res.status === 409) {
-                    setErrorMsg(errorText); // kommt vom Backend: z. B. "Username existiert bereits"
+                    setErrorMsg(errorText);
                 } else {
                     setErrorMsg("Fehler beim Bearbeiten: " + errorText);
                 }

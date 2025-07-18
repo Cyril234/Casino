@@ -16,7 +16,7 @@ h1 {
 
 .register-form {
     width: 100%;
-    max-width: 1100px; /* maximale Breite des Formulars */
+    max-width: 1100px;
     padding: 2.5rem 5rem;
     background: rgba(0, 0, 0, 0.85);
     border: 1px solid #444;
@@ -39,8 +39,8 @@ input[type="text"],
 input[type="email"],
 input[type="password"] {
     width: 100%;
-    padding: 1.5rem 1.75rem; /* mehr Innenabstand */
-    font-size: 1.4rem;       /* größere Schrift */
+    padding: 1.5rem 1.75rem;
+    font-size: 1.4rem;
     border: none;
     border-radius: 12px;
     background-color: #2a2a2a;
@@ -64,7 +64,6 @@ input:focus {
     text-align: center;
 }
 
-/* Buttons */
 .next-btn {
     display: inline-block;
     width: 100%;

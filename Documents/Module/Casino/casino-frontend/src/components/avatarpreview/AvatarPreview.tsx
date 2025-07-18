@@ -34,7 +34,6 @@ export default function AvatarPreview({
     shoes,
     beard,
 }: AvatarPreviewProps) {
-    // Alle Werte in Kleinbuchstaben für sichere Pfade
     const skin = skincolor?.toLowerCase() || "weiss";
     const eyes = eyecolor?.toLowerCase() || "blau";
     const hair = haircolor?.toLowerCase() || "braun";
@@ -44,10 +43,8 @@ export default function AvatarPreview({
     const trousersColor = trouserscolor?.toLowerCase() || "grau";
     const shoesType = shoes?.toLowerCase() || "sneakers";
 
-    // Hose: z. B. "kurz_pink.png" oder "lang_blau.png"
     const trousersFile = `${trousersType}_${trousersColor}.png`;
 
-    // Schuhe mit Hautfarbe: z. B. "flipflops_weiss.png" oder "sneakers_braun.png"
     const shoesFile = `${shoesType}_${skin}.png`;
 
     return (
@@ -61,20 +58,16 @@ export default function AvatarPreview({
             }}
         >
             <div style={{ width: "512px", height: "1800px", position: "relative" }}>
-                {/* Haut (Kopf) */}
                 <img
                     src={`/avatars/base/skin_head/${skin}.png`}
                     alt="Skin Head"
                     style={{
                         ...layerStyle,
                         zIndex: 1,
-                        transform: "translate(-40px, -470px)", // X und Y korrigiert
+                        transform: "translate(-40px, -470px)",
                     }}
                 />
 
-
-
-                {/* Augen */}
                 <img
                     src={`/avatars/eyes/${eyes}.png`}
                     alt="Eyes"
@@ -82,7 +75,6 @@ export default function AvatarPreview({
 
                 />
 
-                {/* Bart */}
                 {beard && (
                     <img
                         src="/avatars/beard/default.png"
@@ -91,14 +83,12 @@ export default function AvatarPreview({
                     />
                 )}
 
-                {/* Haare */}
                 <img
                     src={`/avatars/hair/${hair}.png`}
                     alt="Hair"
                     style={{ ...layerStyle, zIndex: 4 }}
                 />
 
-                {/* Kopfbedeckung */}
                 {hat && (
                     <img
                         src={`/avatars/headgear/${hat}.png`}
@@ -107,21 +97,18 @@ export default function AvatarPreview({
                     />
                 )}
 
-                {/* Shirt */}
                 <img
                     src={`/avatars/shirt/${top}.png`}
                     alt="Shirt"
                     style={{ ...layerStyle, zIndex: 6 }}
                 />
 
-                {/* Schuhe mit Beinen/Füßen */}
                 <img
                     src={`/avatars/shoes/${shoesFile}`}
                     alt="Shoes"
                     style={{ ...layerStyle, zIndex: 7 }}
                 />
 
-                {/* Hose */}
                 <img
                     src={`/avatars/trousers/${trousersFile}`}
                     alt="Trousers"
