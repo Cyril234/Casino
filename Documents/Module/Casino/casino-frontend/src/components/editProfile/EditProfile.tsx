@@ -6,6 +6,7 @@ export default function EditProfile() {
     const navigate = useNavigate();
 
     const currentToken = sessionStorage.getItem("authToken");
+    const usernameSecurity = sessionStorage.getItem("username");
 
     const [playerId, setPlayerId] = useState(0);
     const [username, setUsername] = useState("");
@@ -18,6 +19,9 @@ export default function EditProfile() {
             alert("Du bist noch gar nicht eingeloggt!");
             navigate("/");
             return;
+        }
+        if (!usernameSecurity) {
+            navigate("/gameoverview");
         }
     })
 

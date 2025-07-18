@@ -128,9 +128,9 @@ export default function Leaderboard() {
           <div className="leaderboard-header">
             <h1 className="leaderboard-title">
               <Trophy className="w-8 h-8 text-yellow-500" />
-              Leaderboard
+              Rangliste
             </h1>
-            <p className="leaderboard-subtitle">Top performers ranked by coins</p>
+            <p className="leaderboard-subtitle">Alle Spieler sortiert anhand von ihren Coins.</p>
           </div>
           {/* Scrollable Leaderboard */}
           <div className="leaderboard-list-wrapper">
@@ -161,19 +161,19 @@ export default function Leaderboard() {
             <div className="leaderboard-footer-stats">
               <div className="leaderboard-footer-stat">
                 <div className="leaderboard-footer-value">{users.length}</div>
-                <div>Total Players</div>
+                <div>Anzahl Spieler</div>
               </div>
               <div className="leaderboard-footer-stat">
                 <div className="leaderboard-footer-value">
                   {users.reduce((sum, user) => sum + user.coins, 0).toLocaleString()}
                 </div>
-                <div>Total Coins</div>
+                <div>Coins gesamt</div>
               </div>
               <div className="leaderboard-footer-stat">
                 <div className="leaderboard-footer-value">
                   {users.length > 0 ? Math.round(users.reduce((sum, user) => sum + user.coins, 0) / users.length).toLocaleString() : 0}
                 </div>
-                <div>Average Coins</div>
+                <div>Durchschnittliche Coins pro Spieler</div>
               </div>
             </div>
           </div>

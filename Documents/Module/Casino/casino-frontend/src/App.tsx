@@ -8,13 +8,14 @@ import Start from './components/Start'
 import Gameoverview from './components/Gamesoverview'
 import Register from './components/register/Register'
 import BlackJackGame from './components/Games/BlackJack'
-import Minenfeld from './components/Games/Mienenfeld'
+import Mines from './components/Games/Mines'
 import CreateAvatar from './components/register/CreateAvatar'
 import Logout from './components/logout/Logout'
 import EditProfile from './components/editProfile/EditProfile'
 import Settings from './components/Settings'
 import BlackJackInfo from './components/gameinformations/BlackjackInfo'
 import Leaderboard from './components/Leaderboard'
+import HorseRace from './components/Games/HorseRace'
 
 
 function App() {
@@ -30,13 +31,14 @@ function App() {
         <Route path='/gameoverview' element={<Gameoverview />} />
         <Route path='/register' element={<Register />} />
         <Route path='/gameoverview/blackjack' element={<BlackJackGame />} />
-        <Route path='/gameoverview/mienenfeld' element={<Minenfeld />} />
+        <Route path='/gameoverview/mines' element={<Mines />} />
         <Route path='/create-avatar' element={<CreateAvatar />} />
         <Route path='/logout' element={<Logout />} />
         <Route path='/edit-profile' element={<EditProfile />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/gameoverview/blackjack/info' element={<BlackJackInfo />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
+        <Route path='/gameoverview/horserace' element={<HorseRace />} />
 
       </Routes>
     </>

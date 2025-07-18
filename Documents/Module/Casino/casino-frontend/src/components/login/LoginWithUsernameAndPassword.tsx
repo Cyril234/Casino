@@ -8,6 +8,7 @@ export default function LoginWithEmailAndPassword() {
   const [showPw, setShowPw] = useState(false);
   const [status, setStatus] = useState("");
   const navigate = useNavigate();
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,7 +18,12 @@ export default function LoginWithEmailAndPassword() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-      if (!res.ok) throw new Error("Ungültige Anmeldedaten");
+      if (!res.ok) {
+        const errorText = await res.text();
+        setErrorMsg(errorText);
+        return;
+      }
+
       const { token } = await res.json();
       if (!token) throw new Error("Kein Token erhalten");
 
@@ -66,6 +72,9 @@ export default function LoginWithEmailAndPassword() {
               {showPw ? "Verbergen" : "Anzeigen"}
             </button>
           </div>
+          {errorMsg && (
+            <p className="error-message" role="alert">{errorMsg}</p>
+          )}
           <button className="next-btn" type="submit">Anmelden</button>
           <button
             className="next-btn"

@@ -5,6 +5,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import com.example.casinobackend.Games.Pferderennen.Pferd;
 import com.example.casinobackend.entities.Game;
 import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.GameRepository;
@@ -198,6 +199,12 @@ public class Dataloader implements ApplicationRunner {
             Game game2 = new Game();
             game2.setTitle("Mienenfeld");
             gameRepository.save(game2);
+        }
+
+        if (!gameRepository.findByTitle("Pferderennen").isPresent()) {
+            Game game3 = new Game();
+            game3.setTitle("Pferderennen");
+            gameRepository.save(game3);
         }
 
     }
