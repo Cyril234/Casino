@@ -7,7 +7,7 @@ export default function MinesInfo() {
 
   return (
     <div className="info-page">
-      <button className="back-button" onClick={() => navigate("/gameoverview/minenfeld")}>
+      <button className="back-button" onClick={() => navigate("/gameoverview/mines")}>
         <MdArrowBack /> Zurück zum Spiel
       </button>
 

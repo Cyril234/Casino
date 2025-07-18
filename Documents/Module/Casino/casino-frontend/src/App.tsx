@@ -18,6 +18,7 @@ import Leaderboard from './components/Leaderboard'
 import HorseRace from './components/Games/HorseRace'
 import HorseRaceInfo from './components/gameinformations/HorseRaceInfo'
 import MyGames from './components/lastgames/MyGames'
+import MinenfeldInfo from './components/gameinformations/MinenfeldInfo'
 
 
 function App() {
@@ -39,10 +40,10 @@ function App() {
         <Route path='/edit-profile' element={<EditProfile />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/gameoverview/blackjack/info' element={<BlackJackInfo />} />
-        <Route path='/gameoverview/minenfeld/info' element={<MinenfeldInfo />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
         <Route path='/gameoverview/horserace' element={<HorseRace />} />
         <Route path="/gameoverview/horserace/info" element={<HorseRaceInfo />} />
+        <Route path="/gameoverview/mines/info" element={<MinenfeldInfo />} />
         <Route path="/gaminghistory" element={<MyGames />} />
       </Routes>
     </>
