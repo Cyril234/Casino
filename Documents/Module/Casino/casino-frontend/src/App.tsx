@@ -15,6 +15,7 @@ import EditProfile from './components/editProfile/EditProfile'
 import Settings from './components/Settings'
 import BlackJackInfo from './components/gameinformations/BlackjackInfo'
 import Leaderboard from './components/Leaderboard'
+import MinenfeldInfo from './components/gameinformations/MinenfeldInfo'
 
 
 function App() {
@@ -30,12 +31,13 @@ function App() {
         <Route path='/gameoverview' element={<Gameoverview />} />
         <Route path='/register' element={<Register />} />
         <Route path='/gameoverview/blackjack' element={<BlackJackGame />} />
-        <Route path='/gameoverview/mienenfeld' element={<Minenfeld />} />
+        <Route path='/gameoverview/minenfeld' element={<Minenfeld />} />
         <Route path='/create-avatar' element={<CreateAvatar />} />
         <Route path='/logout' element={<Logout />} />
         <Route path='/edit-profile' element={<EditProfile />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/gameoverview/blackjack/info' element={<BlackJackInfo />} />
+        <Route path='/gameoverview/minenfeld/info' element={<MinenfeldInfo />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
 
       </Routes>

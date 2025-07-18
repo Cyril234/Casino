@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import "../../styles/LoginAsGuest.css"
 
 export default function LoginAsGuest() {
 
@@ -31,15 +32,31 @@ export default function LoginAsGuest() {
         }
     }
 
-    return (
-        <div className="start-container">
-            <div className="start-card">
-                <div className="start-title">Anmeldung als Gast</div>
-                <div className="start-desc">Verwende fast alle Funktionen, ohne ein Konto zu erstellen! Du erhälst einen Startbetrag, welchen du verspielen kannst!</div>
-                <button className="start-btn" onClick={goToGameoverview}>Als Gast fortfahren</button>
-                <button className="start-btn" onClick={() => navigate('/login-overview')}>Zurück</button>
-            </div>
+
+
+   return (
+  <>
+    <div className="guest-login-container">
+      <div className="guest-login-card full-width">
+        <h1 className="guest-login-title">Anmeldung als Gast</h1>
+        <div className="guest-login-desc">
+          Verwende fast alle Funktionen ...
         </div>
-    )
+        <div className="guest-login-buttons">
+          <button className="guest-login-button" onClick={goToGameoverview}>
+            Als Gast fortfahren
+          </button>
+          <button
+            className="guest-login-button"
+            onClick={() => navigate('/login-overview')}
+          >
+            Zurück
+          </button>
+        </div>
+      </div>
+    </div>
+  </>
+);
+
 
 }

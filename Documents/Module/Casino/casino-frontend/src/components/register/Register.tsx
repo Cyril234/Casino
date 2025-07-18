@@ -85,60 +85,65 @@ export default function Register() {
 
 
   return (
-    <main className="register-page">
-      <h1 className="register-title">Registrieren</h1>
-      <form className="register-form" onSubmit={handleNext}>
-        <label htmlFor="username" className="form-label">Username</label>
-        <input
-          id="username"
-          type="text"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          required
-          style={{ width: "97%" }}
-        />
+    <main className="register-page-container">
+      <section className="register-form-wrapper">
+        <h1 className="register-title">Registrieren</h1>
+        <form className="register-form" onSubmit={handleNext}>
 
-        <label htmlFor="email" className="form-label">E-Mail</label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-          style={{ width: "97%" }}
-        />
-
-        <label htmlFor="password" className="form-label">Passwort</label>
-        <div style={{ width: "100%" }}>
+          <label htmlFor="username" className="register-label">Username</label>
           <input
-            id="password"
-            type={showPw ? "text" : "password"}
-            value={password}
-            onChange={e => setPassword(e.target.value)}
+            id="username"
+            type="text"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
             required
-            style={{ width: "96%" }}
+            className="register-input"
           />
-          <button
-            type="button"
-            className="start-btn"
-            style={{ width: "100%", marginTop: "0.5rem", padding: "0.7rem 1rem" }}
-            onClick={() => setShowPw((v) => !v)}
-          >
-            {showPw ? "Verbergen" : "Anzeigen"}
-          </button>
-        </div>
-        {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
 
-        <button className="next-btn" type="submit">Weiter</button>
-        <button
-          className="next-btn"
-          type="button"
-          style={{ marginTop: "1rem" }}
-          onClick={() => navigate('/login-overview')}
-        >
-          Zurück
-        </button>
-      </form>
+          <label htmlFor="email" className="register-label">E-Mail</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+            className="register-input"
+          />
+
+          <label htmlFor="password" className="register-label">Passwort</label>
+          <div className="password-wrapper">
+            <input
+              id="password"
+              type={showPw ? "text" : "password"}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              className="register-input"
+            />
+            <button
+              type="button"
+              className="casino-login-button casino-login-button--toggle"
+              onClick={() => setShowPw(prev => !prev)}
+            >
+              {showPw ? "Verbergen" : "Anzeigen"}
+            </button>
+          </div>
+
+          {errorMsg && <p className="register-error">{errorMsg}</p>}
+
+          <button className="register-button" type="submit">Weiter</button>
+          <button
+            className="register-button register-button-back"
+            type="button"
+            onClick={() => navigate('/login-overview')}
+          >
+            Zurück
+          </button>
+        </form>
+      </section>
     </main>
+
   );
+
+
 }

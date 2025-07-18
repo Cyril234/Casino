@@ -16,15 +16,22 @@ export default function LoginWithBadge() {
     // Badge-Scan Callback
     const handleBadgeScan = useCallback((scan: string) => { }, []);
     useBadgeScanner(handleBadgeScan);
-    return (
-        <>
-            <div className="start-container">
-                <div className="start-card">
-                    <div className="start-title">Badge-Login</div>
-                    <div className="start-desc">Halte deinen Badge an den Leser am Automaten, um dich anzumelden!</div>
-                    <button className="start-btn" onClick={() => navigate('/login-overview')}>Zurück</button>
-                </div>
-            </div>
-        </>
-    )
+return (
+  <>
+    <div className="unique-register-container">
+      <div className="unique-register-card full-width">
+        <h1 className="unique-register-title">Badge-Login</h1>
+        <p className="unique-register-desc">
+          Halte deinen Badge an den Leser am Automaten, um dich anzumelden!
+        </p>
+        <button
+          className="unique-register-button"
+          onClick={() => navigate('/login-overview')}
+        >
+          Zurück
+        </button>
+      </div>
+    </div>
+  </>
+);
 }

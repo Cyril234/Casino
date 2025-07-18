@@ -1,4 +1,5 @@
 import React from "react";
+import "../../styles/Avatar.css"
 
 interface AvatarPreviewProps {
     skincolor: string;
@@ -51,7 +52,7 @@ export default function AvatarPreview({
 
     return (
         <div
-            className="avatar-preview-container"
+            className="acreate-avatar-wrapper"
             style={{
                 marginTop: "32px",
                 display: "flex",

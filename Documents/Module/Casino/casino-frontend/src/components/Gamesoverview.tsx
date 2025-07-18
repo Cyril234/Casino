@@ -137,11 +137,11 @@ export default function Gameoverview() {
 
   return (
     <div className="gameoverview diagonal-grid">
-      <div className="bg-blobs">
-        <div className="blob orange-blob"></div>
-        <div className="blob pink-blob"></div>
+      <div className="bg-blobs-game">
+        <div className="blob orange-blob-game"></div>
+        <div className="blob pink-blob-game"></div>
       </div>
-      <div className="bg-lines"></div>
+      <div className="bg-lines-game"></div>
       <img src="public/pokergeld.png" alt="Testbild" width="100" height="100" className="pokergeld" />
       <h1 className="cointext">{coins !== null ? coins.toString() : ''}</h1>
       <details className="dropdown">

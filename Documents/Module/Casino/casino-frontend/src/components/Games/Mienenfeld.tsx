@@ -10,7 +10,7 @@ export default function MinesGame() {
   const authToken = sessionStorage.getItem("authToken");
   const [playerId, setPlayerId] = useState<number | null>(null);
   const [bombs, setBombs] = useState(3);
-  const [fields, setFields] = useState(25);
+  const [fields] = useState(25);
   const [bet, setBet] = useState(50);
   const [coinsBalance, setCoinsBalance] = useState(0);
   const [revealed, setRevealed] = useState<number[]>([]);
@@ -166,7 +166,7 @@ return (
     <button className="back-button" onClick={() => navigate("/gameoverview")}>
       Zurück
     </button>
-    <button className="info-button" onClick={() => navigate("/gameoverview/blackjack/info")}>
+    <button className="info-button" onClick={() => navigate("/gameoverview/minenfeld/info")}>
       <MdInfo />
     </button>
   </div>

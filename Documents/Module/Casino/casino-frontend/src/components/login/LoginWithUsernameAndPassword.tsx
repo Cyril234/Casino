@@ -32,52 +32,63 @@ export default function LoginWithEmailAndPassword() {
     }
   };
 
-  return (
-    <>
-      <main className="register-page">
-        <h1 className="register-title">Anmelden</h1>
-        <form className="register-form" onSubmit={handleLogin}>
-          <label htmlFor="username" className="form-label">Benutzername</label>
-          <input
-            id="username"
-            type="text"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-            required
-            style={{ width: "97%" }}
-          />
+ return (
+<main className="casino-login-container">
+  <section className="casino-login-card">
+    <h1 className="casino-login-title">Anmelden</h1>
+    <form onSubmit={handleLogin} className="casino-login-form">
+      
+     
 
-          <label htmlFor="password" className="form-label">Passwort</label>
-          <div style={{ width: "100%" }}>
-            <input
-              id="password"
-              type={showPw ? "text" : "password"}
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              style={{ width: "96%" }}
-            />
-            <button
-              type="button"
-              className="start-btn"
-              style={{ width: "100%", marginTop: "0.5rem", padding: "0.7rem 1rem" }}
-              onClick={() => setShowPw((v) => !v)}
-            >
-              {showPw ? "Verbergen" : "Anzeigen"}
-            </button>
-          </div>
-          <button className="next-btn" type="submit">Anmelden</button>
-          <button
-            className="next-btn"
-            type="button"
-            style={{ marginTop: "1rem" }}
-            onClick={() => navigate('/login-overview')}
-          >
-            Zurück
-          </button>
-        </form>
-      </main>
-    </>
-  );
+      {/* Benutzername */}
+      <label htmlFor="username" className="casino-login-label">Benutzername</label>
+      <input
+        id="username"
+        type="text"
+        value={username}
+        onChange={e => setUsername(e.target.value)}
+        required
+        className="casino-login-input"
+      />
+
+      {/* Passwort */}
+      <label htmlFor="password" className="casino-login-label">Passwort</label>
+      <input
+        id="password"
+        type={showPw ? "text" : "password"}
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        required
+        className="casino-login-input"
+      />
+       {/* Anzeigen-Button ganz oben */}
+      <button
+        type="button"
+        className="casino-login-button casino-login-button--toggle"
+        onClick={() => setShowPw(prev => !prev)}
+      >
+        {showPw ? "Verbergen" : "Anzeigen"}
+      </button>
+
+      {/* Buttons zentriert */}
+      <div className="casino-login-buttons">
+        <button className="casino-login-button" type="submit">Anmelden</button>
+        <button
+          className="casino-login-button casino-login-button--back"
+          type="button"
+          onClick={() => navigate('/login-overview')}
+        >
+          Zurück
+        </button>
+      </div>
+    </form>
+  </section>
+</main>
+
+
+
+);
+
+
 }
 
