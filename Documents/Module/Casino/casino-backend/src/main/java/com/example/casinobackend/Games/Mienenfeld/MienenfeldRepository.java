@@ -132,7 +132,7 @@ public class MienenfeldRepository {
         result.setGame(game);
         result.setPlayer(player);
         result.setSettedcoins(session.bet);
-        result.setFinishingbalance(session.currentProfit);
+        result.setFinishingbalance(player.getCoins());
         playingattemptRepository.save(result);
 
         return Map.of(

@@ -36,88 +36,90 @@ public class APILoginController {
     private String UID = "";
 
     @PostMapping("api/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody LoginPasswordRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginPasswordRequest request) {
         Argon2 argon2 = Argon2Factory.create();
-        String token;
 
-        Optional<Player> player = playerRepository.findByUsername(request.getUsername());
+        Optional<Player> playerOpt = playerRepository.findByUsername(request.getUsername());
 
-        System.out.println(player);
-
-        if (player.isPresent() && argon2.verify(player.get().getPassword(), request.getPassword().toCharArray())) {
-            token = generateToken();
-            Player existing = player.get();
-            existing.setToken(token);
-            existing.setLogins(existing.getLogins() + 1);
-            playerRepository.save(existing);
-
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(new TokenResponse(token));
-
-        } else {
+        if (playerOpt.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(new TokenResponse(""));
+                    .body("Benutzername existiert nicht.");
         }
+
+        Player player = playerOpt.get();
+
+        if (!argon2.verify(player.getPassword(), request.getPassword().toCharArray())) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Passwort ist ungültig.");
+        }
+
+        String token = generateToken();
+        player.setToken(token);
+        player.setLogins(player.getLogins() + 1);
+        playerRepository.save(player);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new TokenResponse(token));
     }
 
     @PostMapping("api/loginUID")
     public ResponseEntity<TokenResponse> loginUID(@RequestBody Map<String, String> body) {
 
-        try{
-        MessageDigest md = MessageDigest.getInstance("SHA-512");
-        byte[] hashBytes = md.digest(body.get("uid").getBytes());
-        String token;
-        StringBuilder sb = new StringBuilder();
-        for (byte b : hashBytes) {
-            sb.append(String.format("%02x", b));
-        }
-        String UID = sb.toString();
-
-        System.out.println("ligin" + UID);
-
-        if (UID != "") {
-
-            System.out.println("test:"+UID);
-
-            Optional<Player> player = playerRepository.findPlayerByBadgenumber(UID);
-
-            if (player.isPresent()) {
-                token = generateToken();
-                Player existing = player.get();
-                existing.setToken(token);
-                existing.setLogins(existing.getLogins() + 1);
-                playerRepository.save(existing);
-
-                return ResponseEntity
-                        .status(HttpStatus.CREATED)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(new TokenResponse(token));
-            } else {
-                token = generateToken();
-                Player newPlayer = new Player();
-                newPlayer.setToken(token);
-                newPlayer.setUsername("pleasCange");
-                newPlayer.setLogins(1);
-                newPlayer.setBadgenumber(UID);
-                playerRepository.save(newPlayer);
-
-                return ResponseEntity
-                        .status(HttpStatus.CREATED)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(new TokenResponse(token));
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            byte[] hashBytes = md.digest(body.get("uid").getBytes());
+            String token;
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashBytes) {
+                sb.append(String.format("%02x", b));
             }
+            String UID = sb.toString();
 
-        } else {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(new TokenResponse(""));
-        }
-        }catch(Error e){} catch (NoSuchAlgorithmException e) {
+            System.out.println("ligin" + UID);
+
+            if (UID != "") {
+
+                System.out.println("test:" + UID);
+
+                Optional<Player> player = playerRepository.findPlayerByBadgenumber(UID);
+
+                if (player.isPresent()) {
+                    token = generateToken();
+                    Player existing = player.get();
+                    existing.setToken(token);
+                    existing.setLogins(existing.getLogins() + 1);
+                    playerRepository.save(existing);
+
+                    return ResponseEntity
+                            .status(HttpStatus.CREATED)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(new TokenResponse(token));
+                } else {
+                    token = generateToken();
+                    Player newPlayer = new Player();
+                    newPlayer.setToken(token);
+                    newPlayer.setUsername("pleasCange");
+                    newPlayer.setLogins(1);
+                    newPlayer.setBadgenumber(UID);
+                    playerRepository.save(newPlayer);
+
+                    return ResponseEntity
+                            .status(HttpStatus.CREATED)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(new TokenResponse(token));
+                }
+
+            } else {
+                return ResponseEntity
+                        .status(HttpStatus.NO_CONTENT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(new TokenResponse(""));
+            }
+        } catch (Error e) {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return null;

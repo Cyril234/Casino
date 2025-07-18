@@ -39,7 +39,6 @@ export default function Register() {
         const errorText = await regRes.text();
 
         if (regRes.status === 409) {
-          // Prüfe auf konkrete Fehlertexte vom Backend
           if (errorText.includes("E-Mail")) {
             setErrorMsg("Diese E-Mail-Adresse ist bereits registriert.");
           } else if (errorText.includes("Benutzername") || errorText.includes("Username")) {
@@ -72,6 +71,7 @@ export default function Register() {
 
       const { token }: TokenResponse = await loginRes.json();
       sessionStorage.setItem("authToken", token);
+      sessionStorage.setItem("username", username);
 
       navigate("/create-avatar", {
         state: { player: newPlayer }

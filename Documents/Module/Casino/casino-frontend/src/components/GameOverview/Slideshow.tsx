@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 const slides = [
   { id: 1, img: "./public/titelbilder/blackjackTitelbild.png", link: '/gameoverview/blackjack' },
-  { id: 2, img: "./public/titelbilder/horseRacingTitelbild.png", link: '/'},
-  { id: 3, img: "./public/titelbilder/minenfeldTitelbild.png", link: '/gameoverview/minenfeld' },
+  { id: 2, img: "./public/titelbilder/horseRacingTitelbild.png", link: '/gameoverview/horserace' },
+  { id: 3, img: "./public/titelbilder/minenfeldTitelbild.png", link: '/gameoverview/mines' },
   { id: 4, img: "./public/titelbilder/pokerTitelbild.png", link: '/' },
   { id: 5, img: "./public/titelbilder/rouletteTitelbild.png", link: '/' },
   { id: 6, img: "./public/titelbilder/slotMachineTitelbild.png", link: '/' },

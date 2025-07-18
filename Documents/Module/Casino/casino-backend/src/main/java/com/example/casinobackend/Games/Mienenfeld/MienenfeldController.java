@@ -15,7 +15,7 @@ import com.example.casinobackend.repositories.GameRepository;
 import com.example.casinobackend.repositories.PlayerRepository;
 
 @RestController
-@RequestMapping("/mienenfeld")
+@RequestMapping("/mines")
 @CrossOrigin(origins = "http://localhost:5173")
 public class MienenfeldController {
 

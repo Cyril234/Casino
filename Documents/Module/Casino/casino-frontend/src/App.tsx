@@ -5,17 +5,19 @@ import LoginWithBadge from './components/login/LoginWithBadge'
 import LoginWithEmailAndPassword from './components/login/LoginWithUsernameAndPassword'
 import LoginAsGuest from './components/login/LoginAsGuest'
 import Start from './components/Start'
-import Gameoverview from './components/Gamesoverview'
+import Gameoverview from './components/GameOverview/Gamesoverview'
 import Register from './components/register/Register'
 import BlackJackGame from './components/Games/BlackJack'
-import Minenfeld from './components/Games/Mienenfeld'
+import Mines from './components/Games/Mines'
 import CreateAvatar from './components/register/CreateAvatar'
 import Logout from './components/logout/Logout'
 import EditProfile from './components/editProfile/EditProfile'
 import Settings from './components/Settings'
 import BlackJackInfo from './components/gameinformations/BlackjackInfo'
 import Leaderboard from './components/Leaderboard'
-import MinenfeldInfo from './components/gameinformations/MinenfeldInfo'
+import HorseRace from './components/Games/HorseRace'
+import HorseRaceInfo from './components/gameinformations/HorseRaceInfo'
+import MyGames from './components/lastgames/MyGames'
 
 
 function App() {
@@ -31,7 +33,7 @@ function App() {
         <Route path='/gameoverview' element={<Gameoverview />} />
         <Route path='/register' element={<Register />} />
         <Route path='/gameoverview/blackjack' element={<BlackJackGame />} />
-        <Route path='/gameoverview/minenfeld' element={<Minenfeld />} />
+        <Route path='/gameoverview/mines' element={<Mines />} />
         <Route path='/create-avatar' element={<CreateAvatar />} />
         <Route path='/logout' element={<Logout />} />
         <Route path='/edit-profile' element={<EditProfile />} />
@@ -39,7 +41,9 @@ function App() {
         <Route path='/gameoverview/blackjack/info' element={<BlackJackInfo />} />
         <Route path='/gameoverview/minenfeld/info' element={<MinenfeldInfo />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
-
+        <Route path='/gameoverview/horserace' element={<HorseRace />} />
+        <Route path="/gameoverview/horserace/info" element={<HorseRaceInfo />} />
+        <Route path="/gaminghistory" element={<MyGames />} />
       </Routes>
     </>
   )
