@@ -136,7 +136,7 @@ public Map<String, Object> stand(Player player) {
     resultAttempt.setGame(blackjackGame);
     resultAttempt.setPlayer(player);
     resultAttempt.setSettedcoins(bet);
-    resultAttempt.setFinishingbalance(coinsWon);
+    resultAttempt.setFinishingbalance(player.getCoins());
 
     playingattemptRepo.save(resultAttempt);
 

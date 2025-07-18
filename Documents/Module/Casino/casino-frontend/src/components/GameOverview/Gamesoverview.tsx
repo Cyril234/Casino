@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Gameoverview.css";
-import Slideshow from "./GameOverview/Slideshow";
+import "../../styles/Gameoverview.css";
+import Slideshow from "../GameOverview/Slideshow";
 import { MdLogout } from 'react-icons/md';
 import { MdSettings } from 'react-icons/md';
 import { FaTrophy, FaUser } from "react-icons/fa";
+import { GiConsoleController } from "react-icons/gi";
 
 
 
@@ -137,11 +138,11 @@ export default function Gameoverview() {
 
   return (
     <div className="gameoverview diagonal-grid">
-      <div className="bg-blobs">
-        <div className="blob orange-blob"></div>
-        <div className="blob pink-blob"></div>
+      <div className="bg-blobs-game">
+        <div className="blob orange-blob-game"></div>
+        <div className="blob pink-blob-game"></div>
       </div>
-      <div className="bg-lines"></div>
+      <div className="bg-lines-game"></div>
       <img src="public/pokergeld.png" alt="Testbild" width="100" height="100" className="pokergeld" />
       <h1 className="cointext">{coins !== null ? coins.toString() : ''}</h1>
       <details className="dropdown">
@@ -156,6 +157,12 @@ export default function Gameoverview() {
               disabled={username === "gast"}
             >
               <FaUser /> Profil
+            </button>
+            <button
+              onClick={() => navigate("/gaminghistory")}
+              disabled={username === "gast"}
+            >
+              <GiConsoleController /> Letzte Spiele
             </button>
           </li>
 

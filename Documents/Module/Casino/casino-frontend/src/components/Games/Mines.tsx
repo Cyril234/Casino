@@ -4,12 +4,13 @@ import tableBg from "../../../public/MinenfeldHintergrund.png";
 import bombImg from "../../../public/bombe.png";
 import coinImg from "../../../public/pokergeld.png";
 import { useNavigate } from "react-router-dom";
+import { MdInfo } from "react-icons/md";
 
 export default function MinesGame() {
   const authToken = sessionStorage.getItem("authToken");
   const [playerId, setPlayerId] = useState<number | null>(null);
   const [bombs, setBombs] = useState(3);
-  const [fields, setFields] = useState(25);
+  const [fields] = useState(25);
   const [bet, setBet] = useState(50);
   const [coinsBalance, setCoinsBalance] = useState(0);
   const [revealed, setRevealed] = useState<number[]>([]);
@@ -157,24 +158,22 @@ export default function MinesGame() {
     <div
       className={`mines-container ${status === "LOSE" ? "lost" : ""}`}
       style={{ backgroundImage: `url(${tableBg})` }}
-    >
-      <h2>💣 Mines</h2>
-      <div className="balance-area">
+>
+  <div className="top-left">
+    <button className="back-button" onClick={() => navigate("/gameoverview")}>
+      Zurück
+    </button>
+    <button className="info-button" onClick={() => navigate("/gameoverview/mines/info")}>
+      <MdInfo />
+    </button>
+  </div>
+<div className="balance-area">
+
         Guthaben: <strong>{coinsBalance}</strong>
         <img src={coinImg} alt="Münze" className="coin-small" />
       </div>
       {!gameActive && (
         <div className="config-area">
-          <label>
-            Felder:
-            <input
-              type="number"
-              value={fields}
-              min={5}
-              max={105}
-              onChange={e => setFields(parseInt(e.target.value))}
-            />
-          </label>
           <label>
             Bomben:
             <input

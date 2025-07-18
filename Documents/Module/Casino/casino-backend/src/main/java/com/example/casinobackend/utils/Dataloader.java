@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
-import com.example.casinobackend.Games.Pferderennen.Pferd;
 import com.example.casinobackend.entities.Game;
 import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.GameRepository;

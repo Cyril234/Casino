@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.entities.Playingattempt;
+import com.example.casinobackend.repositories.PlayerRepository;
 import com.example.casinobackend.repositories.PlayingattemptRepository;
 
 @RestController
@@ -27,6 +29,9 @@ public class APIPlayingattemptController {
 
     @Autowired
     PlayingattemptRepository playingattemptRepository;
+
+    @Autowired
+    PlayerRepository playerRepository;
 
     @GetMapping
     public ResponseEntity<List<Playingattempt>> getPlayingattempts() {
@@ -43,6 +48,21 @@ public class APIPlayingattemptController {
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(value)).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/byPlayer/{id}")
+    public ResponseEntity<List<Playingattempt>> getPlayingAttemptsFromOnePlayer(@PathVariable Long id) {
+        Optional<Player> player = playerRepository.findById(id);
+        List<Playingattempt> playingattempts = playingattemptRepository.findByPlayer(player);
+
+        if (playingattempts == null || playingattempts.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(playingattempts);
     }
 
     @DeleteMapping("/{id}")

@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import AvatarPreview from "../avatarpreview/AvatarPreview";
+import "../../styles/Avatar.css"
 
 interface PlayerDto {
     id: number;
@@ -151,15 +152,31 @@ export default function CreateAvatar() {
     }) => (
         <div className="arrow-selector" id={id}>
             <span className="form-label">{label}</span>
-            <button type="button" className="arrow-btn prev-btn" onClick={() => setIndex(cycle(index, options.length, -1))} disabled={!options.length}>
+            <button
+                type="button"
+                className="arrow-btn"
+                onClick={() => setIndex(cycle(index, options.length, -1))}
+                disabled={!options.length}
+            >
                 <MdArrowBack />
             </button>
-            <span className="value-display">{options.length ? options[index] : "Lade..."}</span>
-            <button type="button" className="arrow-btn next-btn" onClick={() => setIndex(cycle(index, options.length, 1))} disabled={!options.length}>
+
+            <span className="value-display">
+                {options.length ? options[index] : "Lade..."}
+            </span>
+
+            <button
+                type="button"
+                className="arrow-btn"
+                onClick={() => setIndex(cycle(index, options.length, 1))}
+                disabled={!options.length}
+            >
                 <MdArrowForward />
             </button>
+
         </div>
     );
+
 
     const layerStyle: React.CSSProperties = {
         width: "100%",
@@ -174,38 +191,121 @@ export default function CreateAvatar() {
     return (
         <main className="create-avatar-page">
             <h1 className="create-avatar-title">Konfiguriere deinen Avatar!</h1>
-            <form className="create-avatar-form" onSubmit={handleSubmit}>
-                <label className="form-label" htmlFor="avatar-name">Avatar-Name</label>
-                <input id="avatar-name" className="form-input" value={avatarName} onChange={e => setAvatarName(e.target.value)} required />
-                <label className="form-label" htmlFor="avatar-description">Beschreibung</label>
-                <input id="avatar-description" className="form-input" value={avatarDescription} onChange={e => setAvatarDescription(e.target.value)} required />
+            <div className="create-avatar-wrapper" style={{ display: "flex", justifyContent: "center", gap: "2rem", maxWidth: "1000px", margin: "auto" }}>
 
-                <ArrowSelector id="haircolor-select" label="Haarfarbe" options={haircolorOptions} index={haircolorIdx} setIndex={setHaircolorIdx} />
-                <ArrowSelector id="skincolor-select" label="Hautfarbe" options={skincolorOptions} index={skincolorIdx} setIndex={setSkincolorIdx} />
-                <ArrowSelector id="eyecolor-select" label="Augenfarbe" options={eyecolorOptions} index={eyecolorIdx} setIndex={setEyecolorIdx} />
-                <ArrowSelector id="headgear-select" label="Kopfbedeckung" options={headgearOptions} index={headgearIdx} setIndex={setHeadgearIdx} />
-                <ArrowSelector id="shirt-select" label="Oberteil" options={shirtOptions} index={shirtIdx} setIndex={setShirtIdx} />
-                <ArrowSelector id="trouserstype-select" label="Hosenart" options={trouserstypeOptions} index={trouserstypeIdx} setIndex={setTrouserstypeIdx} />
-                <ArrowSelector id="trouserscolor-select" label="Hosenfarbe" options={trouserscolorOptions} index={trouserscolorIdx} setIndex={setTrouserscolorIdx} />
-                <ArrowSelector id="shoes-select" label="Schuhe" options={shoesOptions} index={shoesIdx} setIndex={setShoesIdx} />
+                {/* Linkes Formular */}
+                <form className="create-avatar-form" onSubmit={handleSubmit} style={{ flex: "0 0 35%", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    <label className="form-label" htmlFor="avatar-name">Avatar-Name</label>
+                    <input
+                        id="avatar-name"
+                        className="form-input"
+                        value={avatarName}
+                        onChange={e => setAvatarName(e.target.value)}
+                        required
+                    />
 
-                <div className="beard-toggle">
-                    <label className="form-label" htmlFor="beard-checkbox">Bart</label>
-                    <input id="beard-checkbox" type="checkbox" checked={beard} onChange={e => setBeard(e.target.checked)} />
+                    <label className="form-label" htmlFor="avatar-description">Beschreibung</label>
+                    <input
+                        id="avatar-description"
+                        className="form-input"
+                        value={avatarDescription}
+                        onChange={e => setAvatarDescription(e.target.value)}
+                        required
+                    />
+
+                    <ArrowSelector
+                        id="haircolor-select"
+                        label="Haarfarbe"
+                        options={haircolorOptions}
+                        index={haircolorIdx}
+                        setIndex={setHaircolorIdx}
+                    />
+                    <ArrowSelector
+                        id="skincolor-select"
+                        label="Hautfarbe"
+                        options={skincolorOptions}
+                        index={skincolorIdx}
+                        setIndex={setSkincolorIdx}
+                    />
+                    <ArrowSelector
+                        id="eyecolor-select"
+                        label="Augenfarbe"
+                        options={eyecolorOptions}
+                        index={eyecolorIdx}
+                        setIndex={setEyecolorIdx}
+                    />
+                </form>
+
+                {/* Avatar in der Mitte */}
+                <div className="avatar-preview-container" style={{ flex: "0 0 30%", display: "flex", justifyContent: "center" }}>
+                    <AvatarPreview
+                        skincolor={skincolorOptions[skincolorIdx]}
+                        eyecolor={eyecolorOptions[eyecolorIdx]}
+                        haircolor={haircolorOptions[haircolorIdx]}
+                        headgear={headgearOptions[headgearIdx]}
+                        shirt={shirtOptions[shirtIdx]}
+                        trouserstype={trouserstypeOptions[trouserstypeIdx]}
+                        trouserscolor={trouserscolorOptions[trouserscolorIdx]}
+                        shoes={shoesOptions[shoesIdx]}
+                        beard={beard}
+                    />
                 </div>
-                <AvatarPreview
-                    skincolor={skincolorOptions[skincolorIdx]}
-                    eyecolor={eyecolorOptions[eyecolorIdx]}
-                    haircolor={haircolorOptions[haircolorIdx]}
-                    headgear={headgearOptions[headgearIdx]}
-                    shirt={shirtOptions[shirtIdx]}
-                    trouserstype={trouserstypeOptions[trouserstypeIdx]}
-                    trouserscolor={trouserscolorOptions[trouserscolorIdx]}
-                    shoes={shoesOptions[shoesIdx]}
-                    beard={beard}
-                />
-                <button className="submit-btn" type="submit" disabled={!enumsLoaded}>Registrieren</button>
-            </form>
+
+                {/* Rechtes Formular */}
+                <form className="create-avatar-form" onSubmit={handleSubmit} style={{ flex: "0 0 35%", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    <ArrowSelector
+                        id="headgear-select"
+                        label="Kopfbedeckung"
+                        options={headgearOptions}
+                        index={headgearIdx}
+                        setIndex={setHeadgearIdx}
+                    />
+
+                    <ArrowSelector
+                        id="shirt-select"
+                        label="Oberteil"
+                        options={shirtOptions}
+                        index={shirtIdx}
+                        setIndex={setShirtIdx}
+                    />
+                    <ArrowSelector
+                        id="trouserstype-select"
+                        label="Hosenart"
+                        options={trouserstypeOptions}
+                        index={trouserstypeIdx}
+                        setIndex={setTrouserstypeIdx}
+                    />
+                    <ArrowSelector
+                        id="trouserscolor-select"
+                        label="Hosenfarbe"
+                        options={trouserscolorOptions}
+                        index={trouserscolorIdx}
+                        setIndex={setTrouserscolorIdx}
+                    />
+                    <ArrowSelector
+                        id="shoes-select"
+                        label="Schuhe"
+                        options={shoesOptions}
+                        index={shoesIdx}
+                        setIndex={setShoesIdx}
+                    />
+
+                    <div className="beard-toggle" style={{ marginTop: "1rem" }}>
+                        <label className="form-label" htmlFor="beard-checkbox">Bart</label>
+                        <input
+                            id="beard-checkbox"
+                            type="checkbox"
+                            checked={beard}
+                            onChange={e => setBeard(e.target.checked)}
+                        />
+                    </div>
+
+                    <button className="submit-btn" type="submit" disabled={!enumsLoaded} style={{ marginTop: "2rem" }}>
+                        Registrieren
+                    </button>
+                </form>
+
+            </div>
         </main>
     );
 }
