@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Gameoverview.css";
-import Slideshow from "./GameOverview/Slideshow";
+import "../../styles/Gameoverview.css";
+import Slideshow from "../GameOverview/Slideshow";
 import { MdLogout } from 'react-icons/md';
 import { MdSettings } from 'react-icons/md';
 import { FaTrophy, FaUser } from "react-icons/fa";
+import { GiConsoleController } from "react-icons/gi";
 
 
 
@@ -156,6 +157,12 @@ export default function Gameoverview() {
               disabled={username === "gast"}
             >
               <FaUser /> Profil
+            </button>
+            <button
+              onClick={() => navigate("/gaminghistory")}
+              disabled={username === "gast"}
+            >
+              <GiConsoleController /> Letzte Spiele
             </button>
           </li>
 

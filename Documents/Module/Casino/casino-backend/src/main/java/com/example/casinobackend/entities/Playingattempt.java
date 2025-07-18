@@ -35,7 +35,6 @@ public class Playingattempt {
     private Player player;
 
     @ManyToOne
-    @JsonIgnoreProperties("playingattempts")
     private Game game;
 
     public Long getPlayingattemptId() {

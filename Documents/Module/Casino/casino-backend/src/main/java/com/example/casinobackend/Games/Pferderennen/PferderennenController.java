@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.casinobackend.Games.Pferderennen.PferderennenService.Horse;
 import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.PlayerRepository;
 
@@ -22,12 +23,9 @@ public class PferderennenController {
     private final PferderennenService pferderennenservice;
     private final PlayerRepository playerRepository;
 
-    private final Pferdrepository pferdrepository;
-
     public PferderennenController(PlayerRepository playerRepository,
-            PferderennenService pferderennenservice, Pferdrepository pferdrepository) {
+            PferderennenService pferderennenservice) {
         this.playerRepository = playerRepository;
-        this.pferdrepository = pferdrepository;
         this.pferderennenservice = pferderennenservice;
     }
 
@@ -35,20 +33,20 @@ public class PferderennenController {
     public Map<String, Object> startGame(@PathVariable Long playerId, @RequestParam int horseId,
             @RequestParam int coins) {
         Player player = playerRepository.findById(playerId).orElseThrow();
-        Pferd horse = pferdrepository.findById(horseId).orElseThrow();
+        Horse horse = pferderennenservice.findById(horseId).orElseThrow();
         return pferderennenservice.startGame(player, coins, horse);
     }
 
-    @PostMapping("/result")
-    public Pferd reveal(@PathVariable Long id, @RequestParam int horseId,
+    @PostMapping("{playerId}/result")
+    public Horse reveal(@PathVariable Long playerId, @RequestParam int horseId,
             @RequestParam int coins) {
-        Pferd horse = pferdrepository.findById(horseId).orElseThrow();
-        Player player = playerRepository.findById(id).orElseThrow();
+        Horse horse = pferderennenservice.findById(horseId).orElseThrow();
+        Player player = playerRepository.findById(playerId).orElseThrow();
         return pferderennenservice.decideWinner(player, horse, coins);
     }
 
     @GetMapping("/horses")
-    public List<Pferd> getAllHorses() {
+    public List<Horse> getAllHorses() {
         return pferderennenservice.getHorses();
     }
 }

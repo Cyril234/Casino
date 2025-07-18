@@ -5,7 +5,7 @@ import LoginWithBadge from './components/login/LoginWithBadge'
 import LoginWithEmailAndPassword from './components/login/LoginWithUsernameAndPassword'
 import LoginAsGuest from './components/login/LoginAsGuest'
 import Start from './components/Start'
-import Gameoverview from './components/Gamesoverview'
+import Gameoverview from './components/GameOverview/Gamesoverview'
 import Register from './components/register/Register'
 import BlackJackGame from './components/Games/BlackJack'
 import Mines from './components/Games/Mines'
@@ -16,6 +16,8 @@ import Settings from './components/Settings'
 import BlackJackInfo from './components/gameinformations/BlackjackInfo'
 import Leaderboard from './components/Leaderboard'
 import HorseRace from './components/Games/HorseRace'
+import HorseRaceInfo from './components/gameinformations/HorseRaceInfo'
+import MyGames from './components/lastgames/MyGames'
 
 
 function App() {
@@ -39,7 +41,8 @@ function App() {
         <Route path='/gameoverview/blackjack/info' element={<BlackJackInfo />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
         <Route path='/gameoverview/horserace' element={<HorseRace />} />
-
+        <Route path="/gameoverview/horserace/info" element={<HorseRaceInfo />} />
+        <Route path="/gaminghistory" element={<MyGames />} />
       </Routes>
     </>
   )
