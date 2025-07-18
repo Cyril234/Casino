@@ -46,7 +46,7 @@ public class APILoginController {
         if (playerOpt.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Benutzername existiert nicht.");
+                    .body("Benutzername oder Passwort ist ungültig.");
         }
 
         Player player = playerOpt.get();
@@ -54,7 +54,7 @@ public class APILoginController {
         if (!argon2.verify(player.getPassword(), request.getPassword().toCharArray())) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Passwort ist ungültig.");
+                    .body("Benutzername oder Passwort ist ungültig.");
         }
 
         String token = generateToken();
