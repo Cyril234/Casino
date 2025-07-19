@@ -3,7 +3,7 @@
   padding: 0;
   box-sizing: border-box;
 }
- 
+
 body {
   background-color: #1a1a1a;
   font-family: 'Segoe UI', sans-serif;
@@ -11,20 +11,20 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
- 
-/* Spielfeld-Hintergrund */
+
 .blackjack-table {
   width: 1960px;
   height: 1080px;
   background-size: cover;
-  
+  background-position: center;
   position: relative;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
   border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
 }
- 
-/* Karten-Styling */
+
 .card {
   width: 120px;
   height: 180px;
@@ -35,26 +35,26 @@ body {
   background-position: center;
   z-index: 1;
 }
- 
-/* Kartenbereiche */
+
 .dealer-hand,
 .player-hand {
   position: absolute;
   display: flex;
   gap: 8px;
 }
+
 .dealer-hand {
   top: 100px;
   left: 50%;
   transform: translateX(-50%);
 }
+
 .player-hand {
   bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
 }
- 
-/* Punktestand */
+
 .score {
   position: absolute;
   background: rgba(0, 0, 0, 0.6);
@@ -66,18 +66,19 @@ body {
   box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
   z-index: 10;
 }
+
 .score.dealer {
   top: 90px;
   left: 50%;
   transform: translateX(-50%);
 }
+
 .score.player {
   bottom: 90px;
   left: 50%;
   transform: translateX(-50%);
 }
- 
-/* Wertanzeige unter dem Score */
+
 .hand-value {
   font-size: 1.2rem;
   margin-top: 2px;
@@ -86,8 +87,7 @@ body {
   position: relative;
   z-index: 11;
 }
- 
-/* Button-Leiste */
+
 .controls {
   position: absolute;
   bottom: 20px;
@@ -96,6 +96,7 @@ body {
   display: flex;
   gap: 20px;
 }
+
 .controls button {
   background: linear-gradient(145deg, #ffe97f, #d6a431);
   border: none;
@@ -108,114 +109,92 @@ body {
   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.5);
   transition: transform 0.1s, box-shadow 0.1s;
 }
+
 .controls button:hover {
   background: linear-gradient(145deg, #fff8b0, #ddb84a);
 }
+
 .controls button:active {
   transform: translateY(2px);
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.6);
 }
- 
-/* Einsatzbereich */
+
 .bet-area {
   position: absolute;
-  width: 15rem;
-  height: 9rem;
-  top: 40%;
-  right: 150px;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.1);
-  padding: 10px;
-  border-radius: 8px;
-  text-align: center;
+  bottom: 20px;
+  left: 20px;
+  width: 240px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1rem;
+  border-radius: 12px;
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  z-index: 10;
 }
-.bet-area input {
-  width: 90px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 12px;
-  border: none;
-  border-radius: 4px;
+
+.bet-area h3 {
+  margin-bottom: 0.25rem;
+  font-size: 1.1rem;
+  color: #ffd700;
   text-align: center;
-  font-size: 1rem;
-  
-  margin-bottom: 6px;
 }
+
+.bet-area input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  background-color: #f1f1f1;
+  color: #333;
+  text-align: center;
+}
+
 .bet-area button {
   width: 100%;
-  padding: 6px 0;
-  background: #f9d342;
+  padding: 10px 0;
+  background: linear-gradient(145deg, #ffd342, #f0b100);
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  transition: background 0.2s ease;
 }
- 
-/* Guthaben-Anzeige */
+
+.bet-area button:hover {
+  background: linear-gradient(145deg, #ffe659, #f5c000);
+}
+
+.bet-area .error {
+  color: #ff6666;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
 .balance-area {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   color: #fff;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-weight: bold;
   font-size: 2rem;
-  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
   z-index: 10;
 }
- 
-/* Fehlernachricht */
+
 .error {
   color: red;
   margin-top: 0.5rem;
 }
- 
-/* Ergebnis-Popup (Fade In/Out 2s) */
-.status-box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 0.75rem 1.25rem;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #fff;
-  z-index: 100;
-  opacity: 0;
-  animation: fadeInOut 2s forwards;
-}
-.status-box.win { background: rgba(75,181,67,0.9); }
-.status-box.lose { background: rgba(181,67,67,0.9); }
- 
-@keyframes fadeInOut {
-  0%   { opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { opacity: 0; }
-}
-/* kleines Münz‑Icon in der Balance */
-.coin-small {
-  width: 3rem;
-  height: 3rem;
-  vertical-align: middle;
-  margin-left: 0.5em;
-}
- 
-/* Münz‑Icon im Ergebnis‑Popup hat feste Größe */
-.coin-fixed {
-  width: 3rem;
-  height: 3rem;
-  margin-left: 0.5em;
-}
- 
-/* Popup‑Box zentriert mit Fade‑Animation */
+
 .status-box {
   position: absolute;
   top: 50%;
@@ -229,12 +208,17 @@ body {
   text-align: center;
   z-index: 100;
   opacity: 0;
-  animation: fadeInOut 2s forwards; /* startet bei 0 und endet bei 0 nach 2s */
+  animation: fadeInOut 2s forwards;
 }
- 
-.status-box.win { background: rgba( 75,181, 67,0.9); }
-.status-box.lose{ background: rgba(181, 67, 67,0.9); }
- 
+
+.status-box.win {
+  background: rgba(75, 181, 67, 0.9);
+}
+
+.status-box.lose {
+  background: rgba(181, 67, 67, 0.9);
+}
+
 .result-amount {
   margin-top: 0.5rem;
   display: flex;
@@ -242,10 +226,117 @@ body {
   justify-content: center;
   font-size: 1.1rem;
 }
- 
-@keyframes fadeInOut {
-  0%   { opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { opacity: 0; }
+
+.coin-small {
+  width: 3rem;
+  height: 3rem;
+  vertical-align: middle;
+  margin-left: 0.5em;
+}
+
+.coin-fixed {
+  width: 3rem;
+  height: 3rem;
+  margin-left: 0.5em;
+}
+
+.top-left {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 12px;
+  z-index: 20;
+}
+
+.top-left:hover {
+  background: #666;
+}
+
+.back-button {
+  background: linear-gradient(145deg, #2c2c2c, #1e1e1e);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
+  transition: background 0.2s ease, transform 0.1s;
+}
+
+.back-button:hover {
+  background: (145deg, #3a3a3a, #2a2a2a);
+}
+
+.info-button {
+  width: 44px;
+  height: 44px;
+
+  font-size: 1.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #222;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.4);
+  transition: background 0.2s ease, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-button:hover {
+  background: inherit;
+  transform: scale(1.05);
+  box-shadow: none;
+}
+
+.info-button {
+  background: (145deg, #ffe97f, #d6a431);
+  border: none;
+  padding: 10px;
+  font-size: 1.3rem;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #222;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.4);
+  transition: background 0.2s ease, transform 0.1s;
+}
+
+.info-button:hover {
+  background: linear-gradient(145deg, #fff8b0, #ddb84a);
+  transform: scale(1.05);
+}
+
+.balance-area .info-button {
+  background: linear-gradient(145deg, #ffe97f, #d6a431);
+  border: none;
+  padding: 8px 12px;
+  font-size: 1.25rem;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-right: 12px;
+  color: #222;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.4);
+  transition: background 0.2s ease, transform 0.1s;
+}
+
+.balance-area .info-button:hover {
+  background: linear-gradient(145deg, #fff8b0, #ddb84a);
+  transform: scale(1.1);
+}
+
+.error {
+  background: rgba(255, 80, 80, 0.15);
+  color: #ff4d4d;
+  border-left: 4px solid #ff4d4d;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 0 6px rgba(255, 80, 80, 0.3);
+  animation: fadeIn 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2rem;
 }

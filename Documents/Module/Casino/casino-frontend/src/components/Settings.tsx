@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import "../styles/Settings.css"
 
 export default function Settings() {
     const [volume, setVolume] = useState(50);
@@ -77,7 +78,7 @@ export default function Settings() {
     };
 
     return (
-        <>
+        <div className="settings-wrapper">
             <h1>Einstellungen</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="volume">Lautstärke</label>
@@ -91,18 +92,24 @@ export default function Settings() {
                 />
                 <span>{volume}</span>
 
-                <label htmlFor="sound">Sound</label>
-                <input
-                    id="sound"
-                    type="checkbox"
-                    checked={sound}
-                    onChange={(e) => setSound(e.target.checked)}
-                />
-                <span>{sound ? "An" : "Aus"}</span>
+                <div className="toggle-wrapper">
+                    <label htmlFor="sound">Sound</label>
+                    <label className="switch">
+                        <input
+                            id="sound"
+                            type="checkbox"
+                            checked={sound}
+                            onChange={(e) => setSound(e.target.checked)}
+                        />
+                        <span className="slider round"></span>
+                    </label>
+                    <span>{sound ? "An" : "Aus"}</span>
+                </div>
 
                 <button type="submit">Einstellungen speichern</button>
-                <button onClick={() => navigate("/gameoverview")}>Abbrechen</button>
+                <button type="button" onClick={() => navigate("/gameoverview")}>Abbrechen</button>
             </form>
-        </>
+        </div>
     );
+
 }

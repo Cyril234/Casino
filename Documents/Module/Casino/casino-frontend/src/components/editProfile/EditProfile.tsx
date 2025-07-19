@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import "../../styles/EditProfile.css"
 
 export default function EditProfile() {
 
     const navigate = useNavigate();
 
     const currentToken = sessionStorage.getItem("authToken");
+    const usernameSecurity = sessionStorage.getItem("username");
 
     const [playerId, setPlayerId] = useState(0);
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [coins, setCoins] = useState(0);
 
     useEffect(() => {
         if (!currentToken) {
             alert("Du bist noch gar nicht eingeloggt!");
             navigate("/");
             return;
+        }
+        if (!usernameSecurity) {
+            navigate("/gameoverview");
         }
     })
 
@@ -45,6 +51,7 @@ export default function EditProfile() {
                 setPlayerId(data.playerId);
                 setUsername(data.username);
                 setEmail(data.email);
+                setCoins(data.coins);
 
             } catch (err) {
                 console.error("Fehler bei dem Bekommen der SpielerId:", err);
@@ -54,9 +61,12 @@ export default function EditProfile() {
         fetchPlayerId();
     }, [currentToken]);
 
+    const [errorMsg, setErrorMsg] = useState("");
 
     const editProfile = async (e: React.FormEvent) => {
         e.preventDefault();
+        setErrorMsg("");
+
         try {
             const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
                 method: "PUT",
@@ -64,16 +74,28 @@ export default function EditProfile() {
                     "Authorization": `Bearer ${currentToken}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username, email, password }),
+                body: JSON.stringify({ username, email, password, coins }),
             });
-            if (!res) {
-                console.log("Fehler beim Bearbeiten!")
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                if (res.status === 409) {
+                    setErrorMsg(errorText);
+                } else {
+                    setErrorMsg("Fehler beim Bearbeiten: " + errorText);
+                }
+                return;
             }
+
+            sessionStorage.setItem("username", username);
             navigate("/gameoverview");
+
         } catch (err) {
-            console.error(err);
+            console.error("Serverfehler:", err);
+            setErrorMsg("Verbindung zum Server fehlgeschlagen.");
         }
     };
+
 
     const handleDeleteProfile = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -95,7 +117,7 @@ export default function EditProfile() {
     };
 
     return (
-        <>
+        <div className="page-wrapper">
             <h1>Mein Profil</h1>
             <form className="register-form" onSubmit={editProfile}>
                 <label htmlFor="username" className="form-label">Benutzername</label>
@@ -124,6 +146,7 @@ export default function EditProfile() {
                         onChange={e => setPassword(e.target.value)}
                     />
                 </div>
+                {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
                 <button className="next-btn" type="submit">Änderungen speichern</button>
                 <button className="next-btn" onClick={handleDeleteProfile}>Profil löschen</button>
                 <button
@@ -134,6 +157,7 @@ export default function EditProfile() {
                     Zurück
                 </button>
             </form>
-        </>
+        </div>
     );
+
 }

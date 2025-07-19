@@ -1,62 +1,26 @@
-/* --- Bestehende Styles bleiben erhalten --- */
-html, body {
-  z-index: 1;
+html,
+body {
   height: 100%;
-  width: auto;
+  margin: 0;
+  background-color: #121212;
   overflow: hidden;
-  background: #181724; 
+  z-index: 1;
+  width: auto;
 }
 
 .bg-lines {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  opacity: 0.20;
-  background:
-    repeating-linear-gradient(140deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 2px, transparent 2px, transparent 50px),
-    repeating-linear-gradient(215deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 2px, transparent 2px, transparent 50px);
+  display: none !important;
 }
 
 .bg-blobs {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
+  display: none !important;
 }
 
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(18px);
-  opacity: 0.7;
-  animation: blob-pulse 42s infinite alternate;
-}
-
-.orange-blob {
-  width: 2250px;
-  height: 2250px;
-  background: radial-gradient(circle, orange 0%, rgba(255, 165, 0, 0.8) 30%, rgba(255, 165, 0, 0.4) 60%, transparent 100%);
-}
-
-.pink-blob {
-  width: 2250px;
-  height: 2250px;
-  background: radial-gradient(circle, #ff4ccd 0%, rgba(255, 76, 205, 0.8) 30%, rgba(255, 76, 205, 0.4) 60%, transparent 100%);
-}
-
-@keyframes blob-pulse {
-  0% { transform: scale(1);}
-  50% { transform: scale(1.2);}
-  100% { transform: scale(1);}
-}
-
-/* --- Leaderboard Modern Layout Styles --- */
 .leaderboard-root {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  background: #181724;
+  background: #121212;
 }
 
 .leaderboard-back-btn {
@@ -64,15 +28,19 @@ html, body {
   top: 1.5rem;
   left: 1.5rem;
   z-index: 20;
-  background: rgba(255,255,255,0.10);
+  background: rgba(255, 215, 0, 0.15);
   backdrop-filter: blur(4px);
-  border: 1px solid rgba(255,255,255,0.20);
+  border: 1px solid rgba(255, 215, 0, 0.4);
   padding: 0.75rem;
   transition: background 0.2s;
   cursor: pointer;
+  color: #ffd700;
+  font-weight: bold;
+  text-shadow: 0 0 5px #ffd700;
 }
+
 .leaderboard-back-btn:hover {
-  background: rgba(255,255,255,0.20);
+  background: rgba(255, 215, 0, 0.3);
 }
 
 .leaderboard-back-btn-selected {
@@ -93,33 +61,39 @@ html, body {
 }
 
 .leaderboard-content {
-  background: rgba(255,255,255,0.95);
+  background: #2f2f2f;
   backdrop-filter: blur(4px);
   border-radius: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   padding: 2rem;
   width: 140vh;
-  border: 1px solid rgba(255,255,255,0.20);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
   height: 80vh;
+  color: #ffd700;
+  font-weight: 600;
 }
+
 .leaderboard-header {
   text-align: center;
   margin-bottom: 2rem;
 }
+
 .leaderboard-title {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #232323;
+  color: #ffd700;
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
+  text-shadow: 0 0 10px #ffd700;
 }
+
 .leaderboard-subtitle {
-  color: #666;
+  color: #ffd700cc;
   font-size: 1rem;
 }
 
@@ -129,6 +103,7 @@ html, body {
   overflow-y: auto;
   margin-bottom: 2rem;
 }
+
 .leaderboard-list {
   display: flex;
   flex-direction: column;
@@ -143,86 +118,100 @@ html, body {
   border-radius: 0.75rem;
   transition: background 0.2s;
   font-size: 1.15rem;
+  color: #ffd700;
+  text-shadow: 0 0 3px #ffd700aa;
 }
+
 .leaderboard-gold {
   background: linear-gradient(90deg, #ffe066 0%, #ffd700 100%);
   color: #fff;
   font-weight: bold;
+  text-shadow: none;
 }
+
 .leaderboard-silver {
   background: linear-gradient(90deg, #e0e0e0 0%, #b0b0b0 100%);
   color: #fff;
   font-weight: bold;
 }
+
 .leaderboard-bronze {
   background: linear-gradient(90deg, #ffb347 0%, #ff8800 100%);
   color: #fff;
   font-weight: bold;
 }
+
 .leaderboard-default {
   background: #fff;
   color: #232323;
 }
+
 .leaderboard-row-left {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
-.leaderboard-rank {
-  font-size: 1.5rem;
-  font-weight: bold;
-  min-width: 3rem;
-  text-align: center;
+
+.leaderboard-rank,
+.leaderboard-username,
+.leaderboard-coins {
+  color: #000;
+  text-shadow: none;
 }
+
 .leaderboard-username {
   font-weight: 600;
   font-size: 1.1rem;
 }
+
 .leaderboard-row-right {
   text-align: right;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
 }
-.leaderboard-coins {
-  font-size: 1.35rem;
-  font-weight: bold;
-}
+
 .leaderboard-coins-label {
   font-size: 0.85rem;
   opacity: 0.75;
+  color: #000000cc;
 }
 
 .leaderboard-footer {
   padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #555;
 }
+
 .leaderboard-footer-stats {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  color: #666;
+  color: #ffd700cc;
   font-size: 1rem;
 }
+
 .leaderboard-footer-stat {
   text-align: center;
+  color: #ffd700cc;
 }
+
 .leaderboard-footer-value {
   font-weight: 600;
   font-size: 1.15rem;
-  color: #232323;
+  color: #ffd700;
 }
 
-/* Custom Scrollbar */
 .leaderboard-list-wrapper::-webkit-scrollbar {
   width: 6px;
 }
+
 .leaderboard-list-wrapper::-webkit-scrollbar-thumb {
-  background-color: #d1d5db;
+  background-color: #555;
   border-radius: 3px;
 }
+
 .leaderboard-list-wrapper::-webkit-scrollbar-track {
-  background-color: #f3f4f6;
+  background-color: #222;
   border-radius: 3px;
 }

@@ -5,17 +5,20 @@ import LoginWithBadge from './components/login/LoginWithBadge'
 import LoginWithEmailAndPassword from './components/login/LoginWithUsernameAndPassword'
 import LoginAsGuest from './components/login/LoginAsGuest'
 import Start from './components/Start'
-import Gameoverview from './components/Gamesoverview'
+import Gameoverview from './components/GameOverview/Gamesoverview'
 import Register from './components/register/Register'
 import BlackJackGame from './components/Games/BlackJack'
+import Mines from './components/Games/Mines'
 import CreateAvatar from './components/register/CreateAvatar'
 import Logout from './components/logout/Logout'
 import EditProfile from './components/editProfile/EditProfile'
 import Settings from './components/Settings'
 import BlackJackInfo from './components/gameinformations/BlackjackInfo'
 import Leaderboard from './components/Leaderboard'
-import Pocker from './components/Games/Pocker'
-import PockerEinstelungen from './components/Games/PockerEinstelungen';
+import HorseRace from './components/Games/HorseRace'
+import HorseRaceInfo from './components/gameinformations/HorseRaceInfo'
+import MyGames from './components/lastgames/MyGames'
+import MinenfeldInfo from './components/gameinformations/MinenfeldInfo'
 
 
 function App() {
@@ -31,14 +34,17 @@ function App() {
         <Route path='/gameoverview' element={<Gameoverview />} />
         <Route path='/register' element={<Register />} />
         <Route path='/gameoverview/blackjack' element={<BlackJackGame />} />
+        <Route path='/gameoverview/mines' element={<Mines />} />
         <Route path='/create-avatar' element={<CreateAvatar />} />
         <Route path='/logout' element={<Logout />} />
         <Route path='/edit-profile' element={<EditProfile />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/gameoverview/blackjack/info' element={<BlackJackInfo />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
-        <Route path='/gameoverview/poker' element={<Pocker />} />
-        <Route path='/gameoverview/poker-einstellungen' element={<PockerEinstelungen />} />
+        <Route path='/gameoverview/horserace' element={<HorseRace />} />
+        <Route path="/gameoverview/horserace/info" element={<HorseRaceInfo />} />
+        <Route path="/gameoverview/mines/info" element={<MinenfeldInfo />} />
+        <Route path="/gaminghistory" element={<MyGames />} />
       </Routes>
     </>
   )

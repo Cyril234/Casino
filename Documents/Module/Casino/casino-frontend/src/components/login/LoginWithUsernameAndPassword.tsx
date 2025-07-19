@@ -8,6 +8,7 @@ export default function LoginWithEmailAndPassword() {
   const [showPw, setShowPw] = useState(false);
   const [status, setStatus] = useState("");
   const navigate = useNavigate();
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,67 +18,71 @@ export default function LoginWithEmailAndPassword() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-      if (!res.ok) throw new Error("Ungültige Anmeldedaten");
+      if (!res.ok) {
+        const errorText = await res.text();
+        setErrorMsg(errorText);
+        return;
+      }
+
       const { token } = await res.json();
       if (!token) throw new Error("Kein Token erhalten");
 
       sessionStorage.setItem("authToken", token);
       sessionStorage.setItem("username", username);
-      setStatus("Erfolgreich angemeldet ✅");
+      setStatus("Erfolgreich angemeldet");
       navigate("/gameoverview");
     } catch (err) {
       if (err instanceof Error) setStatus(err.message);
-      else setStatus("Anmeldung fehlgeschlagen ❌");
+      else setStatus("Anmeldung fehlgeschlagen");
       console.error(err);
     }
   };
 
   return (
-    <>
-      <main className="register-page">
-        <h1 className="register-title">Anmelden</h1>
-        <form className="register-form" onSubmit={handleLogin}>
-          <label htmlFor="username" className="form-label">Benutzername</label>
+    <main className="casino-login-container">
+      <section className="casino-login-card">
+        <h1 className="casino-login-title">Anmelden</h1>
+        <form onSubmit={handleLogin} className="casino-login-form">
+          <label htmlFor="username" className="casino-login-label">Benutzername</label>
           <input
             id="username"
             type="text"
             value={username}
             onChange={e => setUsername(e.target.value)}
             required
-            style={{ width: "97%" }}
+            className="casino-login-input"
           />
 
-          <label htmlFor="password" className="form-label">Passwort</label>
-          <div style={{ width: "100%" }}>
-            <input
-              id="password"
-              type={showPw ? "text" : "password"}
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              style={{ width: "96%" }}
-            />
+          <label htmlFor="password" className="casino-login-label">Passwort</label>
+          <input
+            id="password"
+            type={showPw ? "text" : "password"}
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            className="casino-login-input"
+          />
+          <button
+            type="button"
+            className="casino-login-button casino-login-button--toggle"
+            onClick={() => setShowPw(prev => !prev)}
+          >
+            {showPw ? "Verbergen" : "Anzeigen"}
+          </button>
+          {errorMsg && <p className="register-error">{errorMsg}</p>}
+          <div className="casino-login-buttons">
+            <button className="casino-login-button" type="submit">Anmelden</button>
             <button
+              className="casino-login-button casino-login-button--back"
               type="button"
-              className="start-btn"
-              style={{ width: "100%", marginTop: "0.5rem", padding: "0.7rem 1rem" }}
-              onClick={() => setShowPw((v) => !v)}
+              onClick={() => navigate('/login-overview')}
             >
-              {showPw ? "Verbergen" : "Anzeigen"}
+              Zurück
             </button>
           </div>
-          <button className="next-btn" type="submit">Anmelden</button>
-          <button
-            className="next-btn"
-            type="button"
-            style={{ marginTop: "1rem" }}
-            onClick={() => navigate('/login-overview')}
-          >
-            Zurück
-          </button>
         </form>
-      </main>
-    </>
+      </section>
+    </main>
   );
 }
 

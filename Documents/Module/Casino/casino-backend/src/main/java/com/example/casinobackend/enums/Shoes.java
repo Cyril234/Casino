@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Shoes {
     FLIPFLOPS("Flipflops"),
-    SNEAKERS("Sneakers"),
-    FOOTBALLSHOES("Fussballschuhe"),
-    SANDALS("Sandalen");
+    SNEAKERS("Sneakers");
 
     private final String label;
 

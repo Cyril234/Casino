@@ -1,0 +1,60 @@
+.info-page {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #eaeaea;
+  font-family: 'Segoe UI', sans-serif;
+  background: rgba(20, 20, 20, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+.info-page h1 {
+  text-align: center;
+  color: #ffcc00;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.info-section {
+  margin-bottom: 2rem;
+}
+
+.info-section h2 {
+  color: #ffd700;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.info-section p,
+.info-section ul {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: #f0f0f0;
+}
+
+.info-section ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.back-button {
+  background: linear-gradient(145deg, #2c2c2c, #1e1e1e);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
+  transition: background 0.2s ease, transform 0.1s;
+}
+
+.back-button:hover {
+  background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+  transform: scale(1.05);
+}

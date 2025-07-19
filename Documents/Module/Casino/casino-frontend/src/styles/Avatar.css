@@ -1,0 +1,137 @@
+.create-avatar-wrapper {
+    width: 90vw;
+    max-width: none !important;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: nowrap;
+    margin-top: 4rem;
+    padding-bottom: 3rem;
+    max-width: 1600px;
+    margin-left: auto;
+}
+
+.create-avatar-form {
+    flex: 0 0 800px;
+    max-width: 800px;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    background: #1a0000;
+    border: 2px solid #ff6600;
+    box-shadow: 0 0 12px #ff9900, inset 0 0 12px #ff3300;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+}
+
+.form-label {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: -0.25rem;
+}
+
+.form-input {
+    padding: 0.7rem;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    border: 2px solid #ff6600;
+    background: #2a0000;
+    color: #fff3cc;
+    outline: none;
+}
+
+.form-input:focus {
+    border-color: #ffcc00;
+    box-shadow: 0 0 10px #ffaa00;
+}
+
+.arrow-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    font-size: 0.95rem;
+}
+
+.arrow-btn {
+    background: transparent;
+    border: 2px solid #ffaa00;
+    color: #ffaa00;
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrow-btn:hover {
+    background: #ffaa00;
+    color: #1a0000;
+    box-shadow: 0 0 8px #ffaa00;
+}
+
+.value-display {
+    min-width: 100px;
+    font-weight: bold;
+    color: #ffaa00;
+}
+
+.beard-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.submit-btn {
+    padding: 0.8rem;
+    font-size: 1rem;
+    background: linear-gradient(90deg, #ff6600, #ffcc00);
+    color: #1a0000;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    margin-top: 1rem;
+}
+
+.submit-btn:hover {
+    transform: scale(1.05);
+    background: linear-gradient(90deg, #ffcc00, #ff3300);
+}
+
+.avatar-preview-container {
+    flex: 0 0 450px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 1rem;
+}
+
+.avatar-preview-container>div {
+    width: 450px;
+    height: 1050px;
+    position: relative;
+}
+
+.create-avatar-page {
+    padding-top: 30rem;
+    padding-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.create-avatar-title {
+    margin-bottom: 27rem;
+    color: #ff9900;
+    font-weight: 700;
+    font-size: 2rem;
+    text-align: center;
+}

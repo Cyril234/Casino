@@ -11,7 +11,6 @@ export default function Loginoverview() {
     const goToGuest = () => navigate('/login-as-guest');
     const goToRegister = () => navigate('/register');
 
-    // Badge-Scan Callback
     const handleBadgeScan = useCallback((scan: string) => { }, []);
     useBadgeScanner(handleBadgeScan);
 

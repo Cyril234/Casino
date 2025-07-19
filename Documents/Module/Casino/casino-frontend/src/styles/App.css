@@ -8,7 +8,8 @@ body {
   max-width: 1900px;
   margin: 0 auto;
   padding: 2rem;
-  display: flex;}
+  display: flex;
+}
 
 .logo {
   height: 6em;
@@ -16,20 +17,23 @@ body {
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-html, body {
+html,
+body {
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: #181724;
+  background: #121212;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -50,6 +54,7 @@ html, body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
