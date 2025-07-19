@@ -14,6 +14,8 @@ import EditProfile from './components/editProfile/EditProfile'
 import Settings from './components/Settings'
 import BlackJackInfo from './components/gameinformations/BlackjackInfo'
 import Leaderboard from './components/Leaderboard'
+import Pocker from './components/Games/Pocker'
+import PockerEinstelungen from './components/Games/PockerEinstelungen';
 
 
 function App() {
@@ -35,7 +37,8 @@ function App() {
         <Route path='/settings' element={<Settings />} />
         <Route path='/gameoverview/blackjack/info' element={<BlackJackInfo />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
-
+        <Route path='/gameoverview/poker' element={<Pocker />} />
+        <Route path='/gameoverview/poker-einstellungen' element={<PockerEinstelungen />} />
       </Routes>
     </>
   )
