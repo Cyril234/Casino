@@ -1,0 +1,81 @@
+.slot-container {
+  width: 320px;
+  margin: 2rem auto;
+  padding: 1rem;
+  border: 2px solid #222;
+  border-radius: 8px;
+  background: #1a1a1a;
+  color: #eee;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.balance-area {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.coin-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.bet-area {
+  margin-bottom: 1rem;
+}
+
+.bet-area input {
+  width: 80px;
+  font-size: 1rem;
+  padding: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+.reels {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.reel-slot {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #555;
+  border-radius: 6px;
+  background-color: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slot-symbol {
+  max-width: 70px;
+  max-height: 70px;
+  image-rendering: pixelated; /* Pixelart Effekt */
+}
+
+.spin-button {
+  padding: 0.5rem 1.5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  background-color: #0a84ff;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.spin-button:hover {
+  background-color: #006fcc;
+}
+
+.message {
+  margin-top: 1rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
