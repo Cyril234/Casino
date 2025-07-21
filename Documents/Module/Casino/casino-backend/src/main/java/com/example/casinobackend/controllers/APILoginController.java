@@ -60,7 +60,8 @@ public class APILoginController {
         String token = generateToken();
         player.setToken(token);
         player.setLogins(player.getLogins() + 1);
-        if (!player.getLastlogindate().isEqual(LocalDate.now())) {
+        
+        if (player.getLastlogindate() != null&&!player.getLastlogindate().isEqual(LocalDate.now())) {
             player.setCoins(player.getCoins() + 500);
         }
         player.setLastlogindate(LocalDate.now());
