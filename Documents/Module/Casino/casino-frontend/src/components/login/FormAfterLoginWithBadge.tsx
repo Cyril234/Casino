@@ -6,6 +6,7 @@ export default function FormAfterLoginWithBadge() {
     const token = sessionStorage.getItem("authToken");
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<String>("");
+    const [badgenumber, setBadgenumber] = useState<String>("");
     const [playerId, setPlayerId] = useState<Number>(0);
     const [email, setEmail] = useState<String>("");
     const [errorMsg, setErrorMsg] = useState<String>("");
@@ -14,9 +15,6 @@ export default function FormAfterLoginWithBadge() {
         if (!token) {
             navigate("/");
             return;
-        }
-        if (sessionStorage.getItem("username") !== "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267") {
-            navigate("/gameoverview");
         }
     })
 
@@ -43,8 +41,11 @@ export default function FormAfterLoginWithBadge() {
 
                 const data = await res.json();
                 setPlayerId(data.playerId);
-                setUsername(data.username);
-                setEmail(data.email);
+                setBadgenumber(data.badgenumber);
+
+                if (sessionStorage.getItem("username") !== "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267") {
+                    navigate("/gameoverview");
+                }
 
             } catch (err) {
                 console.error("Fehler bei dem Bekommen der SpielerId:", err);
@@ -84,7 +85,7 @@ export default function FormAfterLoginWithBadge() {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username, email, password }),
+                body: JSON.stringify({ username, email, password, badgenumber }),
             });
 
             if (!res.ok) {
