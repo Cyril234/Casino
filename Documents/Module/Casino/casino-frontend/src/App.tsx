@@ -49,8 +49,6 @@ function App() {
         <Route path="/gameoverview/mines/info" element={<MinenfeldInfo />} />
         <Route path="/gaminghistory" element={<MyGames />} />
         <Route path="/login-with-badge/form" element={<FormAfterLoginWithBadge />} />
-
-
       </Routes>
     </>
   )
