@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "../../styles/EditProfile.css"
+import { useBadgeScanner } from "./AddBadge";
 
 export default function EditProfile() {
 
@@ -14,6 +15,7 @@ export default function EditProfile() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [coins, setCoins] = useState(0);
+    const [badgenumber, setBadgenumber] = useState<String | null>(null);
 
     useEffect(() => {
         if (!currentToken) {
@@ -52,6 +54,7 @@ export default function EditProfile() {
                 setUsername(data.username);
                 setEmail(data.email);
                 setCoins(data.coins);
+                setBadgenumber(data.badgenumber);
 
             } catch (err) {
                 console.error("Fehler bei dem Bekommen der SpielerId:", err);
@@ -96,6 +99,50 @@ export default function EditProfile() {
         }
     };
 
+    useBadgeScanner((scan) => {
+        const match = scan.match(/UID:(.*?);/);
+        if (match) {
+            setBadgenumber(match[1]);
+            console.log("Badge gescannt:", match[1]);
+        }
+    });
+
+    const handleBadgeClick = async () => {
+        if (!currentToken || !playerId) {
+            console.error("Token oder Spieler-ID fehlt.");
+            return;
+        }
+
+        try {
+            const endpoint = `http://localhost:8080/api/players/${playerId}`;
+            let body;
+
+            if (badgenumber === null) {
+                alert("Scanne nun deinen Badge.");
+                return;
+            } else {
+                body = JSON.stringify({ badgenumber: null });
+            }
+            const res = await fetch(endpoint, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${currentToken}`,
+                    "Content-Type": "application/json"
+                },
+                body,
+            });
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                console.error("Fehler beim Aktualisieren des Badges:", errorText);
+            } else {
+                setBadgenumber(badgenumber === null ? "..." : null);
+                console.log("Badge aktualisiert");
+            }
+        } catch (err) {
+            console.error("Netzwerkfehler beim Badge-Update:", err);
+        }
+    };
 
     const handleDeleteProfile = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -146,6 +193,14 @@ export default function EditProfile() {
                         onChange={e => setPassword(e.target.value)}
                     />
                 </div>
+                <button
+                    className="next-btn"
+                    type="button"
+                    onClick={handleBadgeClick}
+                >
+                    {badgenumber === null ? "Badge zu Profil hinzufügen" : "Badge von Konto lösen"}
+                </button>
+
                 {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
                 <button className="next-btn" type="submit">Änderungen speichern</button>
                 <button className="next-btn" onClick={handleDeleteProfile}>Profil löschen</button>
@@ -159,5 +214,4 @@ export default function EditProfile() {
             </form>
         </div>
     );
-
 }

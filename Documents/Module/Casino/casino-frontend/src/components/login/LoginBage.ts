@@ -48,7 +48,7 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
                                 }
                                 const userData = await userRes.json();
 
-                                if (userData.username === "pleasCange") {
+                                if (userData.username === "pleaseChange") {
                                     navigate("/gameoverview");
                                     console.log("benuzername wechseln")
                                 } else {
