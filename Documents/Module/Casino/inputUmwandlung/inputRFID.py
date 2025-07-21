@@ -18,7 +18,7 @@ def inputRFID():
             if sw1 == 0x90 and sw2 == 0x00:
                 # UID als Hex ausgeben
                 uid = "".join(f"{b:02X}" for b in daten)
-                pyautogui.write(uid)
+                pyautogui.write("UID:" + uid + ";")
             else:
                 print("Fehler beim Auslesen der Karte!")
 
