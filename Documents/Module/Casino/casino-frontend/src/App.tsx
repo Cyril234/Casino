@@ -19,6 +19,7 @@ import HorseRace from './components/Games/HorseRace'
 import HorseRaceInfo from './components/gameinformations/HorseRaceInfo'
 import MyGames from './components/lastgames/MyGames'
 import MinenfeldInfo from './components/gameinformations/MinenfeldInfo'
+import Roulette from './components/Games/Roulette'
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/gameoverview/blackjack' element={<BlackJackGame />} />
         <Route path='/gameoverview/mines' element={<Mines />} />
+        <Route path='/gameoverview/roulette' element={<Roulette />} />
         <Route path='/create-avatar' element={<CreateAvatar />} />
         <Route path='/logout' element={<Logout />} />
         <Route path='/edit-profile' element={<EditProfile />} />
@@ -45,6 +47,8 @@ function App() {
         <Route path="/gameoverview/horserace/info" element={<HorseRaceInfo />} />
         <Route path="/gameoverview/mines/info" element={<MinenfeldInfo />} />
         <Route path="/gaminghistory" element={<MyGames />} />
+        
+
       </Routes>
     </>
   )

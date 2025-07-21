@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+
 import com.example.casinobackend.entities.Game;
 import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.repositories.GameRepository;
@@ -17,6 +18,7 @@ public class Dataloader implements ApplicationRunner {
 
     @Autowired
     private PlayerRepository playerRepository;
+    
     @Autowired
     private GameRepository gameRepository;
 
@@ -205,5 +207,10 @@ public class Dataloader implements ApplicationRunner {
             gameRepository.save(game3);
         }
 
+        if (!gameRepository.findByTitle("Roulette").isPresent()) {
+            Game game4 = new Game();
+            game4.setTitle("Roulette");
+            gameRepository.save(game4);
+        }
     }
 }
