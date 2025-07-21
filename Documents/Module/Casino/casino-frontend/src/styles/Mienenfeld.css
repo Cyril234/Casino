@@ -11,7 +11,6 @@ body {
   overflow: hidden;
 }
 
-/* Container nimmt ganzen Viewport ein, zentriert alles */
 .mines-container {
   display: flex;
   flex-direction: column;
@@ -27,29 +26,25 @@ body {
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
 }
 
-/* Roter Rahmen bei Verlust */
 .mines-container.lost {
   border: 3px solid #e74c3c;
 }
 
-/* Titel */
 .mines-container h2 {
   color: #ecf0f1;
   text-align: center;
   margin-bottom: 0.5rem;
 }
 
-/* Grid mittig */
 .grid {
   display: grid;
-    margin-right: 10rem;
+  margin-right: 10rem;
   gap: 20px;
   justify-content: center;
   align-items: center;
   max-width: 90vw;
 }
 
-/* Spielfelder */
 .grid button {
   width: 100px;
   height: 100px;
@@ -64,23 +59,19 @@ body {
   justify-content: center;
 }
 
-/* Hover */
 .grid button:hover:not(:disabled) {
   transform: scale(1.05);
 }
 
-/* Deaktivierte Buttons */
 .grid button:disabled {
   opacity: 0.8;
   cursor: default;
 }
 
-/* Sichere Felder */
 .grid button.safe {
   background-image: url('/pokergeld.png');
 }
 
-/* Bombenfeld */
 .grid button.bomb {
   background-image: url('/bombe.png');
   background-size: 70%;
@@ -89,17 +80,22 @@ body {
   animation: blink 1s infinite;
 }
 
-/* Blink bei Verlust */
 .mines-container.lost .grid button.bomb {
   background-color: #e74c3c;
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
-/* Balance */
 .balance-area {
   position: absolute;
   top: 10px;
@@ -113,10 +109,9 @@ body {
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
 }
 
-/* 🟨 Konfigurationsbereich – größer & weiter unten */
 .config-area {
   position: absolute;
-  top: 340px; /* weiter nach unten */
+  top: 340px;
   left: 80px;
   display: flex;
   flex-direction: column;
@@ -160,7 +155,6 @@ body {
   background: #ffd659;
 }
 
-/* Controls unten */
 .controls {
   position: absolute;
   bottom: 20px;
@@ -193,7 +187,6 @@ body {
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.6);
 }
 
-/* Gewinn-/Verloren-Anzeige */
 .status-box {
   position: absolute;
   top: 50%;
@@ -210,22 +203,36 @@ body {
   z-index: 100;
 }
 
-.status-box.win { background: rgba(75, 181, 67, 0.9); }
-.status-box.lose { background: rgba(181, 67, 67, 0.9); }
-
-@keyframes fadeInOut {
-  0% { opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { opacity: 0; }
+.status-box.win {
+  background: rgba(75, 181, 67, 0.9);
 }
 
-/* Bomben-Pseudoelement abschalten */
+.status-box.lose {
+  background: rgba(181, 67, 67, 0.9);
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
 .mines-container.lost .grid button.bomb::before {
   display: none;
 }
 
-/* Fehleranzeige */
 .error {
   position: absolute;
   bottom: 150px;
@@ -235,7 +242,6 @@ body {
   font-size: 1rem;
 }
 
-/* 💰 Gewinnanzeige (hervorgehoben) */
 .profit-display {
   font-size: 1.5rem;
   font-weight: bold;
@@ -249,7 +255,6 @@ body {
   gap: 8px;
 }
 
-/* Responsiv */
 @media (max-width: 640px) {
   .grid {
     gap: 8px;

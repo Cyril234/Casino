@@ -169,6 +169,7 @@ public class APIPlayerController {
         player.setVolume(newPlayer.getVolume());
         player.setSoundstatus(newPlayer.getSoundstatus());
         player.setBadgenumber(newPlayer.getBadgenumber());
+        player.setLastlogindate(newPlayer.getLastlogindate());
         player.setLogins(newPlayer.getLogins());
 
         return ResponseEntity.status(HttpStatus.OK)

@@ -1,5 +1,6 @@
 package com.example.casinobackend.entities;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -56,6 +57,9 @@ public class Player {
 
     @Column(name = "logins", nullable = false)
     private int logins = 0;
+
+    @Column(name = "lastlogindate", nullable = false)
+    private LocalDate lastlogindate = LocalDate.now();
 
     @OneToOne(mappedBy = "player")
     @JsonIgnoreProperties("player")
@@ -183,5 +187,12 @@ public class Player {
     public void setToken(String token) {
         this.token = token;
     }
-    
+
+    public LocalDate getLastlogindate() {
+        return lastlogindate;
+    }
+
+    public void setLastlogindate(LocalDate lastlogindate) {
+        this.lastlogindate = lastlogindate;
+    }
 }

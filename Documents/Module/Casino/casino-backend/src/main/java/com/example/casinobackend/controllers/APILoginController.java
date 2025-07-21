@@ -3,11 +3,13 @@ package com.example.casinobackend.controllers;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +46,7 @@ public class APILoginController {
         if (playerOpt.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Benutzername existiert nicht.");
+                    .body("Benutzername oder Passwort ist ungültig.");
         }
 
         Player player = playerOpt.get();
@@ -52,12 +54,17 @@ public class APILoginController {
         if (!argon2.verify(player.getPassword(), request.getPassword().toCharArray())) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Passwort ist ungültig.");
+                    .body("Benutzername oder Passwort ist ungültig.");
         }
 
         String token = generateToken();
         player.setToken(token);
         player.setLogins(player.getLogins() + 1);
+        
+        if (player.getLastlogindate() != null&&!player.getLastlogindate().isEqual(LocalDate.now())) {
+            player.setCoins(player.getCoins() + 500);
+        }
+        player.setLastlogindate(LocalDate.now());
         playerRepository.save(player);
 
         return ResponseEntity
@@ -91,6 +98,10 @@ public class APILoginController {
                     Player existing = player.get();
                     existing.setToken(token);
                     existing.setLogins(existing.getLogins() + 1);
+                    if (!existing.getLastlogindate().isEqual(LocalDate.now())) {
+                        existing.setCoins(existing.getCoins() + 500);
+                    }
+                    existing.setLastlogindate(LocalDate.now());
                     playerRepository.save(existing);
 
                     return ResponseEntity
@@ -101,9 +112,10 @@ public class APILoginController {
                     token = generateToken();
                     Player newPlayer = new Player();
                     newPlayer.setToken(token);
-                    newPlayer.setUsername("pleasCange");
+                    newPlayer.setUsername("pleaseChange");
                     newPlayer.setLogins(1);
                     newPlayer.setBadgenumber(UID);
+
                     playerRepository.save(newPlayer);
 
                     return ResponseEntity

@@ -1,6 +1,32 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import '../../styles/HorseRaceBet.css';
+import coinImg from "../../../public/pokergeld.png";
+import { MdInfo } from "react-icons/md";
+
+import blitz from '../../../public/horses/blitz.png';
+import donner from '../../../public/horses/donner.png';
+import eis from '../../../public/horses/eis.png';
+import feuer from '../../../public/horses/feuer.png';
+import glanz from '../../../public/horses/glanz.png';
+import pfeil from '../../../public/horses/pfeil.png';
+import schatten from '../../../public/horses/schatten.png';
+import sturm from '../../../public/horses/sturm.png';
+import tornado from '../../../public/horses/tornado.png';
+import wirbel from '../../../public/horses/wirbel.png';
+
+const horseImages: Record<string, string> = {
+    blitz,
+    donner,
+    eis,
+    feuer,
+    glanz,
+    pfeil,
+    schatten,
+    sturm,
+    tornado,
+    wirbel
+};
 
 export default function HorseRace() {
     interface Horse {
@@ -22,6 +48,8 @@ export default function HorseRace() {
     const [isProcessing, setIsProcessing] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
+    const [horseIndex, setHorseIndex] = useState(0);
+
     useEffect(() => {
         if (!token) navigate("/");
     }, [token, navigate]);
@@ -30,6 +58,20 @@ export default function HorseRace() {
         fetchPlayerData();
         fetchHorses();
     }, [token]);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (!allHorses) return;
+            if (e.key === "ArrowRight") {
+                setHorseIndex(prev => (prev + 1) % allHorses.length);
+            } else if (e.key === "ArrowLeft") {
+                setHorseIndex(prev => (prev - 1 + allHorses.length) % allHorses.length);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [allHorses]);
 
     const fetchPlayerData = async () => {
         try {
@@ -57,6 +99,7 @@ export default function HorseRace() {
             console.error("Fehler beim Laden der Pferde:", err);
         }
     };
+
     const getWinner = async (selectedHorseId: number) => {
         try {
             const res = await fetch(
@@ -72,13 +115,11 @@ export default function HorseRace() {
         }
     };
 
-
     const handleHorseSelection = async (selectedId: number) => {
         setHorseId(selectedId);
         setWinnerHorse(null);
         await startGame(selectedId);
     };
-
 
     const startGame = async (selectedHorseId: number) => {
         if (bet <= 0 || selectedHorseId === 0 || isProcessing || bet > coinsBalance) return;
@@ -110,23 +151,31 @@ export default function HorseRace() {
         }
     };
 
-
     const handleInfo = () => navigate("/gameoverview/horserace/info");
     const handleBack = () => navigate("/gameoverview");
 
     const disableButtons = bet <= 0 || bet > coinsBalance || isProcessing;
 
+    const getHorseImage = (horse: Horse) => {
+        const key = horse.name.toLowerCase();
+        return horseImages[key] || blitz;
+    };
+
     return (
         <div className="container">
             <div className="top-bar">
                 <button className="nav-button" onClick={handleBack}>Zurück</button>
-                <button className="nav-button" onClick={handleInfo}>Info</button>
+                <button className="nav-button" onClick={handleInfo}><MdInfo /></button>
             </div>
 
-            <h1>Pferderennen</h1>
+            <h1 className="titel">Pferderennen</h1>
+
+            <div className="balance-area">
+                Dein Guthaben: <strong>{coinsBalance}</strong>
+                <img src={coinImg} alt="Münze" className="coin-small" />
+            </div>
 
             <div className="bet-section">
-                <div>Guthaben: <strong>{coinsBalance}</strong></div>
                 <label>
                     Einsatz:
                     <input
@@ -139,23 +188,31 @@ export default function HorseRace() {
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
             </div>
 
-            <div className="horse-slideshow">
-                {allHorses?.map((horse) => (
-                    <div key={horse.horseId} className="horse-card">
-                        <h2>{horse.name}</h2>
-                        <p>Gewinnchance: {Math.round(horse.winningProbability * 100)}%</p>
-                        <p>Multiplikator: {horse.multiplicationfactor}x</p>
-                        <p>{horse.description}</p>
+            {allHorses && allHorses.length > 0 && (
+                <div className="horse-slider-container">
+                    <div className="horse-card large">
+                        <img
+                            src={getHorseImage(allHorses[horseIndex])}
+                            alt={allHorses[horseIndex].name}
+                            className="horse-image"
+                        />
+                        <h2>{allHorses[horseIndex].name}</h2>
+                        <p>Gewinnchance: {Math.round(allHorses[horseIndex].winningProbability * 100)}%</p>
+                        <p>Multiplikator: {allHorses[horseIndex].multiplicationfactor}x</p>
+                        <p>{allHorses[horseIndex].description}</p>
                         <button
                             className="select-button"
-                            onClick={() => handleHorseSelection(horse.horseId)}
+                            onClick={() => handleHorseSelection(allHorses[horseIndex].horseId)}
                             disabled={disableButtons}
                         >
-                            Wette auf {horse.name}
+                            Wette auf {allHorses[horseIndex].name}
                         </button>
                     </div>
-                ))}
-            </div>
+                    <div className="slider-indicator">
+                        {horseIndex + 1} / {allHorses.length}
+                    </div>
+                </div>
+            )}
 
             {winnerHorse && (
                 <div className="winner-announcement">

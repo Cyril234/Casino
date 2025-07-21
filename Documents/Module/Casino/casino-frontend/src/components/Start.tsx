@@ -11,11 +11,10 @@ import { useBadgeScanner } from "./login/LoginBage";
 export default function Start() {
     const navigate = useNavigate();
 
-    // Badge-Scan Callback
-    const handleBadgeScan = useCallback((scan: string) => {}, []);
+    const handleBadgeScan = useCallback((scan: string) => { }, []);
     useBadgeScanner(handleBadgeScan);
 
-    
+
     useEffect(() => {
         if (sessionStorage.getItem("authToken")) {
             sessionStorage.removeItem("authToken")
@@ -24,7 +23,7 @@ export default function Start() {
             sessionStorage.removeItem("username")
         }
     })
-    
+
     function handleLogin() {
         navigate("/login-overview");
     }

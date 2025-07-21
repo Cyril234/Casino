@@ -77,7 +77,6 @@ span {
     text-align: center;
 }
 
-/* Toggle Sound */
 .toggle-wrapper {
     display: flex;
     flex-direction: column;
@@ -101,8 +100,10 @@ span {
 .slider {
     position: absolute;
     cursor: pointer;
-    top: 0; left: 0;
-    right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: #555;
     transition: 0.4s;
     border-radius: 60px;
@@ -122,15 +123,14 @@ span {
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
 }
 
-.switch input:checked + .slider {
+.switch input:checked+.slider {
     background-color: #888;
 }
 
-.switch input:checked + .slider::before {
+.switch input:checked+.slider::before {
     transform: translateX(60px);
 }
 
-/* Buttons */
 button {
     padding: 1.5rem;
     background: linear-gradient(145deg, #ffd700, #ffb400);

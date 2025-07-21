@@ -83,7 +83,7 @@ export default function MinesGame() {
         setStatus("BOMBE! Alles verloren.");
         setGameActive(false);
         setCoinsBalance(prev => prev - bet);
-        setBombIndex(index); // 💥 Die tatsächlich angeklickte Bombe speichern
+        setBombIndex(index);
       } else {
         setRevealed(Array.from(data.revealed));
         setCurrentProfit(data.currentProfit);
@@ -158,16 +158,16 @@ export default function MinesGame() {
     <div
       className={`mines-container ${status === "LOSE" ? "lost" : ""}`}
       style={{ backgroundImage: `url(${tableBg})` }}
->
-  <div className="top-left">
-    <button className="back-button" onClick={() => navigate("/gameoverview")}>
-      Zurück
-    </button>
-    <button className="info-button" onClick={() => navigate("/gameoverview/mines/info")}>
-      <MdInfo />
-    </button>
-  </div>
-<div className="balance-area">
+    >
+      <div className="top-left">
+        <button className="back-button" onClick={() => navigate("/gameoverview")}>
+          Zurück
+        </button>
+        <button className="info-button" onClick={() => navigate("/gameoverview/mines/info")}>
+          <MdInfo />
+        </button>
+      </div>
+      <div className="balance-area">
 
         Guthaben: <strong>{coinsBalance}</strong>
         <img src={coinImg} alt="Münze" className="coin-small" />

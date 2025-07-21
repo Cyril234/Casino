@@ -16,7 +16,6 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
                         const match = inputBuffer.current.match(/UID:(.*?);/);
                         if (match) {
                             try {
-                                // Erster Fetch: Token holen
                                 const res = await fetch("http://localhost:8080/api/loginUID", {
                                     method: "POST",
                                     headers: { "Content-Type": "application/json" },
@@ -36,7 +35,6 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
                                 if (!token) throw new Error("Kein Token erhalten");
                                 sessionStorage.setItem("authToken", token);
 
-                                // Zweiter Fetch: Userdaten holen
                                 const userRes = await fetch(`http://localhost:8080/api/players/byToken/${token}`, {
                                     method: "GET",
                                     headers: {
@@ -50,8 +48,7 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
                                 }
                                 const userData = await userRes.json();
 
-                                // Weiterleitung je nach Username
-                                if (userData.username === "pleasCange") {
+                                if (userData.username === "pleaseChange") {
                                     navigate("/gameoverview");
                                     console.log("benuzername wechseln")
                                 } else {

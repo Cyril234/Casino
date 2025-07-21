@@ -1,29 +1,26 @@
-/* Gesamt-Hintergrund schwarz */
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
-  background-color: #121212; /* schwarz */
+  background-color: #121212;
   overflow: hidden;
   z-index: 1;
   width: auto;
 }
 
-/* Hintergrund-Linien komplett entfernen */
 .bg-lines {
   display: none !important;
 }
 
-/* Blobs entfernen oder ausblenden */
 .bg-blobs {
   display: none !important;
 }
 
-/* --- Leaderboard Modern Layout Styles --- */
 .leaderboard-root {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  background: #121212; /* komplett schwarz außenrum */
+  background: #121212;
 }
 
 .leaderboard-back-btn {
@@ -31,16 +28,17 @@ html, body {
   top: 1.5rem;
   left: 1.5rem;
   z-index: 20;
-  background: rgba(255, 215, 0, 0.15); /* goldener halbtransparenter Hintergrund */
+  background: rgba(255, 215, 0, 0.15);
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 215, 0, 0.4);
   padding: 0.75rem;
   transition: background 0.2s;
   cursor: pointer;
-  color: #ffd700; /* goldene Schrift */
+  color: #ffd700;
   font-weight: bold;
   text-shadow: 0 0 5px #ffd700;
 }
+
 .leaderboard-back-btn:hover {
   background: rgba(255, 215, 0, 0.3);
 }
@@ -63,17 +61,17 @@ html, body {
 }
 
 .leaderboard-content {
-  background: #2f2f2f; /* dunkelgrau */
+  background: #2f2f2f;
   backdrop-filter: blur(4px);
   border-radius: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   padding: 2rem;
   width: 140vh;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
   height: 80vh;
-  color: #ffd700; /* goldene Texte */
+  color: #ffd700;
   font-weight: 600;
 }
 
@@ -81,10 +79,11 @@ html, body {
   text-align: center;
   margin-bottom: 2rem;
 }
+
 .leaderboard-title {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #ffd700; /* goldgelb */
+  color: #ffd700;
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -92,6 +91,7 @@ html, body {
   gap: 0.75rem;
   text-shadow: 0 0 10px #ffd700;
 }
+
 .leaderboard-subtitle {
   color: #ffd700cc;
   font-size: 1rem;
@@ -103,6 +103,7 @@ html, body {
   overflow-y: auto;
   margin-bottom: 2rem;
 }
+
 .leaderboard-list {
   display: flex;
   flex-direction: column;
@@ -117,40 +118,44 @@ html, body {
   border-radius: 0.75rem;
   transition: background 0.2s;
   font-size: 1.15rem;
-  color: #ffd700; /* gold */
+  color: #ffd700;
   text-shadow: 0 0 3px #ffd700aa;
 }
+
 .leaderboard-gold {
   background: linear-gradient(90deg, #ffe066 0%, #ffd700 100%);
   color: #fff;
   font-weight: bold;
   text-shadow: none;
 }
+
 .leaderboard-silver {
   background: linear-gradient(90deg, #e0e0e0 0%, #b0b0b0 100%);
   color: #fff;
   font-weight: bold;
 }
+
 .leaderboard-bronze {
   background: linear-gradient(90deg, #ffb347 0%, #ff8800 100%);
   color: #fff;
   font-weight: bold;
 }
+
 .leaderboard-default {
   background: #fff;
   color: #232323;
 }
+
 .leaderboard-row-left {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-/* Texte für User, Coins und Platzierung schwarz */
 .leaderboard-rank,
 .leaderboard-username,
 .leaderboard-coins {
-  color: #000; /* schwarz */
+  color: #000;
   text-shadow: none;
 }
 
@@ -158,12 +163,14 @@ html, body {
   font-weight: 600;
   font-size: 1.1rem;
 }
+
 .leaderboard-row-right {
   text-align: right;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
 }
+
 .leaderboard-coins-label {
   font-size: 0.85rem;
   opacity: 0.75;
@@ -174,6 +181,7 @@ html, body {
   padding-top: 1.5rem;
   border-top: 1px solid #555;
 }
+
 .leaderboard-footer-stats {
   display: flex;
   justify-content: center;
@@ -182,24 +190,27 @@ html, body {
   color: #ffd700cc;
   font-size: 1rem;
 }
+
 .leaderboard-footer-stat {
   text-align: center;
   color: #ffd700cc;
 }
+
 .leaderboard-footer-value {
   font-weight: 600;
   font-size: 1.15rem;
   color: #ffd700;
 }
 
-/* Custom Scrollbar */
 .leaderboard-list-wrapper::-webkit-scrollbar {
   width: 6px;
 }
+
 .leaderboard-list-wrapper::-webkit-scrollbar-thumb {
   background-color: #555;
   border-radius: 3px;
 }
+
 .leaderboard-list-wrapper::-webkit-scrollbar-track {
   background-color: #222;
   border-radius: 3px;

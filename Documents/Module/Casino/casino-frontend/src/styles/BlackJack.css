@@ -14,7 +14,6 @@ body {
   overflow: hidden;
 }
 
-/* Spielfeld-Hintergrund */
 .blackjack-table {
   width: 1960px;
   height: 1080px;
@@ -26,7 +25,6 @@ body {
   overflow: hidden;
 }
 
-/* Karten */
 .card {
   width: 120px;
   height: 180px;
@@ -38,7 +36,6 @@ body {
   z-index: 1;
 }
 
-/* Kartenbereiche */
 .dealer-hand,
 .player-hand {
   position: absolute;
@@ -58,7 +55,6 @@ body {
   transform: translateX(-50%);
 }
 
-/* Punktestand */
 .score {
   position: absolute;
   background: rgba(0, 0, 0, 0.6);
@@ -92,7 +88,6 @@ body {
   z-index: 11;
 }
 
-/* Steuerung */
 .controls {
   position: absolute;
   bottom: 20px;
@@ -124,7 +119,6 @@ body {
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.6);
 }
 
-/* 🟨 Einsatzbereich links unten */
 .bet-area {
   position: absolute;
   bottom: 20px;
@@ -182,7 +176,6 @@ body {
   margin-top: 0.5rem;
 }
 
-/* Guthaben */
 .balance-area {
   position: absolute;
   top: 10px;
@@ -197,13 +190,11 @@ body {
   z-index: 10;
 }
 
-/* Fehler */
 .error {
   color: red;
   margin-top: 0.5rem;
 }
 
-/* Ergebnis */
 .status-box {
   position: absolute;
   top: 50%;
@@ -236,8 +227,6 @@ body {
   font-size: 1.1rem;
 }
 
-
-/* Münz-Icons */
 .coin-small {
   width: 3rem;
   height: 3rem;
@@ -297,9 +286,7 @@ body {
 
 .info-button:hover {
   background: inherit;
-  /* keine neue Farbe */
   transform: scale(1.05);
-  /* optional für leichten Effekt */
   box-shadow: none;
 }
 
@@ -340,11 +327,8 @@ body {
 
 .error {
   background: rgba(255, 80, 80, 0.15);
-  /* sanfter roter Hintergrund */
   color: #ff4d4d;
-  /* gut sichtbares Hellrot */
   border-left: 4px solid #ff4d4d;
-  /* roter Balken links */
   padding: 10px 12px;
   border-radius: 6px;
   font-size: 1rem;

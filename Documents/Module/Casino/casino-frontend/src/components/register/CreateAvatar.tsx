@@ -193,7 +193,6 @@ export default function CreateAvatar() {
             <h1 className="create-avatar-title">Konfiguriere deinen Avatar!</h1>
             <div className="create-avatar-wrapper" style={{ display: "flex", justifyContent: "center", gap: "2rem", maxWidth: "1000px", margin: "auto" }}>
 
-                {/* Linkes Formular */}
                 <form className="create-avatar-form" onSubmit={handleSubmit} style={{ flex: "0 0 35%", display: "flex", flexDirection: "column", gap: "1rem" }}>
                     <label className="form-label" htmlFor="avatar-name">Avatar-Name</label>
                     <input
@@ -236,7 +235,6 @@ export default function CreateAvatar() {
                     />
                 </form>
 
-                {/* Avatar in der Mitte */}
                 <div className="avatar-preview-container" style={{ flex: "0 0 30%", display: "flex", justifyContent: "center" }}>
                     <AvatarPreview
                         skincolor={skincolorOptions[skincolorIdx]}
@@ -250,8 +248,6 @@ export default function CreateAvatar() {
                         beard={beard}
                     />
                 </div>
-
-                {/* Rechtes Formular */}
                 <form className="create-avatar-form" onSubmit={handleSubmit} style={{ flex: "0 0 35%", display: "flex", flexDirection: "column", gap: "1rem" }}>
                     <ArrowSelector
                         id="headgear-select"

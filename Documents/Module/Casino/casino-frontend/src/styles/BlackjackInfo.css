@@ -2,7 +2,7 @@
   padding: 2rem;
   max-width: 800px;
   margin: 0 auto;
-  color: #eaeaea; /* Standardtext heller */
+  color: #eaeaea;
   font-family: 'Segoe UI', sans-serif;
   background: rgba(20, 20, 20, 0.9);
   border-radius: 16px;
@@ -11,7 +11,7 @@
 
 .info-page h1 {
   text-align: center;
-  color: #ffcc00; /* heller Goldton */
+  color: #ffcc00;
   font-size: 2.5rem;
   margin-bottom: 2rem;
 }
@@ -21,7 +21,7 @@
 }
 
 .info-section h2 {
-  color: #ffd700; /* etwas stärkerer Goldton */
+  color: #ffd700;
   font-size: 1.6rem;
   margin-bottom: 0.5rem;
 }

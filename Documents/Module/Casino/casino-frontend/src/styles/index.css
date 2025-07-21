@@ -12,16 +12,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-
-
 body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-    background-color: #121212;
+  background-color: #121212;
 
 }
 
@@ -52,7 +49,7 @@ button:focus-visible {
     color: #121212;
     background-color: #ffffff;
   }
-  
+
   button {
     background-color: #f9f9f9;
   }

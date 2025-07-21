@@ -29,72 +29,60 @@ export default function LoginWithEmailAndPassword() {
 
       sessionStorage.setItem("authToken", token);
       sessionStorage.setItem("username", username);
-      setStatus("Erfolgreich angemeldet ✅");
+      setStatus("Erfolgreich angemeldet");
       navigate("/gameoverview");
     } catch (err) {
       if (err instanceof Error) setStatus(err.message);
-      else setStatus("Anmeldung fehlgeschlagen ❌");
+      else setStatus("Anmeldung fehlgeschlagen");
       console.error(err);
     }
   };
 
- return (
-<main className="casino-login-container">
-  <section className="casino-login-card">
-    <h1 className="casino-login-title">Anmelden</h1>
-    <form onSubmit={handleLogin} className="casino-login-form">
-      
-     
+  return (
+    <main className="casino-login-container">
+      <section className="casino-login-card">
+        <h1 className="casino-login-title">Anmelden</h1>
+        <form onSubmit={handleLogin} className="casino-login-form">
+          <label htmlFor="username" className="casino-login-label">Benutzername</label>
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            required
+            className="casino-login-input"
+          />
 
-      {/* Benutzername */}
-      <label htmlFor="username" className="casino-login-label">Benutzername</label>
-      <input
-        id="username"
-        type="text"
-        value={username}
-        onChange={e => setUsername(e.target.value)}
-        required
-        className="casino-login-input"
-      />
-
-      {/* Passwort */}
-      <label htmlFor="password" className="casino-login-label">Passwort</label>
-      <input
-        id="password"
-        type={showPw ? "text" : "password"}
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-        required
-        className="casino-login-input"
-      />
-       {/* Anzeigen-Button ganz oben */}
-      <button
-        type="button"
-        className="casino-login-button casino-login-button--toggle"
-        onClick={() => setShowPw(prev => !prev)}
-      >
-        {showPw ? "Verbergen" : "Anzeigen"}
-      </button>
-
-      {/* Buttons zentriert */}
-      <div className="casino-login-buttons">
-        <button className="casino-login-button" type="submit">Anmelden</button>
-        <button
-          className="casino-login-button casino-login-button--back"
-          type="button"
-          onClick={() => navigate('/login-overview')}
-        >
-          Zurück
-        </button>
-      </div>
-    </form>
-  </section>
-</main>
-
-
-
-);
-
-
+          <label htmlFor="password" className="casino-login-label">Passwort</label>
+          <input
+            id="password"
+            type={showPw ? "text" : "password"}
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            className="casino-login-input"
+          />
+          <button
+            type="button"
+            className="casino-login-button casino-login-button--toggle"
+            onClick={() => setShowPw(prev => !prev)}
+          >
+            {showPw ? "Verbergen" : "Anzeigen"}
+          </button>
+          {errorMsg && <p className="register-error">{errorMsg}</p>}
+          <div className="casino-login-buttons">
+            <button className="casino-login-button" type="submit">Anmelden</button>
+            <button
+              className="casino-login-button casino-login-button--back"
+              type="button"
+              onClick={() => navigate('/login-overview')}
+            >
+              Zurück
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+  );
 }
 

@@ -3,7 +3,6 @@ import { ArrowLeft, Trophy, Medal, Award } from "lucide-react";
 import "../styles/Leaderboard.css";
 import { useNavigate } from "react-router-dom";
 
-// Typdefinition für User
 interface User {
   playerId: number;
   username: string;
@@ -47,8 +46,6 @@ export default function Leaderboard() {
     fetchData();
   }, []);
 
-
-  // Keyboard handling
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "Enter") {
@@ -56,14 +53,14 @@ export default function Leaderboard() {
       }
       if (e.key === "ArrowUp") {
         setSelectedIndex((prev) => {
-          if (prev === 0) return -1; // Von erstem User zum Back-Button
-          if (prev === -1) return -1; // Bleibt auf Back-Button
+          if (prev === 0) return -1;
+          if (prev === -1) return -1;
           return prev - 1;
         });
       }
       if (e.key === "ArrowDown") {
         setSelectedIndex((prev) => {
-          if (prev === -1) return 0; // Von Back-Button zum ersten User
+          if (prev === -1) return 0;
           if (prev < users.length - 1) return prev + 1;
           return prev;
         });
@@ -78,7 +75,6 @@ export default function Leaderboard() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [users.length, selectedIndex]);
 
-  // Scroll zum ausgewählten Element oder Back-Button
   useEffect(() => {
     if (selectedIndex === -1) {
       backBtnRef.current?.focus();
@@ -112,7 +108,6 @@ export default function Leaderboard() {
         <div className="blob pink-blob"></div>
       </div>
       <div className="bg-lines"></div>
-      {/* Back Button */}
       <button
         onClick={() => (navigate("/gameoverview"))}
         className={`leaderboard-back-btn${selectedIndex === -1 ? " leaderboard-back-btn-selected" : ""}`}
@@ -121,10 +116,8 @@ export default function Leaderboard() {
       >
         Zurück
       </button>
-      {/* Main Content */}
       <div className="leaderboard-content-wrapper">
         <div className="leaderboard-content">
-          {/* Header */}
           <div className="leaderboard-header">
             <h1 className="leaderboard-title">
               <Trophy className="w-8 h-8 text-yellow-500" />
@@ -132,7 +125,6 @@ export default function Leaderboard() {
             </h1>
             <p className="leaderboard-subtitle">Alle Spieler sortiert anhand von ihren Coins.</p>
           </div>
-          {/* Scrollable Leaderboard */}
           <div className="leaderboard-list-wrapper">
             <div className="leaderboard-list">
               {users
@@ -156,7 +148,6 @@ export default function Leaderboard() {
                 ))}
             </div>
           </div>
-          {/* Footer Stats */}
           <div className="leaderboard-footer">
             <div className="leaderboard-footer-stats">
               <div className="leaderboard-footer-stat">

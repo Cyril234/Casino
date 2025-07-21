@@ -55,8 +55,6 @@ export default function Gameoverview() {
     fetchData();
   }, [token]);
 
-
-  // User und Coins fetchen
   useEffect(() => {
     const token = sessionStorage.getItem("authToken");
     if (!token) return;
@@ -76,7 +74,6 @@ export default function Gameoverview() {
       });
   }, []);
 
-  // Keyboard-Handling
   useEffect(() => {
     const token = sessionStorage.getItem("authToken");
     if (!token) {
@@ -96,7 +93,6 @@ export default function Gameoverview() {
 
   const handleKeyUsed = () => setLastKey(null);
 
-  // Blob Bewegung mit useEffect + Intervall
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (posXPink < -400) {
@@ -133,7 +129,7 @@ export default function Gameoverview() {
     }, 50);
 
     return () => clearInterval(intervalId);
-  }, []); // nur einmal beim Mounten!
+  }, []);
 
 
   return (

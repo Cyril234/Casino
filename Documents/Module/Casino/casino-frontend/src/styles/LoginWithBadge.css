@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -14,7 +15,6 @@ html, body {
   align-items: center;
 }
 
-/* Container */
 .unique-register-container {
   position: fixed;
   top: 0;
@@ -29,7 +29,6 @@ html, body {
   box-sizing: border-box;
 }
 
-/* Karte (Formularbox) */
 .unique-register-card {
   background: #1a0000;
   border-radius: 20px;
@@ -43,7 +42,6 @@ html, body {
   width: 100%;
 }
 
-/* Titel */
 .unique-register-title {
   font-size: 3rem;
   font-weight: bold;
@@ -56,7 +54,6 @@ html, body {
   margin-bottom: 1.5rem;
 }
 
-/* Beschreibungstext (unter Titel) */
 .unique-register-desc {
   color: #ffcc00;
   text-align: center;
@@ -66,7 +63,6 @@ html, body {
   text-shadow: 0 0 8px #ff6600;
 }
 
-/* Formular */
 .unique-register-form {
   width: 100%;
   max-width: 1000px;
@@ -80,7 +76,6 @@ html, body {
   color: #ffcc00;
 }
 
-/* Label */
 .unique-register-label {
   font-size: 1.4rem;
   font-weight: 700;
@@ -88,7 +83,6 @@ html, body {
   text-shadow: 0 0 6px #ff6600;
 }
 
-/* Input */
 .unique-register-input {
   padding: 1rem;
   font-size: 1.1rem;
@@ -109,7 +103,6 @@ html, body {
     inset 0 0 20px #ffaa00;
 }
 
-/* Button Basis */
 .unique-register-button {
   background: linear-gradient(90deg, #ff6600, #ffcc00);
   color: #1a0000;
@@ -127,10 +120,9 @@ html, body {
   width: 240px;
   margin-left: 23rem;
   text-align: center;
-  align-self: center; /* Button mittig */
+  align-self: center;
 }
 
-/* Hover Effekt */
 .unique-register-button:hover {
   background: linear-gradient(90deg, #ffcc00, #ff3300);
   color: #1a0000;
@@ -140,7 +132,6 @@ html, body {
     0 0 40px #ff3300;
 }
 
-/* Button Gruppe zentriert */
 .unique-register-buttons {
   display: flex;
   flex-direction: column;
@@ -148,29 +139,26 @@ html, body {
   gap: 1.2rem;
 }
 
-/* Toggle-Button oben */
 .unique-register-button--toggle {
   align-self: center;
 }
 
-/* Zurück Button (leicht anders) */
-/* Voller Bildschirm Container mit Flexbox */
 .unique-register-container {
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
 
   display: flex;
-  justify-content: center; /* horizontal zentrieren */
-  align-items: center;     /* vertikal zentrieren */
+  justify-content: center;
+  align-items: center;
 
   background: linear-gradient(135deg, #1a0000, #330000);
   padding: 2rem;
   box-sizing: border-box;
 }
 
-/* Formular Karte */
 .unique-register-card {
   background: #1a0000;
   border-radius: 20px;
@@ -183,10 +171,8 @@ html, body {
 
   max-width: 1100px;
   width: 100%;
-  /* Kein margin nötig, Flexbox zentriert es */
 }
 
-/* Titel zentriert */
 .unique-register-title {
   font-size: 3rem;
   font-weight: bold;
@@ -199,7 +185,6 @@ html, body {
   margin-bottom: 1rem;
 }
 
-/* Formular */
 .unique-register-form {
   width: 100%;
   max-width: 1000px;
@@ -212,6 +197,3 @@ html, body {
   padding: 3rem 4rem;
   box-sizing: border-box;
 }
-
-/* Labels und Inputs etc. wie gehabt... */
-

@@ -17,7 +17,6 @@ body {
     repeating-linear-gradient(215deg, rgba(255, 255, 255, 0.2) 0, rgba(255, 255, 255, 0.2) 2px, transparent 2px, transparent 50px);
 }
 
-/* --- BLOBS (darunter) --- */
 .bg-blobs-game {
   position: fixed;
   inset: 0;
@@ -68,7 +67,6 @@ body {
   z-index: 10;
   color: #fff;
   text-align: center;
-  /* margin-top: 10vh; entfernt für bessere Zentrierung */
   font-size: 2rem;
   display: flex;
   flex-direction: column;
@@ -81,7 +79,6 @@ body {
 .pokergeld {
   z-index: 10;
   position: absolute;
-  /* or relative, depending on your layout needs */
   left: 50px;
   top: 50px;
 }
@@ -89,14 +86,11 @@ body {
 .cointext {
   z-index: 10;
   position: absolute;
-  /* or relative, depending on your layout needs */
   left: 170px;
   top: 35px;
   color: #fff;
 }
 
-
-/* Dropdown Menu Styling */
 .dropdown {
   z-index: 10;
   position: absolute;
