@@ -56,7 +56,7 @@
 .slot-symbol {
   max-width: 70px;
   max-height: 70px;
-  image-rendering: pixelated; /* Pixelart Effekt */
+  image-rendering: pixelated; 
 }
 
 .spin-button {

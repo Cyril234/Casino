@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import "../../styles/EditProfile.css"
 import { useBadgeScanner } from "./AddBadge";
@@ -15,7 +15,13 @@ export default function EditProfile() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [coins, setCoins] = useState(0);
-    const [badgenumber, setBadgenumber] = useState<String | null>(null);
+    const [badgenumber, setBadgenumber] = useState<string | null>(null);
+
+    // Aktuelles Input-Feld, das von der Tastatur beschriftet wird
+    const [activeInput, setActiveInput] = useState<"username" | "email" | "password" | null>(null);
+
+    // Tastatur anzeigen oder nicht
+    const [keyboardVisible, setKeyboardVisible] = useState(false);
 
     useEffect(() => {
         if (!currentToken) {
@@ -26,7 +32,7 @@ export default function EditProfile() {
         if (!usernameSecurity) {
             navigate("/gameoverview");
         }
-    })
+    }, [currentToken, usernameSecurity, navigate]);
 
     useEffect(() => {
         const fetchPlayerId = async () => {
@@ -161,10 +167,79 @@ export default function EditProfile() {
         }
     };
 
+    // Tastatur-Handler: Taste drücken
+    const onKeyPress = (key: string) => {
+        if (!activeInput) return;
+
+        const updater = (old: string) => {
+            if (key === "Delete") {
+                // Lösche letztes Zeichen
+                return old.slice(0, -1);
+            } else if (key === "x") {
+                // Schließen = Tastatur ausblenden
+                setKeyboardVisible(false);
+                return old;
+            } else {
+                // Ansonsten Buchstaben / Zeichen anfügen
+                return old + key;
+            }
+        };
+
+        if (activeInput === "username") setUsername(updater);
+        if (activeInput === "email") setEmail(updater);
+        if (activeInput === "password") setPassword(updater);
+    };
+
+    // Komponente für virtuelle Tastatur
+    function VirtualKeyboard() {
+        const keysRow1 = ["q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "@"];
+        const keysRow2 = ["a", "s", "d", "f", "g", "h", "j", "k", "l", "x", "Delete"];
+        const keysRow3 = ["y", "x", "c", "v", "b", "n", "m"];
+
+        return (
+            <div className="virtual-keyboard">
+                <div className="keyboard-row">
+                    {keysRow1.map((k) => (
+                        <button
+                            key={k}
+                            className={`keyboard-key ${k === "@" ? "keyboard-at" : ""} ${k === "x" ? "keyboard-close" : ""} ${k === "Delete" ? "keyboard-delete" : ""}`}
+                            onClick={() => onKeyPress(k)}
+                        >
+                            {k === "x" ? "x" : k === "Delete" ? "Del" : k}
+                        </button>
+                    ))}
+                </div>
+                <div className="keyboard-row">
+                    {keysRow2.map((k) => (
+                        <button
+                            key={k}
+                            className={`keyboard-key ${k === "@" ? "keyboard-at" : ""} ${k === "x" ? "keyboard-close" : ""} ${k === "Delete" ? "keyboard-delete" : ""}`}
+                            onClick={() => onKeyPress(k)}
+                        >
+                            {k === "x" ? "x" : k === "Delete" ? "Del" : k}
+                        </button>
+                    ))}
+                </div>
+                <div className="keyboard-row">
+                    {keysRow3.map((k) => (
+                        <button
+                            key={k}
+                            className={`keyboard-key ${k === "@" ? "keyboard-at" : ""} ${k === "x" ? "keyboard-close" : ""} ${k === "Delete" ? "keyboard-delete" : ""}`}
+                            onClick={() => onKeyPress(k)}
+                        >
+                            {k === "x" ? "x" : k === "Delete" ? "Del" : k}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="page-wrapper">
             <h1>Mein Profil</h1>
             <form className="register-form" onSubmit={editProfile}>
+
                 <label htmlFor="username" className="form-label">Benutzername</label>
                 <input
                     id="username"
@@ -172,7 +247,9 @@ export default function EditProfile() {
                     value={username}
                     placeholder={username}
                     onChange={e => setUsername(e.target.value)}
+                    onFocus={() => { setActiveInput("username"); setKeyboardVisible(true) }}
                 />
+
                 <label htmlFor="email" className="form-label">Email</label>
                 <input
                     id="email"
@@ -180,17 +257,19 @@ export default function EditProfile() {
                     value={email}
                     placeholder={email}
                     onChange={e => setEmail(e.target.value)}
+                    onFocus={() => { setActiveInput("email"); setKeyboardVisible(true) }}
                 />
+
                 <label htmlFor="password" className="form-label">Passwort</label>
-                <div style={{ width: "100%" }}>
-                    <input
-                        id="password"
-                        type={"password"}
-                        value={password}
-                        placeholder="Gib dein neues Passwort hier ein"
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                </div>
+                <input
+                    id="password"
+                    type={"password"}
+                    value={password}
+                    placeholder="Gib dein neues Passwort hier ein"
+                    onChange={e => setPassword(e.target.value)}
+                    onFocus={() => { setActiveInput("password"); setKeyboardVisible(true) }}
+                />
+
                 <button
                     className="next-btn"
                     type="button"
@@ -210,6 +289,8 @@ export default function EditProfile() {
                     Zurück
                 </button>
             </form>
+
+            {keyboardVisible && <VirtualKeyboard />}
         </div>
     );
 }
