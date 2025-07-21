@@ -20,6 +20,7 @@ import HorseRaceInfo from './components/gameinformations/HorseRaceInfo'
 import MyGames from './components/lastgames/MyGames'
 import MinenfeldInfo from './components/gameinformations/MinenfeldInfo'
 import Roulette from './components/Games/Roulette'
+import FormAfterLoginWithBadge from './components/login/FormAfterLoginWithBadge'
 
 
 function App() {
@@ -47,7 +48,8 @@ function App() {
         <Route path="/gameoverview/horserace/info" element={<HorseRaceInfo />} />
         <Route path="/gameoverview/mines/info" element={<MinenfeldInfo />} />
         <Route path="/gaminghistory" element={<MyGames />} />
-        
+        <Route path="/login-with-badge/form" element={<FormAfterLoginWithBadge />} />
+
 
       </Routes>
     </>

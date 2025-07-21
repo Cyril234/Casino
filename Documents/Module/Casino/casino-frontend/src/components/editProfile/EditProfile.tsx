@@ -114,33 +114,31 @@ export default function EditProfile() {
         }
 
         try {
-            const endpoint = `http://localhost:8080/api/players/${playerId}`;
-            let body;
-
-            if (badgenumber === null) {
-                alert("Scanne nun deinen Badge.");
-                return;
-            } else {
-                body = JSON.stringify({ badgenumber: null });
-            }
-            const res = await fetch(endpoint, {
+            const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${currentToken}`,
                     "Content-Type": "application/json"
                 },
-                body,
+                body: JSON.stringify({ "badgenumber": badgenumber }),
             });
 
             if (!res.ok) {
                 const errorText = await res.text();
-                console.error("Fehler beim Aktualisieren des Badges:", errorText);
-            } else {
-                setBadgenumber(badgenumber === null ? "..." : null);
-                console.log("Badge aktualisiert");
+                if (res.status === 409) {
+                    setErrorMsg(errorText);
+                } else {
+                    setErrorMsg("Fehler beim Bearbeiten: " + errorText);
+                }
+                return;
             }
+
+            sessionStorage.setItem("username", username);
+            navigate("/gameoverview");
+
         } catch (err) {
-            console.error("Netzwerkfehler beim Badge-Update:", err);
+            console.error("Serverfehler:", err);
+            setErrorMsg("Verbindung zum Server fehlgeschlagen.");
         }
     };
 

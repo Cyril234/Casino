@@ -60,8 +60,8 @@ public class APILoginController {
         String token = generateToken();
         player.setToken(token);
         player.setLogins(player.getLogins() + 1);
-        
-        if (player.getLastlogindate() != null&&!player.getLastlogindate().isEqual(LocalDate.now())) {
+
+        if (player.getLastlogindate() != null && !player.getLastlogindate().isEqual(LocalDate.now())) {
             player.setCoins(player.getCoins() + 500);
         }
         player.setLastlogindate(LocalDate.now());
@@ -98,7 +98,7 @@ public class APILoginController {
                     Player existing = player.get();
                     existing.setToken(token);
                     existing.setLogins(existing.getLogins() + 1);
-                    if(existing.getLastlogindate() != null){
+                    if (existing.getLastlogindate() != null) {
                         if (!existing.getLastlogindate().isEqual(LocalDate.now())) {
                             existing.setCoins(existing.getCoins() + 500);
                         }
@@ -114,7 +114,8 @@ public class APILoginController {
                     token = generateToken();
                     Player newPlayer = new Player();
                     newPlayer.setToken(token);
-                    newPlayer.setUsername("pleaseChange");
+                    newPlayer.setUsername(
+                            "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267");
                     newPlayer.setLogins(1);
                     newPlayer.setBadgenumber(UID);
 
