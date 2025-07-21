@@ -9,7 +9,7 @@ const slides = [
   { id: 3, img: "./public/titelbilder/minenfeldTitelbild.png", link: '/gameoverview/mines' },
   { id: 4, img: "./public/titelbilder/pokerTitelbild.png", link: '/' },
   { id: 5, img: "./public/titelbilder/rouletteTitelbild.png", link: '/gameoverview/roulette' },
-  { id: 6, img: "./public/titelbilder/slotMachineTitelbild.png", link: '/' },
+  { id: 6, img: "./public/titelbilder/slotMachineTitelbild.png", link: '/gameoverview/slot' },
 ];
 
 interface SlideshowProps {

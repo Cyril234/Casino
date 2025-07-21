@@ -21,7 +21,7 @@ import MyGames from './components/lastgames/MyGames'
 import MinenfeldInfo from './components/gameinformations/MinenfeldInfo'
 import Roulette from './components/Games/Roulette'
 import FormAfterLoginWithBadge from './components/login/FormAfterLoginWithBadge'
-
+import Slot from './components/Games/Slot'
 
 function App() {
 
@@ -36,6 +36,7 @@ function App() {
         <Route path='/gameoverview' element={<Gameoverview />} />
         <Route path='/register' element={<Register />} />
         <Route path='/gameoverview/blackjack' element={<BlackJackGame />} />
+        <Route path='/gameoverview/slot' element={<Slot />} />
         <Route path='/gameoverview/mines' element={<Mines />} />
         <Route path='/gameoverview/roulette' element={<Roulette />} />
         <Route path='/create-avatar' element={<CreateAvatar />} />

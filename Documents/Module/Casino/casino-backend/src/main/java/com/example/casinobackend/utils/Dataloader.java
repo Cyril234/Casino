@@ -212,5 +212,10 @@ public class Dataloader implements ApplicationRunner {
             game4.setTitle("Roulette");
             gameRepository.save(game4);
         }
+        if (!gameRepository.findByTitle("Slot").isPresent()) {
+            Game game6 = new Game();
+            game6.setTitle("Slot");
+            gameRepository.save(game6);
+        }
     }
 }
