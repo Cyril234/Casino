@@ -49,12 +49,9 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
                                 const userData = await userRes.json();
 
                                 if (userData.username === "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267") {
-                                    navigate("/gameoverview");
-                                    console.log("benuzername wechseln")
-                                }
-                                else if (userData.logins === 1) {
                                     navigate("/login-with-badge/form");
-                                } else {
+                                }
+                                else {
                                     navigate("/gameoverview");
                                 }
                             } catch (err) {
