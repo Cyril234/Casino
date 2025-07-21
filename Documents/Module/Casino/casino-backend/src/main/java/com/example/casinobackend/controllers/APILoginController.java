@@ -98,8 +98,10 @@ public class APILoginController {
                     Player existing = player.get();
                     existing.setToken(token);
                     existing.setLogins(existing.getLogins() + 1);
-                    if (!existing.getLastlogindate().isEqual(LocalDate.now())) {
-                        existing.setCoins(existing.getCoins() + 500);
+                    if(existing.getLastlogindate() != null){
+                        if (!existing.getLastlogindate().isEqual(LocalDate.now())) {
+                            existing.setCoins(existing.getCoins() + 500);
+                        }
                     }
                     existing.setLastlogindate(LocalDate.now());
                     playerRepository.save(existing);
