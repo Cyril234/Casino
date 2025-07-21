@@ -13,6 +13,13 @@ interface TokenResponse {
   token: string;
 }
 
+const keys = [
+  "Q","W","E","R","T","Z","U","I","O","P",
+  "A","S","D","F","G","H","J","K","L",
+  "Y","X","C","V","B","N","M",
+  "@"
+];
+
 export default function Register() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -20,6 +27,8 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [showKeyboard, setShowKeyboard] = useState(false);
+  const [focusedField, setFocusedField] = useState<"username" | "email" | "password" | null>(null);
 
   const handleNext = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,6 +92,30 @@ export default function Register() {
     }
   };
 
+  function onFocusField(field: "username" | "email" | "password") {
+    setFocusedField(field);
+    setShowKeyboard(true);
+  }
+
+  function onKeyPress(key: string) {
+    if (focusedField === "username") {
+      setUsername(prev => prev + key);
+    } else if (focusedField === "email") {
+      setEmail(prev => prev + key);
+    } else if (focusedField === "password") {
+      setPassword(prev => prev + key);
+    }
+  }
+
+  function onBackspace() {
+    if (focusedField === "username") {
+      setUsername(prev => prev.slice(0, -1));
+    } else if (focusedField === "email") {
+      setEmail(prev => prev.slice(0, -1));
+    } else if (focusedField === "password") {
+      setPassword(prev => prev.slice(0, -1));
+    }
+  }
 
   return (
     <main className="register-page-container">
@@ -96,8 +129,10 @@ export default function Register() {
             type="text"
             value={username}
             onChange={e => setUsername(e.target.value)}
+            onFocus={() => onFocusField("username")}
             required
             className="register-input"
+            autoComplete="off"
           />
 
           <label htmlFor="email" className="register-label">E-Mail</label>
@@ -106,8 +141,10 @@ export default function Register() {
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
+            onFocus={() => onFocusField("email")}
             required
             className="register-input"
+            autoComplete="off"
           />
 
           <label htmlFor="password" className="register-label">Passwort</label>
@@ -117,8 +154,10 @@ export default function Register() {
               type={showPw ? "text" : "password"}
               value={password}
               onChange={e => setPassword(e.target.value)}
+              onFocus={() => onFocusField("password")}
               required
               className="register-input"
+              autoComplete="off"
             />
             <button
               type="button"
@@ -140,10 +179,39 @@ export default function Register() {
             Zurück
           </button>
         </form>
+
+        {/* Virtuelle Tastatur */}
+        {showKeyboard && (
+          <div className="virtual-keyboard">
+            <div className="keyboard-keys">
+              {keys.map(key => (
+                <button
+                  key={key}
+                  type="button"
+                  className="keyboard-key"
+                  onClick={() => onKeyPress(key)}
+                >
+                  {key}
+                </button>
+              ))}
+              <button
+                type="button"
+                className="keyboard-key keyboard-backspace"
+                onClick={onBackspace}
+              >
+                ⌫
+              </button>
+              <button
+                type="button"
+                className="keyboard-key keyboard-close"
+                onClick={() => setShowKeyboard(false)}
+              >
+                ✖ 
+              </button>
+            </div>
+          </div>
+        )}
       </section>
     </main>
-
   );
-
-
 }
