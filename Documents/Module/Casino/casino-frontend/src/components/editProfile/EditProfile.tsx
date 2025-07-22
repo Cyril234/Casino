@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import "../../styles/EditProfile.css"
+import "../../styles/EditProfile.css";
 import { useBadgeScanner } from "./AddBadge";
 
 export default function EditProfile() {
@@ -13,13 +13,13 @@ export default function EditProfile() {
     const [playerId, setPlayerId] = useState(0);
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState<string | undefined>();
     const [coins, setCoins] = useState(0);
     const [badgenumber, setBadgenumber] = useState<string | null>(null);
 
     const [activeInput, setActiveInput] = useState<"username" | "email" | "password" | null>(null);
-
     const [keyboardVisible, setKeyboardVisible] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
 
     useEffect(() => {
         if (!currentToken) {
@@ -34,10 +34,7 @@ export default function EditProfile() {
 
     useEffect(() => {
         const fetchPlayerId = async () => {
-            if (!currentToken) {
-                console.error("Kein Auth-Token gefunden.");
-                return;
-            }
+            if (!currentToken) return;
 
             try {
                 const res = await fetch(`http://localhost:8080/api/players/byToken/${currentToken}`, {
@@ -49,9 +46,7 @@ export default function EditProfile() {
                     }
                 });
 
-                if (!res.ok) {
-                    throw new Error(`HTTP Fehler: ${res.status}`);
-                }
+                if (!res.ok) throw new Error(`HTTP Fehler: ${res.status}`);
 
                 const data = await res.json();
                 setPlayerId(data.playerId);
@@ -61,63 +56,27 @@ export default function EditProfile() {
                 setBadgenumber(data.badgenumber);
 
             } catch (err) {
-                console.error("Fehler bei dem Bekommen der SpielerId:", err);
+                console.error("Fehler beim Laden der Spielerdaten:", err);
             }
         };
 
         fetchPlayerId();
     }, [currentToken]);
 
-    const [errorMsg, setErrorMsg] = useState("");
-
     const editProfile = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrorMsg("");
 
-        try {
-            const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `Bearer ${currentToken}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ username, email, password, coins }),
-            });
+        const updateData: any = {
+            username,
+            email,
+            coins,
+            badgenumber
+        };
 
-            if (!res.ok) {
-                const errorText = await res.text();
-                if (res.status === 409) {
-                    setErrorMsg(errorText);
-                } else {
-                    setErrorMsg("Fehler beim Bearbeiten: " + errorText);
-                }
-                return;
-            }
-
-            sessionStorage.setItem("username", username);
-            navigate("/gameoverview");
-
-        } catch (err) {
-            console.error("Serverfehler:", err);
-            setErrorMsg("Verbindung zum Server fehlgeschlagen.");
+        if (password && password.trim() !== "") {
+            updateData.password = password;
         }
-    };
-
-    useBadgeScanner((scan) => {
-        const match = scan.match(/UID:(.*?);/);
-        if (match) {
-            setBadgenumber(match[1]);
-            console.log("Badge gescannt:", match[1]);
-        }
-    });
-
-    const handleBadgeClick = async () => {
-        if (!currentToken || !playerId) {
-            console.error("Token oder Spieler-ID fehlt.");
-            return;
-        }
-
-        const newBadgeValue = badgenumber === null ? "warte auf Scan..." : null;
 
         try {
             const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
@@ -126,7 +85,7 @@ export default function EditProfile() {
                     "Authorization": `Bearer ${currentToken}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username, email, password, coins, newBadgeValue }),
+                body: JSON.stringify(updateData),
             });
 
             if (!res.ok) {
@@ -135,10 +94,6 @@ export default function EditProfile() {
                 return;
             }
 
-            if (newBadgeValue === null) {
-                setBadgenumber(null);
-            }
-
             sessionStorage.setItem("username", username);
             navigate("/gameoverview");
 
@@ -148,6 +103,64 @@ export default function EditProfile() {
         }
     };
 
+    useBadgeScanner(async (scan) => {
+        const match = scan.match(/UID:(.*?);/);
+        if (match) {
+            const scannedBadge = match[1];
+            setBadgenumber(scannedBadge);
+
+            if (!currentToken || !playerId) return;
+
+            try {
+                const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${currentToken}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ badgenumber: scannedBadge }),
+                });
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    setErrorMsg(res.status === 409 ? errorText : "Fehler beim Badge-Speichern: " + errorText);
+                }
+            } catch (err) {
+                console.error("Fehler beim automatischen Badge-Speichern:", err);
+            }
+        }
+    });
+
+    const handleBadgeClick = async () => {
+        if (!currentToken || !playerId) return;
+
+        const updatedBadge = badgenumber === null ? "warte auf Scan..." : null;
+
+        try {
+            const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${currentToken}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ badgenumber: updatedBadge }),
+            });
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                setErrorMsg(res.status === 409 ? errorText : "Fehler beim Badge-Update: " + errorText);
+                return;
+            }
+
+            setBadgenumber(updatedBadge);
+            sessionStorage.setItem("username", username);
+            navigate("/gameoverview");
+
+        } catch (err) {
+            console.error("Serverfehler:", err);
+            setErrorMsg("Verbindung zum Server fehlgeschlagen.");
+        }
+    };
 
     const handleDeleteProfile = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -159,9 +172,6 @@ export default function EditProfile() {
                     "Content-Type": "application/json"
                 }
             });
-            if (!res) {
-                console.log("Fehler beim Löschen!")
-            }
             navigate("/");
         } catch (err) {
             console.error(err);
@@ -172,20 +182,19 @@ export default function EditProfile() {
         if (!activeInput) return;
 
         const updater = (old: string) => {
-            if (key === "Delete") {
-                return old.slice(0, -1);
-            } else if (key === "x") {
+            if (key === "Delete") return old.slice(0, -1);
+            if (key === "x") {
                 setKeyboardVisible(false);
                 return old;
-            } else {
-                return old + key;
             }
+            return old + key;
         };
 
         if (activeInput === "username") setUsername(updater);
         if (activeInput === "email") setEmail(updater);
-        if (activeInput === "password") setPassword(updater);
+        if (activeInput === "password") setPassword(prev => updater(prev ?? ""));
     };
+
     function VirtualKeyboard() {
         const keysRow1 = ["q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "@"];
         const keysRow2 = ["a", "s", "d", "f", "g", "h", "j", "k", "l", "x", "Delete"];
@@ -227,7 +236,7 @@ export default function EditProfile() {
                     ))}
                 </div>
             </div>
-        )
+        );
     }
 
     return (
@@ -258,7 +267,7 @@ export default function EditProfile() {
                 <label htmlFor="password" className="form-label">Passwort</label>
                 <input
                     id="password"
-                    type={"password"}
+                    type="password"
                     value={password}
                     placeholder="Gib dein neues Passwort hier ein"
                     onChange={e => setPassword(e.target.value)}
@@ -276,13 +285,7 @@ export default function EditProfile() {
                 {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
                 <button className="next-btn" type="submit">Änderungen speichern</button>
                 <button className="next-btn" onClick={handleDeleteProfile}>Profil löschen</button>
-                <button
-                    className="next-btn"
-                    type="button"
-                    onClick={() => navigate('/gameoverview')}
-                >
-                    Zurück
-                </button>
+                <button className="next-btn" type="button" onClick={() => navigate('/gameoverview')}>Zurück</button>
             </form>
 
             {keyboardVisible && <VirtualKeyboard />}

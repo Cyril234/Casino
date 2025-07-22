@@ -155,15 +155,17 @@ public class APIPlayerController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Dieser Benutzername ist bereits vergeben.");
         }
 
-        Argon2 argon2 = Argon2Factory.create();
-        char[] pw = newPlayer.getPassword().toCharArray();
-        newPlayer.setPassword(argon2.hash(2, 65536, 1, pw));
-        argon2.wipeArray(pw);
-
         Player player = currentPlayer.get();
         player.setUsername(newPlayer.getUsername());
         player.setEmail(newPlayer.getEmail());
-        player.setPassword(newPlayer.getPassword());
+
+        if (newPlayer.getPassword() != null && !newPlayer.getPassword().isEmpty()) {
+            Argon2 argon2 = Argon2Factory.create();
+            char[] pw = newPlayer.getPassword().toCharArray();
+            String hashed = argon2.hash(2, 65536, 1, pw);
+            argon2.wipeArray(pw);
+            player.setPassword(hashed);
+        }
         player.setCoins(newPlayer.getCoins());
         player.setColortheme(newPlayer.getColortheme());
         player.setVolume(newPlayer.getVolume());
