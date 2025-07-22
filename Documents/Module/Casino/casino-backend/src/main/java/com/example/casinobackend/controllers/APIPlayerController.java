@@ -1,5 +1,6 @@
 package com.example.casinobackend.controllers;
 
+import java.security.MessageDigest;
 import java.util.List;
 import java.util.Optional;
 
@@ -145,7 +146,6 @@ public class APIPlayerController {
 
         Player player = currentPlayer.get();
 
-        // Benutzername prüfen und setzen
         if (newPlayer.getUsername() != null && !newPlayer.getUsername().isEmpty()) {
             Optional<Player> existingWithUsername = playerRepository.findByUsername(newPlayer.getUsername());
             if (existingWithUsername.isPresent() && existingWithUsername.get().getPlayerId() != id) {
@@ -154,7 +154,6 @@ public class APIPlayerController {
             player.setUsername(newPlayer.getUsername());
         }
 
-        // E-Mail prüfen und setzen
         if (newPlayer.getEmail() != null && !newPlayer.getEmail().isEmpty()) {
             Optional<Player> existingWithEmail = playerRepository.findByEmail(newPlayer.getEmail());
             if (existingWithEmail.isPresent() && existingWithEmail.get().getPlayerId() != id) {
@@ -163,7 +162,6 @@ public class APIPlayerController {
             player.setEmail(newPlayer.getEmail());
         }
 
-        // Passwort nur setzen, wenn nicht leer
         if (newPlayer.getPassword() != null && !newPlayer.getPassword().isEmpty()) {
             Argon2 argon2 = Argon2Factory.create();
             char[] pw = newPlayer.getPassword().toCharArray();
@@ -172,14 +170,8 @@ public class APIPlayerController {
             player.setPassword(hashed);
         }
 
-        // Nur überschreiben, wenn explizit im Body gesetzt
-        if (newPlayer.getCoins() != 0) {
-            player.setCoins(newPlayer.getCoins());
-        }
-
-        if (newPlayer.getVolume() != 0) {
-            player.setVolume(newPlayer.getVolume());
-        }
+        player.setCoins(newPlayer.getCoins());
+        player.setVolume(newPlayer.getVolume());
 
         if (newPlayer.getColortheme() != null) {
             player.setColortheme(newPlayer.getColortheme());
@@ -189,12 +181,31 @@ public class APIPlayerController {
             player.setSoundstatus(newPlayer.getSoundstatus());
         }
 
-        // Badge kann auf null gesetzt werden
-        player.setBadgenumber(newPlayer.getBadgenumber());
+        if (newPlayer.getBadgenumber() != null) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA-512");
+                byte[] hashBytes = md.digest(newPlayer.getBadgenumber().getBytes());
+                StringBuilder sb = new StringBuilder();
+                for (byte b : hashBytes) {
+                    sb.append(String.format("%02x", b));
+                }
+                String hashedBadge = sb.toString();
 
-        if (newPlayer.getLogins() != 0) {
-            player.setLogins(newPlayer.getLogins());
+                Optional<Player> existingBadge = playerRepository.findPlayerByBadgenumber(hashedBadge);
+                if (existingBadge.isPresent() && existingBadge.get().getPlayerId() != id) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body("Diese Badgenummer ist bereits vergeben.");
+                }
+
+                player.setBadgenumber(hashedBadge);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Fehler beim Hashen der Badgenummer.");
+            }
+        } else {
+            player.setBadgenumber(null);
         }
+
+        player.setLogins(newPlayer.getLogins());
 
         if (newPlayer.getLastlogindate() != null) {
             player.setLastlogindate(newPlayer.getLastlogindate());
