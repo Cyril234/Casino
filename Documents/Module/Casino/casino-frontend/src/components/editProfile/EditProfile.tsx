@@ -17,10 +17,8 @@ export default function EditProfile() {
     const [coins, setCoins] = useState(0);
     const [badgenumber, setBadgenumber] = useState<string | null>(null);
 
-    // Aktuelles Input-Feld, das von der Tastatur beschriftet wird
     const [activeInput, setActiveInput] = useState<"username" | "email" | "password" | null>(null);
 
-    // Tastatur anzeigen oder nicht
     const [keyboardVisible, setKeyboardVisible] = useState(false);
 
     useEffect(() => {
@@ -119,6 +117,8 @@ export default function EditProfile() {
             return;
         }
 
+        const newBadgeValue = badgenumber === null ? "warte auf Scan..." : null;
+
         try {
             const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
                 method: "PUT",
@@ -126,17 +126,17 @@ export default function EditProfile() {
                     "Authorization": `Bearer ${currentToken}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ "badgenumber": badgenumber }),
+                body: JSON.stringify({ username, email, password, coins, newBadgeValue }),
             });
 
             if (!res.ok) {
                 const errorText = await res.text();
-                if (res.status === 409) {
-                    setErrorMsg(errorText);
-                } else {
-                    setErrorMsg("Fehler beim Bearbeiten: " + errorText);
-                }
+                setErrorMsg(res.status === 409 ? errorText : "Fehler beim Bearbeiten: " + errorText);
                 return;
+            }
+
+            if (newBadgeValue === null) {
+                setBadgenumber(null);
             }
 
             sessionStorage.setItem("username", username);
@@ -147,6 +147,7 @@ export default function EditProfile() {
             setErrorMsg("Verbindung zum Server fehlgeschlagen.");
         }
     };
+
 
     const handleDeleteProfile = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -167,20 +168,16 @@ export default function EditProfile() {
         }
     };
 
-    // Tastatur-Handler: Taste drücken
     const onKeyPress = (key: string) => {
         if (!activeInput) return;
 
         const updater = (old: string) => {
             if (key === "Delete") {
-                // Lösche letztes Zeichen
                 return old.slice(0, -1);
             } else if (key === "x") {
-                // Schließen = Tastatur ausblenden
                 setKeyboardVisible(false);
                 return old;
             } else {
-                // Ansonsten Buchstaben / Zeichen anfügen
                 return old + key;
             }
         };
@@ -189,8 +186,6 @@ export default function EditProfile() {
         if (activeInput === "email") setEmail(updater);
         if (activeInput === "password") setPassword(updater);
     };
-
-    // Komponente für virtuelle Tastatur
     function VirtualKeyboard() {
         const keysRow1 = ["q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "@"];
         const keysRow2 = ["a", "s", "d", "f", "g", "h", "j", "k", "l", "x", "Delete"];

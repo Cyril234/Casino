@@ -89,6 +89,25 @@ export default function CreateAvatar() {
         fetchPlayerId();
     }, [token]);
 
+    const cancel = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+            if (!res) {
+                console.log("Fehler beim Abbrechen!")
+            }
+            navigate("/");
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const enumsLoaded =
         haircolorOptions.length &&
         skincolorOptions.length &&
@@ -295,9 +314,11 @@ export default function CreateAvatar() {
                             onChange={e => setBeard(e.target.checked)}
                         />
                     </div>
-
                     <button className="submit-btn" type="submit" disabled={!enumsLoaded} style={{ marginTop: "2rem" }}>
                         Registrieren
+                    </button>
+                    <button className="submit-btn" onClick={cancel} disabled={!enumsLoaded} style={{ marginTop: "2rem" }}>
+                        Abbrechen
                     </button>
                 </form>
 
