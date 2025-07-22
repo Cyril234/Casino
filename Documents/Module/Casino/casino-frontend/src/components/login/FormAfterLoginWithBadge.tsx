@@ -145,7 +145,7 @@ export default function FormAfterLoginWithBadge() {
 
                     {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
 
-                    <button className="next-btn" type="submit">Profil erstellen</button>
+                    <button className="next-btn" type="submit">Weiter</button>
                     <button className="next-btn" type="button" onClick={cancel}>Abbrechen</button>
                 </form>
             </div>
