@@ -1,5 +1,6 @@
 package com.example.casinobackend.Games.Roulette;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.casinobackend.entities.Game;
 import com.example.casinobackend.entities.Player;
+import com.example.casinobackend.entities.Playingattempt;
 import com.example.casinobackend.repositories.PlayerRepository;
+import com.example.casinobackend.repositories.PlayingattemptRepository;
 
 @Repository
 public class RouletteRepository {
@@ -36,6 +39,8 @@ public class RouletteRepository {
     
     @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
+    private PlayingattemptRepository playingattemptRepo;
 
     private int rollNumber() {
         return new Random().nextInt(37);
@@ -82,6 +87,15 @@ public class RouletteRepository {
         result.put("totalPayout", totalPayout);
         result.put("newBalance", player.getCoins());
         result.put("result", totalPayout > 0 ? "WIN" : "LOSE");
+
+        Playingattempt attempt = new Playingattempt();
+        attempt.setDate(LocalDateTime.now());
+        attempt.setGame(game);
+        attempt.setPlayer(player);
+        attempt.setSettedcoins(totalBet);
+        attempt.setFinishingbalance(player.getCoins());
+
+        playingattemptRepo.save(attempt);
 
         return result;
     }

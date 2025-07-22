@@ -22,7 +22,9 @@ import MinenfeldInfo from './components/gameinformations/MinenfeldInfo'
 import Roulette from './components/Games/Roulette'
 import FormAfterLoginWithBadge from './components/login/FormAfterLoginWithBadge'
 import Slot from './components/Games/Slot'
+import SlotInfo from './components/gameinformations/SlotInfo'
 import CreateAvatarWithBadge from './components/register/CreateAvatarWithBadge'
+
 
 function App() {
 
@@ -45,6 +47,7 @@ function App() {
         <Route path='/edit-profile' element={<EditProfile />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/gameoverview/blackjack/info' element={<BlackJackInfo />} />
+        <Route path='/gameoverview/slot/info' element={<SlotInfo />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
         <Route path='/gameoverview/horserace' element={<HorseRace />} />
         <Route path="/gameoverview/horserace/info" element={<HorseRaceInfo />} />

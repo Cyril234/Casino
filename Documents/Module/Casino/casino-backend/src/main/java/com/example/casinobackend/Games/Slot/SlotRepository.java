@@ -19,7 +19,7 @@ import jakarta.transaction.Transactional;
 @Repository
 public class SlotRepository {
 
-    private static final List<String> SYMBOLS = List.of("🍒", "🍋", "🔔", "⭐", "7️⃣");
+    private static final List<String> SYMBOLS = List.of("cherry", "lemon", "bell", "star", "seven");
     private static final Random RANDOM = new Random();
 
     @Autowired
