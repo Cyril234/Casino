@@ -1,186 +1,188 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router";
+import { MdInfo } from "react-icons/md";
+import "../../styles/Slot.css";
 import coinImg from "../../../public/pokergeld.png";
+ 
+// Dynamisch alle Slot-Symbole importieren
+const symbolModules = import.meta.glob(
+  "../../../public/slot-symbols/*.png",
+  { eager: true }
+) as Record<string, { default: string }>;
 
-const symbols = ["bell", "cherry", "lemon", "seven"];
-const symbolMap: Record<string, string> = {
-  bell: "/slot-symbols/bell.png",
-  cherry: "/slot-symbols/cherry.png",
-  lemon: "/slot-symbols/lemon.png",
-  seven: "/slot-symbols/seven.png",
-};
+const slotImages: Record<string, string> = {};
+Object.entries(symbolModules).forEach(([path, m]) => {
+  const file = path.split("/").pop()!;
+  const name = file.replace(".png", "");
+  slotImages[name] = m.default;
+});
 
-export default function Slot() {
-  const [coinsBalance, setCoinsBalance] = useState(100); // Startguthaben
-  const [bet, setBet] = useState(0);
-  const [reels, setReels] = useState<string[]>(["cherry", "cherry", "cherry"]);
-  const [resultAmount, setResultAmount] = useState<number | null>(null);
-  const [showResult, setShowResult] = useState(false);
+function getRandomSymbol(): string {
+  const keys = Object.keys(slotImages);
+  return keys[Math.floor(Math.random() * keys.length)];
+}
+
+export default function SlotGame() {
+  const navigate = useNavigate();
+  const authToken = sessionStorage.getItem("authToken");
+
+  // State-Variablen
+  const [playerId, setPlayerId] = useState<number | null>(null);
+  const [coinsBalance, setCoinsBalance] = useState(0);
+  const [bet, setBet] = useState(1);
+  const [reels, setReels] = useState<string[]>([
+    getRandomSymbol(),
+    getRandomSymbol(),
+    getRandomSymbol(),
+  ]);
+  const [isSpinning, setIsSpinning] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showResult, setShowResult] = useState(false);
+  const [win, setWin] = useState(false);
+  const [coinsWon, setCoinsWon] = useState(0);
+  const [attempts, setAttempts] = useState(0);
 
-  const getSymbolUrl = (symbol: string) => symbolMap[symbol] || "";
+  // Refs für Timer
+  const spinInterval = useRef<number | null>(null);
+  const spinTimeout = useRef<number | null>(null);
 
+  // Spieler-Daten laden
+  useEffect(() => {
+    if (!authToken) {
+      navigate("/");
+      return;
+    }
+    async function fetchPlayer() {
+      try {
+        const res = await fetch(
+          `http://localhost:8080/api/players/byToken/${authToken}`,
+          { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+        if (!res.ok) throw new Error("Spieler konnte nicht geladen werden");
+        const data = await res.json();
+        setPlayerId(data.playerId);
+        setCoinsBalance(data.coins);
+        setAttempts(data.attempts ?? 0);
+      } catch {
+        setErrorMessage("Fehler beim Laden des Spielers.");
+      }
+    }
+    fetchPlayer();
+  }, [authToken, navigate]);
+
+  // Spin-Funktion
   const spin = () => {
+    if (!playerId) return;
+    if (bet < 1 || bet > coinsBalance) {
+      setErrorMessage("Ungültiger Einsatz!");
+      return;
+    }
+
     setErrorMessage("");
-    if (bet <= 0) {
-      setErrorMessage("Bitte einen Einsatz größer als 0 eingeben.");
-      return;
-    }
-    if (bet > coinsBalance) {
-      setErrorMessage("Nicht genügend Coins für den Einsatz.");
-      return;
-    }
+    setIsSpinning(true);
+    setShowResult(false);
 
-    // Einsatz abziehen
-    setCoinsBalance((prev) => prev - bet);
+    // 1) Reel-Animation: Zufallsbilder alle 100ms
+    spinInterval.current = window.setInterval(() => {
+      setReels([
+        getRandomSymbol(),
+        getRandomSymbol(),
+        getRandomSymbol(),
+      ]);
+    }, 100);
 
-    // Zufällige Symbole generieren
-    const newReels: string[] = [];
-    for (let i = 0; i < 3; i++) {
-      const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-      newReels.push(randomSymbol);
-    }
-    setReels(newReels);
-
-    // Gewinn prüfen: z.B. alle drei Symbole gleich = 3x Gewinn
-    if (newReels[0] === newReels[1] && newReels[1] === newReels[2]) {
-      const winAmount = bet * 3;
-      setCoinsBalance((prev) => prev + winAmount);
-      setResultAmount(winAmount);
-    } else {
-      setResultAmount(-bet);
-    }
-    setShowResult(true);
-
-    // Ergebnisanzeige nach 2 Sekunden ausblenden
-    setTimeout(() => {
-      setShowResult(false);
-      setResultAmount(null);
+    // 2) Nach 2 Sekunden echtes Ergebnis abholen und Animation stoppen
+    spinTimeout.current = window.setTimeout(async () => {
+      if (spinInterval.current !== null) {
+        clearInterval(spinInterval.current);
+      }
+      try {
+        const res = await fetch(
+          `http://localhost:8080/slot/${playerId}/spin?coins=${bet}`,
+          { method: "POST", headers: { Authorization: `Bearer ${authToken}` } }
+        );
+        if (!res.ok) {
+          const msg = await res.text();
+          setErrorMessage(msg);
+          setIsSpinning(false);
+          return;
+        }
+        const data = await res.json();
+        // Finales Ergebnis
+        setReels(data.slots);
+        setWin(data.win);
+        setCoinsWon(data.coinsWon);
+        setCoinsBalance(data.newBalance);
+        setAttempts(data.attempts);
+        setShowResult(true);
+      } catch {
+        setErrorMessage("Fehler beim Spin.");
+      } finally {
+        setIsSpinning(false);
+        // Ergebnisanzeige nach 3s ausblenden
+        setTimeout(() => setShowResult(false), 3000);
+      }
     }, 2000);
   };
 
+  // Aufräumen bei Unmount
+  useEffect(() => {
+    return () => {
+      if (spinInterval.current !== null) clearInterval(spinInterval.current);
+      if (spinTimeout.current !== null) clearTimeout(spinTimeout.current);
+    };
+  }, []);
+
   return (
-    <div style={{ maxWidth: 600, margin: "auto", textAlign: "center", fontSize: "1.5rem", fontWeight: "bold", padding: 20 }}>
-      <div style={{ marginBottom: 30 }}>
-        <div style={{ fontSize: "2rem" }}>
-          Guthaben: {coinsBalance}{" "}
-          <img
-            src={coinImg}
-            alt="Münze"
-            style={{ width: 40, height: 40, verticalAlign: "middle", marginLeft: 10 }}
+    <div className="slot-machine">
+      <div className="slot-container">
+        <div className="slot-header">
+          <button onClick={() => navigate("/gameoverview")}>Zurück</button>
+          <button onClick={() => navigate("/gameoverview/slot/info")}><MdInfo /></button>
+        </div>
+
+        <div className="slot-balance">
+          Dein Guthaben: <strong>{coinsBalance}</strong>
+          <img src={coinImg} alt="Münze" className="coin-icon" />
+        </div>
+       
+
+        <div className="slot-bet-area">
+          <label htmlFor="bet">Einsatz</label>
+          <input
+            id="bet"
+            type="number"
+            value={bet}
+            min={1}
+            max={coinsBalance}
+            disabled={isSpinning}
+            onChange={(e) => setBet(Number(e.target.value))}
           />
+          <button onClick={spin} disabled={isSpinning || bet < 1}>
+            Spin
+          </button>
+          {errorMessage && <div className="slot-error">{errorMessage}</div>}
         </div>
-      </div>
 
-      <div
-        className="slot-machine"
-        style={{ display: "flex", justifyContent: "center", gap: 20, marginBottom: 30 }}
-      >
-        {reels.map((symbol, index) => {
-          const url = getSymbolUrl(symbol);
-          return (
+        <div className="slot-reels">
+          {reels.map((symbol, i) => (
             <div
-              key={index}
-              className="reel-slot"
-              style={{
-                width: 150,
-                height: 150,
-                border: "5px solid #333",
-                borderRadius: 15,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#eee",
-              }}
-            >
-              {url ? (
-                <img
-                  src={url}
-                  alt={symbol}
-                  className="slot-symbol"
-                  style={{ width: 100, height: 100 }}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = "none";
-                  }}
-                />
-              ) : (
-                <div>Kein Symbol</div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      <div style={{ marginBottom: 20 }}>
-        <label htmlFor="bet" style={{ fontSize: "1.8rem", marginRight: 10 }}>
-          Einsatz:
-        </label>
-        <input
-          id="bet"
-          type="number"
-          value={bet}
-          min={1}
-          max={coinsBalance}
-          onChange={(e) => setBet(Number(e.target.value))}
-          style={{
-            fontSize: "1.6rem",
-            padding: "8px 12px",
-            width: 120,
-            borderRadius: 8,
-            border: "2px solid #333",
-            textAlign: "center",
-          }}
-        />
-      </div>
-
-      {errorMessage && (
-        <div
-          style={{
-            color: "red",
-            marginBottom: 20,
-            fontSize: "1.6rem",
-            fontWeight: "bold",
-          }}
-        >
-          {errorMessage}
+              key={i}
+              className={`slot-reel ${isSpinning ? "spinning" : ""}`}
+              style={{ backgroundImage: `url(${slotImages[symbol]})` }}
+              title={symbol}
+            />
+          ))}
         </div>
-      )}
 
-      <button
-        onClick={spin}
-        disabled={bet <= 0 || bet > coinsBalance}
-        style={{
-          fontSize: "2rem",
-          padding: "15px 40px",
-          borderRadius: 10,
-          border: "none",
-          backgroundColor: bet > 0 && bet <= coinsBalance ? "#007bff" : "#aaa",
-          color: "white",
-          cursor: bet > 0 && bet <= coinsBalance ? "pointer" : "not-allowed",
-          fontWeight: "bold",
-          boxShadow: "0 5px 10px rgba(0,0,0,0.3)",
-          transition: "background-color 0.3s",
-        }}
-      >
-        Spin
-      </button>
-
-      {showResult && resultAmount != null && (
-        <div
-          style={{
-            marginTop: 30,
-            fontSize: "2rem",
-            fontWeight: "bold",
-            color: resultAmount > 0 ? "green" : "red",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 10,
-          }}
-        >
-          {resultAmount > 0 ? `+${resultAmount}` : `${resultAmount}`}{" "}
-          <img src={coinImg} alt="Münze" style={{ width: 40, height: 40 }} />
-        </div>
-      )}
+        {showResult && (
+          <div className={`slot-result ${win ? "win" : "lose"}`}>
+            {win ? `Gewonnen! +${coinsWon}` : `Verloren: -${bet}`}
+            <img src={coinImg} alt="Münze" className="coin-icon-small" />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+ 
