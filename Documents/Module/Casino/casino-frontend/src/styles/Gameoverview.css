@@ -204,3 +204,49 @@ body {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.dropdown {
+  position: absolute;
+  right: 50px;
+  top: 35px;
+  color: #fff;
+  outline: none;
+}
+
+.dropdown-summary {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dropdown-menu {
+  margin-top: 8px;
+  background: rgba(24, 23, 36, 0.95);
+  border-radius: 12px;
+  padding: 0.5rem;
+  list-style: none;
+  backdrop-filter: blur(12px);
+}
+
+.dropdown-menu button {
+  background: none;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+.dropdown-menu button.focused {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.dropdown-menu button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

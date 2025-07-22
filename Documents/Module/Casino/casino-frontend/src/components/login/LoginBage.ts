@@ -49,8 +49,9 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
                                 const userData = await userRes.json();
 
                                 sessionStorage.setItem("username", userData.username);
+                                console.log(sessionStorage.getItem("username"));
 
-                                if (userData.username === "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267") {
+                                if (sessionStorage.getItem("username") === "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267") {
                                     navigate("/login-with-badge/form");
                                 }
                                 else {

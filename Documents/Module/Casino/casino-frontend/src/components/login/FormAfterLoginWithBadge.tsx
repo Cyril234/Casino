@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router"
-import "../../styles/FormAfterLoginWithBadge.css"
+import { useNavigate } from "react-router";
+import "../../styles/FormAfterLoginWithBadge.css";
 
 export default function FormAfterLoginWithBadge() {
     const navigate = useNavigate();
@@ -17,7 +17,7 @@ export default function FormAfterLoginWithBadge() {
             navigate("/");
             return;
         }
-    })
+    });
 
     useEffect(() => {
         const fetchPlayerId = async () => {
@@ -43,8 +43,9 @@ export default function FormAfterLoginWithBadge() {
                 const data = await res.json();
                 setPlayerId(data.playerId);
                 setBadgenumber(data.badgenumber);
+                sessionStorage.setItem("username", data.username);
 
-                if (sessionStorage.getItem("username") !== "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267") {
+                if (data.username !== "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267") {
                     navigate("/gameoverview");
                 }
 
@@ -67,7 +68,7 @@ export default function FormAfterLoginWithBadge() {
                 }
             });
             if (!res) {
-                console.log("Fehler beim Löschen!")
+                console.log("Fehler beim Löschen!");
             }
             navigate("/");
         } catch (err) {
@@ -106,6 +107,7 @@ export default function FormAfterLoginWithBadge() {
             setErrorMsg("Verbindung zum Server fehlgeschlagen.");
         }
     };
+
     return (
         <>
             <div className="page-wrapper">
@@ -151,5 +153,4 @@ export default function FormAfterLoginWithBadge() {
             </div>
         </>
     );
-
 }

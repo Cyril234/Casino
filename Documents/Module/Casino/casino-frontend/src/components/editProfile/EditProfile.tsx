@@ -261,7 +261,7 @@ export default function EditProfile() {
 
                 <p className="badge-status">
                     {badgenumber === null
-                        ? "Kein Badge mit deinem Konto verknüpft."
+                        ? "Kein Badge mit deinem Konto verknüpft. Scanne deinen Badge am leser, um ihn mit deinem Account zu verknüpfen."
                         : "Ein Badge ist mit deinem Konto verknüpft."}
                 </p>
 

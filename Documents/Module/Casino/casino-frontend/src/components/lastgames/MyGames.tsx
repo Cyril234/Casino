@@ -84,7 +84,7 @@ export default function MyGames() {
                         </div>
                     ))
                 ) : (
-                    <p className="no-games-text">Keine Spielversuche gefunden.</p>
+                    <p className="no-games-text">Noch keine Spiele gefunden...</p>
                 )}
             </div>
         </div>
