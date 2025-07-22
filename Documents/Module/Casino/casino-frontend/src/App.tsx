@@ -22,6 +22,7 @@ import MinenfeldInfo from './components/gameinformations/MinenfeldInfo'
 import Roulette from './components/Games/Roulette'
 import FormAfterLoginWithBadge from './components/login/FormAfterLoginWithBadge'
 import Slot from './components/Games/Slot'
+import CreateAvatarWithBadge from './components/register/CreateAvatarWithBadge'
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
         <Route path="/gameoverview/mines/info" element={<MinenfeldInfo />} />
         <Route path="/gaminghistory" element={<MyGames />} />
         <Route path="/login-with-badge/form" element={<FormAfterLoginWithBadge />} />
+        <Route path="/create-avatar-with-badge" element={<CreateAvatarWithBadge />} />
       </Routes>
     </>
   )

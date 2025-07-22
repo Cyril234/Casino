@@ -99,7 +99,7 @@ export default function FormAfterLoginWithBadge() {
                 return;
             }
             sessionStorage.setItem("username", username);
-            navigate("/create-avatar");
+            navigate("/create-avatar-with-badge");
 
         } catch (err) {
             console.error("Serverfehler:", err);
