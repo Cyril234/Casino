@@ -8,7 +8,6 @@ import com.example.casinobackend.enums.Shoes;
 import com.example.casinobackend.enums.Skincolor;
 import com.example.casinobackend.enums.Trouserscolor;
 import com.example.casinobackend.enums.Trouserstype;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

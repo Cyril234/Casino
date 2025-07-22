@@ -5,13 +5,6 @@ import AvatarPreview from "../avatarpreview/AvatarPreview";
 import "../../styles/Avatar.css"
 
 export default function CreateAvatarWithBadge() {
-
-    interface PlayerDto {
-        id: number;
-        username: string;
-        email: string;
-    }
-
     const navigate = useNavigate();
     const token = sessionStorage.getItem("authToken");
 
