@@ -143,22 +143,27 @@ public class APIPlayerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Spieler nicht gefunden.");
         }
 
+        Player player = currentPlayer.get();
+
+        // Benutzername prüfen und setzen
+        if (newPlayer.getUsername() != null && !newPlayer.getUsername().isEmpty()) {
+            Optional<Player> existingWithUsername = playerRepository.findByUsername(newPlayer.getUsername());
+            if (existingWithUsername.isPresent() && existingWithUsername.get().getPlayerId() != id) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Dieser Benutzername ist bereits vergeben.");
+            }
+            player.setUsername(newPlayer.getUsername());
+        }
+
+        // E-Mail prüfen und setzen
         if (newPlayer.getEmail() != null && !newPlayer.getEmail().isEmpty()) {
             Optional<Player> existingWithEmail = playerRepository.findByEmail(newPlayer.getEmail());
             if (existingWithEmail.isPresent() && existingWithEmail.get().getPlayerId() != id) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Diese E-Mail ist bereits vergeben.");
             }
+            player.setEmail(newPlayer.getEmail());
         }
 
-        Optional<Player> existingWithUsername = playerRepository.findByUsername(newPlayer.getUsername());
-        if (existingWithUsername.isPresent() && existingWithUsername.get().getPlayerId() != id) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Dieser Benutzername ist bereits vergeben.");
-        }
-
-        Player player = currentPlayer.get();
-        player.setUsername(newPlayer.getUsername());
-        player.setEmail(newPlayer.getEmail());
-
+        // Passwort nur setzen, wenn nicht leer
         if (newPlayer.getPassword() != null && !newPlayer.getPassword().isEmpty()) {
             Argon2 argon2 = Argon2Factory.create();
             char[] pw = newPlayer.getPassword().toCharArray();
@@ -166,13 +171,34 @@ public class APIPlayerController {
             argon2.wipeArray(pw);
             player.setPassword(hashed);
         }
-        player.setCoins(newPlayer.getCoins());
-        player.setColortheme(newPlayer.getColortheme());
-        player.setVolume(newPlayer.getVolume());
-        player.setSoundstatus(newPlayer.getSoundstatus());
+
+        // Nur überschreiben, wenn explizit im Body gesetzt
+        if (newPlayer.getCoins() != 0) {
+            player.setCoins(newPlayer.getCoins());
+        }
+
+        if (newPlayer.getVolume() != 0) {
+            player.setVolume(newPlayer.getVolume());
+        }
+
+        if (newPlayer.getColortheme() != null) {
+            player.setColortheme(newPlayer.getColortheme());
+        }
+
+        if (newPlayer.getSoundstatus() != null) {
+            player.setSoundstatus(newPlayer.getSoundstatus());
+        }
+
+        // Badge kann auf null gesetzt werden
         player.setBadgenumber(newPlayer.getBadgenumber());
-        player.setLastlogindate(newPlayer.getLastlogindate());
-        player.setLogins(newPlayer.getLogins());
+
+        if (newPlayer.getLogins() != 0) {
+            player.setLogins(newPlayer.getLogins());
+        }
+
+        if (newPlayer.getLastlogindate() != null) {
+            player.setLastlogindate(newPlayer.getLastlogindate());
+        }
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)

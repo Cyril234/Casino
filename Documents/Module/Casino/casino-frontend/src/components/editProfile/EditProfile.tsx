@@ -33,7 +33,7 @@ export default function EditProfile() {
     }, [currentToken, usernameSecurity, navigate]);
 
     useEffect(() => {
-        const fetchPlayerId = async () => {
+        const fetchPlayerData = async () => {
             if (!currentToken) return;
 
             try {
@@ -41,7 +41,6 @@ export default function EditProfile() {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${currentToken}`,
-                        Accept: "*/*",
                         "Content-Type": "application/json"
                     }
                 });
@@ -60,7 +59,7 @@ export default function EditProfile() {
             }
         };
 
-        fetchPlayerId();
+        fetchPlayerData();
     }, [currentToken]);
 
     const editProfile = async (e: React.FormEvent) => {
@@ -202,34 +201,22 @@ export default function EditProfile() {
             <div className="virtual-keyboard">
                 <div className="keyboard-row">
                     {keysRow1.map((k) => (
-                        <button
-                            key={k}
-                            className={`keyboard-key ${k === "@" ? "keyboard-at" : ""} ${k === "x" ? "keyboard-close" : ""} ${k === "Delete" ? "keyboard-delete" : ""}`}
-                            onClick={() => onKeyPress(k)}
-                        >
+                        <button key={k} className="keyboard-key" onClick={() => onKeyPress(k)}>
                             {k === "x" ? "x" : k === "Delete" ? "Del" : k}
                         </button>
                     ))}
                 </div>
                 <div className="keyboard-row">
                     {keysRow2.map((k) => (
-                        <button
-                            key={k}
-                            className={`keyboard-key ${k === "@" ? "keyboard-at" : ""} ${k === "x" ? "keyboard-close" : ""} ${k === "Delete" ? "keyboard-delete" : ""}`}
-                            onClick={() => onKeyPress(k)}
-                        >
+                        <button key={k} className="keyboard-key" onClick={() => onKeyPress(k)}>
                             {k === "x" ? "x" : k === "Delete" ? "Del" : k}
                         </button>
                     ))}
                 </div>
                 <div className="keyboard-row">
                     {keysRow3.map((k) => (
-                        <button
-                            key={k}
-                            className={`keyboard-key ${k === "@" ? "keyboard-at" : ""} ${k === "x" ? "keyboard-close" : ""} ${k === "Delete" ? "keyboard-delete" : ""}`}
-                            onClick={() => onKeyPress(k)}
-                        >
-                            {k === "x" ? "x" : k === "Delete" ? "Del" : k}
+                        <button key={k} className="keyboard-key" onClick={() => onKeyPress(k)}>
+                            {k}
                         </button>
                     ))}
                 </div>
@@ -275,7 +262,7 @@ export default function EditProfile() {
                 <p className="badge-status">
                     {badgenumber === null
                         ? "Kein Badge mit deinem Konto verknüpft."
-                        : `Badge verknüpft: ${badgenumber}`}
+                        : "Ein Badge ist mit deinem Konto verknüpft."}
                 </p>
 
                 {badgenumber !== null && (
