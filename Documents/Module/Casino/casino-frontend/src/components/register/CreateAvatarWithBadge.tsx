@@ -1,24 +1,25 @@
-import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import AvatarPreview from "../avatarpreview/AvatarPreview";
 import "../../styles/Avatar.css"
 
-interface PlayerDto {
-    id: number;
-    username: string;
-    email: string;
-}
+export default function CreateAvatarWithBadge() {
 
-export default function CreateAvatar() {
-    const location = useLocation();
+    interface PlayerDto {
+        id: number;
+        username: string;
+        email: string;
+    }
+
     const navigate = useNavigate();
-    const { player } = (location.state || {}) as { player?: PlayerDto };
     const token = sessionStorage.getItem("authToken");
 
     useEffect(() => {
-        if (!player || !token) navigate("/", { replace: true });
-    }, [player, token, navigate]);
+        if (!token) {
+            navigate(("/"))
+        };
+    }, [token]);
 
     const [avatarName, setAvatarName] = useState("");
     const [avatarDescription, setAvatarDescription] = useState("");
@@ -122,7 +123,6 @@ export default function CreateAvatar() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!player || !token || !enumsLoaded) return;
 
         const avatarPayload = {
             name: avatarName,
@@ -154,7 +154,6 @@ export default function CreateAvatar() {
                 const msg = await res.text();
                 throw new Error(msg);
             }
-
             navigate("/gameoverview");
         } catch (err) {
             console.error(err);
@@ -195,17 +194,6 @@ export default function CreateAvatar() {
 
         </div>
     );
-
-
-    const layerStyle: React.CSSProperties = {
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-        position: "absolute",
-        top: 0,
-        left: 0,
-        imageRendering: "pixelated"
-    };
 
     return (
         <main className="create-avatar-page">

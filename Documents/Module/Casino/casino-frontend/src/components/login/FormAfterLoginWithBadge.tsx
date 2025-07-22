@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router"
+import "../../styles/FormAfterLoginWithBadge.css"
 
 export default function FormAfterLoginWithBadge() {
     const navigate = useNavigate();
@@ -98,7 +99,7 @@ export default function FormAfterLoginWithBadge() {
                 return;
             }
             sessionStorage.setItem("username", username);
-            navigate("/gameoverview");
+            navigate("/create-avatar-with-badge");
 
         } catch (err) {
             console.error("Serverfehler:", err);
@@ -107,42 +108,48 @@ export default function FormAfterLoginWithBadge() {
     };
     return (
         <>
-            <h1>Bitte fülle folgende Dinge aus, um dein Profil zu vervollständigen: </h1>
-            <p>Dieses Formular muss nur beim ersten Login mit dem Badge ausgefüllt werden. Danach funktioniert alles automatisch - du musst dir dein Passwort nicht mehr merken!</p>
-            <form className="register-form" onSubmit={createNewProfileWithBadge}>
-                <label htmlFor="username" className="form-label">Benutzername</label>
-                <input
-                    id="username"
-                    type="text"
-                    placeholder={"Bsp. SchlauerFuchs12"}
-                    onChange={e => setUsername(e.target.value)}
-                />
-                <label htmlFor="email" className="form-label">Email</label>
-                <input
-                    id="email"
-                    type="email"
-                    placeholder={"Bsp. peter.muster@icloud.com"}
-                    onChange={e => setEmail(e.target.value)}
-                />
-                <label htmlFor="password" className="form-label">Passwort</label>
-                <div style={{ width: "100%" }}>
+            <div className="page-wrapper">
+                <h1>Bitte fülle folgende Dinge aus, um dein Profil zu vervollständigen: </h1>
+                <p>
+                    Dieses Formular muss nur beim ersten Login mit dem Badge ausgefüllt werden. Danach funktioniert alles automatisch – du musst dir dein Passwort nicht mehr merken!
+                </p>
+                <form className="register-form" onSubmit={createNewProfileWithBadge}>
+                    <label htmlFor="username" className="form-label">Benutzername</label>
                     <input
-                        id="password"
-                        type={"password"}
-                        placeholder="Gib dein Passwort hier ein"
-                        onChange={e => setPassword(e.target.value)}
+                        id="username"
+                        type="text"
+                        className="form-input"
+                        placeholder="Bsp. SchlauerFuchs12"
+                        onChange={e => setUsername(e.target.value)}
                     />
-                </div>
-                {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
-                <button className="next-btn" type="submit">Profil erstellen</button>
-                <button
-                    className="next-btn"
-                    type="button"
-                    onClick={cancel}
-                >
-                    Abbrechen
-                </button>
-            </form>
+
+                    <label htmlFor="email" className="form-label">Email</label>
+                    <input
+                        id="email"
+                        type="email"
+                        className="form-input"
+                        placeholder="Bsp. peter.muster@icloud.com"
+                        onChange={e => setEmail(e.target.value)}
+                    />
+
+                    <label htmlFor="password" className="form-label">Passwort</label>
+                    <div style={{ width: "100%" }}>
+                        <input
+                            id="password"
+                            type="password"
+                            className="form-input"
+                            placeholder="Gib dein Passwort hier ein"
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                    </div>
+
+                    {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
+
+                    <button className="next-btn" type="submit">Weiter</button>
+                    <button className="next-btn" type="button" onClick={cancel}>Abbrechen</button>
+                </form>
+            </div>
         </>
-    )
+    );
+
 }

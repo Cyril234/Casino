@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import "../../styles/EditProfile.css"
+import "../../styles/EditProfile.css";
 import { useBadgeScanner } from "./AddBadge";
 
 export default function EditProfile() {
@@ -13,15 +13,13 @@ export default function EditProfile() {
     const [playerId, setPlayerId] = useState(0);
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState<string | undefined>();
     const [coins, setCoins] = useState(0);
     const [badgenumber, setBadgenumber] = useState<string | null>(null);
 
-    // Aktuelles Input-Feld, das von der Tastatur beschriftet wird
     const [activeInput, setActiveInput] = useState<"username" | "email" | "password" | null>(null);
-
-    // Tastatur anzeigen oder nicht
     const [keyboardVisible, setKeyboardVisible] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
 
     useEffect(() => {
         if (!currentToken) {
@@ -35,25 +33,19 @@ export default function EditProfile() {
     }, [currentToken, usernameSecurity, navigate]);
 
     useEffect(() => {
-        const fetchPlayerId = async () => {
-            if (!currentToken) {
-                console.error("Kein Auth-Token gefunden.");
-                return;
-            }
+        const fetchPlayerData = async () => {
+            if (!currentToken) return;
 
             try {
                 const res = await fetch(`http://localhost:8080/api/players/byToken/${currentToken}`, {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${currentToken}`,
-                        Accept: "*/*",
                         "Content-Type": "application/json"
                     }
                 });
 
-                if (!res.ok) {
-                    throw new Error(`HTTP Fehler: ${res.status}`);
-                }
+                if (!res.ok) throw new Error(`HTTP Fehler: ${res.status}`);
 
                 const data = await res.json();
                 setPlayerId(data.playerId);
@@ -63,18 +55,27 @@ export default function EditProfile() {
                 setBadgenumber(data.badgenumber);
 
             } catch (err) {
-                console.error("Fehler bei dem Bekommen der SpielerId:", err);
+                console.error("Fehler beim Laden der Spielerdaten:", err);
             }
         };
 
-        fetchPlayerId();
+        fetchPlayerData();
     }, [currentToken]);
-
-    const [errorMsg, setErrorMsg] = useState("");
 
     const editProfile = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrorMsg("");
+
+        const updateData: any = {
+            username,
+            email,
+            coins,
+            badgenumber
+        };
+
+        if (password && password.trim() !== "") {
+            updateData.password = password;
+        }
 
         try {
             const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
@@ -83,16 +84,12 @@ export default function EditProfile() {
                     "Authorization": `Bearer ${currentToken}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username, email, password, coins }),
+                body: JSON.stringify(updateData),
             });
 
             if (!res.ok) {
                 const errorText = await res.text();
-                if (res.status === 409) {
-                    setErrorMsg(errorText);
-                } else {
-                    setErrorMsg("Fehler beim Bearbeiten: " + errorText);
-                }
+                setErrorMsg(res.status === 409 ? errorText : "Fehler beim Bearbeiten: " + errorText);
                 return;
             }
 
@@ -105,19 +102,36 @@ export default function EditProfile() {
         }
     };
 
-    useBadgeScanner((scan) => {
+    useBadgeScanner(async (scan) => {
         const match = scan.match(/UID:(.*?);/);
         if (match) {
-            setBadgenumber(match[1]);
-            console.log("Badge gescannt:", match[1]);
+            const scannedBadge = match[1];
+            if (!currentToken || !playerId) return;
+
+            try {
+                const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${currentToken}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ badgenumber: scannedBadge }),
+                });
+
+                if (res.ok) {
+                    setBadgenumber(scannedBadge);
+                } else {
+                    const errorText = await res.text();
+                    setErrorMsg(res.status === 409 ? errorText : "Fehler beim Badge-Speichern: " + errorText);
+                }
+            } catch (err) {
+                console.error("Fehler beim automatischen Badge-Speichern:", err);
+            }
         }
     });
 
     const handleBadgeClick = async () => {
-        if (!currentToken || !playerId) {
-            console.error("Token oder Spieler-ID fehlt.");
-            return;
-        }
+        if (!currentToken || !playerId) return;
 
         try {
             const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
@@ -126,19 +140,16 @@ export default function EditProfile() {
                     "Authorization": `Bearer ${currentToken}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ "badgenumber": badgenumber }),
+                body: JSON.stringify({ badgenumber: null }),
             });
 
             if (!res.ok) {
                 const errorText = await res.text();
-                if (res.status === 409) {
-                    setErrorMsg(errorText);
-                } else {
-                    setErrorMsg("Fehler beim Bearbeiten: " + errorText);
-                }
+                setErrorMsg(res.status === 409 ? errorText : "Fehler beim Badge-Löschen: " + errorText);
                 return;
             }
 
+            setBadgenumber(null);
             sessionStorage.setItem("username", username);
             navigate("/gameoverview");
 
@@ -151,46 +162,36 @@ export default function EditProfile() {
     const handleDeleteProfile = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
+            await fetch(`http://localhost:8080/api/players/${playerId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${currentToken}`,
                     "Content-Type": "application/json"
                 }
             });
-            if (!res) {
-                console.log("Fehler beim Löschen!")
-            }
             navigate("/");
         } catch (err) {
             console.error(err);
         }
     };
 
-    // Tastatur-Handler: Taste drücken
     const onKeyPress = (key: string) => {
         if (!activeInput) return;
 
         const updater = (old: string) => {
-            if (key === "Delete") {
-                // Lösche letztes Zeichen
-                return old.slice(0, -1);
-            } else if (key === "x") {
-                // Schließen = Tastatur ausblenden
+            if (key === "Delete") return old.slice(0, -1);
+            if (key === "x") {
                 setKeyboardVisible(false);
                 return old;
-            } else {
-                // Ansonsten Buchstaben / Zeichen anfügen
-                return old + key;
             }
+            return old + key;
         };
 
         if (activeInput === "username") setUsername(updater);
         if (activeInput === "email") setEmail(updater);
-        if (activeInput === "password") setPassword(updater);
+        if (activeInput === "password") setPassword(prev => updater(prev ?? ""));
     };
 
-    // Komponente für virtuelle Tastatur
     function VirtualKeyboard() {
         const keysRow1 = ["q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "@"];
         const keysRow2 = ["a", "s", "d", "f", "g", "h", "j", "k", "l", "x", "Delete"];
@@ -200,39 +201,27 @@ export default function EditProfile() {
             <div className="virtual-keyboard">
                 <div className="keyboard-row">
                     {keysRow1.map((k) => (
-                        <button
-                            key={k}
-                            className={`keyboard-key ${k === "@" ? "keyboard-at" : ""} ${k === "x" ? "keyboard-close" : ""} ${k === "Delete" ? "keyboard-delete" : ""}`}
-                            onClick={() => onKeyPress(k)}
-                        >
+                        <button key={k} className="keyboard-key" onClick={() => onKeyPress(k)}>
                             {k === "x" ? "x" : k === "Delete" ? "Del" : k}
                         </button>
                     ))}
                 </div>
                 <div className="keyboard-row">
                     {keysRow2.map((k) => (
-                        <button
-                            key={k}
-                            className={`keyboard-key ${k === "@" ? "keyboard-at" : ""} ${k === "x" ? "keyboard-close" : ""} ${k === "Delete" ? "keyboard-delete" : ""}`}
-                            onClick={() => onKeyPress(k)}
-                        >
+                        <button key={k} className="keyboard-key" onClick={() => onKeyPress(k)}>
                             {k === "x" ? "x" : k === "Delete" ? "Del" : k}
                         </button>
                     ))}
                 </div>
                 <div className="keyboard-row">
                     {keysRow3.map((k) => (
-                        <button
-                            key={k}
-                            className={`keyboard-key ${k === "@" ? "keyboard-at" : ""} ${k === "x" ? "keyboard-close" : ""} ${k === "Delete" ? "keyboard-delete" : ""}`}
-                            onClick={() => onKeyPress(k)}
-                        >
-                            {k === "x" ? "x" : k === "Delete" ? "Del" : k}
+                        <button key={k} className="keyboard-key" onClick={() => onKeyPress(k)}>
+                            {k}
                         </button>
                     ))}
                 </div>
             </div>
-        )
+        );
     }
 
     return (
@@ -263,31 +252,33 @@ export default function EditProfile() {
                 <label htmlFor="password" className="form-label">Passwort</label>
                 <input
                     id="password"
-                    type={"password"}
+                    type="password"
                     value={password}
                     placeholder="Gib dein neues Passwort hier ein"
                     onChange={e => setPassword(e.target.value)}
                     onFocus={() => { setActiveInput("password"); setKeyboardVisible(true) }}
                 />
 
-                <button
-                    className="next-btn"
-                    type="button"
-                    onClick={handleBadgeClick}
-                >
-                    {badgenumber === null ? "Badge zu Profil hinzufügen" : "Badge von Konto lösen"}
-                </button>
+                <p className="badge-status">
+                    {badgenumber === null
+                        ? "Kein Badge mit deinem Konto verknüpft."
+                        : "Ein Badge ist mit deinem Konto verknüpft."}
+                </p>
+
+                {badgenumber !== null && (
+                    <button
+                        className="next-btn"
+                        type="button"
+                        onClick={handleBadgeClick}
+                    >
+                        Badge von Konto lösen
+                    </button>
+                )}
 
                 {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
                 <button className="next-btn" type="submit">Änderungen speichern</button>
                 <button className="next-btn" onClick={handleDeleteProfile}>Profil löschen</button>
-                <button
-                    className="next-btn"
-                    type="button"
-                    onClick={() => navigate('/gameoverview')}
-                >
-                    Zurück
-                </button>
+                <button className="next-btn" type="button" onClick={() => navigate('/gameoverview')}>Zurück</button>
             </form>
 
             {keyboardVisible && <VirtualKeyboard />}

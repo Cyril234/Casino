@@ -1,5 +1,6 @@
 package com.example.casinobackend.controllers;
 
+import java.security.MessageDigest;
 import java.util.List;
 import java.util.Optional;
 
@@ -143,34 +144,72 @@ public class APIPlayerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Spieler nicht gefunden.");
         }
 
+        Player player = currentPlayer.get();
+
+        if (newPlayer.getUsername() != null && !newPlayer.getUsername().isEmpty()) {
+            Optional<Player> existingWithUsername = playerRepository.findByUsername(newPlayer.getUsername());
+            if (existingWithUsername.isPresent() && existingWithUsername.get().getPlayerId() != id) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Dieser Benutzername ist bereits vergeben.");
+            }
+            player.setUsername(newPlayer.getUsername());
+        }
+
         if (newPlayer.getEmail() != null && !newPlayer.getEmail().isEmpty()) {
             Optional<Player> existingWithEmail = playerRepository.findByEmail(newPlayer.getEmail());
             if (existingWithEmail.isPresent() && existingWithEmail.get().getPlayerId() != id) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Diese E-Mail ist bereits vergeben.");
             }
+            player.setEmail(newPlayer.getEmail());
         }
 
-        Optional<Player> existingWithUsername = playerRepository.findByUsername(newPlayer.getUsername());
-        if (existingWithUsername.isPresent() && existingWithUsername.get().getPlayerId() != id) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Dieser Benutzername ist bereits vergeben.");
+        if (newPlayer.getPassword() != null && !newPlayer.getPassword().isEmpty()) {
+            Argon2 argon2 = Argon2Factory.create();
+            char[] pw = newPlayer.getPassword().toCharArray();
+            String hashed = argon2.hash(2, 65536, 1, pw);
+            argon2.wipeArray(pw);
+            player.setPassword(hashed);
         }
 
-        Argon2 argon2 = Argon2Factory.create();
-        char[] pw = newPlayer.getPassword().toCharArray();
-        newPlayer.setPassword(argon2.hash(2, 65536, 1, pw));
-        argon2.wipeArray(pw);
-
-        Player player = currentPlayer.get();
-        player.setUsername(newPlayer.getUsername());
-        player.setEmail(newPlayer.getEmail());
-        player.setPassword(newPlayer.getPassword());
         player.setCoins(newPlayer.getCoins());
-        player.setColortheme(newPlayer.getColortheme());
         player.setVolume(newPlayer.getVolume());
-        player.setSoundstatus(newPlayer.getSoundstatus());
-        player.setBadgenumber(newPlayer.getBadgenumber());
-        player.setLastlogindate(newPlayer.getLastlogindate());
+
+        if (newPlayer.getColortheme() != null) {
+            player.setColortheme(newPlayer.getColortheme());
+        }
+
+        if (newPlayer.getSoundstatus() != null) {
+            player.setSoundstatus(newPlayer.getSoundstatus());
+        }
+
+        if (newPlayer.getBadgenumber() != null) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA-512");
+                byte[] hashBytes = md.digest(newPlayer.getBadgenumber().getBytes());
+                StringBuilder sb = new StringBuilder();
+                for (byte b : hashBytes) {
+                    sb.append(String.format("%02x", b));
+                }
+                String hashedBadge = sb.toString();
+
+                Optional<Player> existingBadge = playerRepository.findPlayerByBadgenumber(hashedBadge);
+                if (existingBadge.isPresent() && existingBadge.get().getPlayerId() != id) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body("Diese Badgenummer ist bereits vergeben.");
+                }
+
+                player.setBadgenumber(hashedBadge);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Fehler beim Hashen der Badgenummer.");
+            }
+        } else {
+            player.setBadgenumber(null);
+        }
+
         player.setLogins(newPlayer.getLogins());
+
+        if (newPlayer.getLastlogindate() != null) {
+            player.setLastlogindate(newPlayer.getLastlogindate());
+        }
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
