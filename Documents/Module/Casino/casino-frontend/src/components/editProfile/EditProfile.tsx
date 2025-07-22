@@ -107,8 +107,6 @@ export default function EditProfile() {
         const match = scan.match(/UID:(.*?);/);
         if (match) {
             const scannedBadge = match[1];
-            setBadgenumber(scannedBadge);
-
             if (!currentToken || !playerId) return;
 
             try {
@@ -121,7 +119,9 @@ export default function EditProfile() {
                     body: JSON.stringify({ badgenumber: scannedBadge }),
                 });
 
-                if (!res.ok) {
+                if (res.ok) {
+                    setBadgenumber(scannedBadge);
+                } else {
                     const errorText = await res.text();
                     setErrorMsg(res.status === 409 ? errorText : "Fehler beim Badge-Speichern: " + errorText);
                 }
@@ -134,8 +134,6 @@ export default function EditProfile() {
     const handleBadgeClick = async () => {
         if (!currentToken || !playerId) return;
 
-        const updatedBadge = badgenumber === null ? "warte auf Scan..." : null;
-
         try {
             const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
                 method: "PUT",
@@ -143,16 +141,16 @@ export default function EditProfile() {
                     "Authorization": `Bearer ${currentToken}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ badgenumber: updatedBadge }),
+                body: JSON.stringify({ badgenumber: null }),
             });
 
             if (!res.ok) {
                 const errorText = await res.text();
-                setErrorMsg(res.status === 409 ? errorText : "Fehler beim Badge-Update: " + errorText);
+                setErrorMsg(res.status === 409 ? errorText : "Fehler beim Badge-Löschen: " + errorText);
                 return;
             }
 
-            setBadgenumber(updatedBadge);
+            setBadgenumber(null);
             sessionStorage.setItem("username", username);
             navigate("/gameoverview");
 
@@ -165,7 +163,7 @@ export default function EditProfile() {
     const handleDeleteProfile = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
+            await fetch(`http://localhost:8080/api/players/${playerId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${currentToken}`,
@@ -274,13 +272,21 @@ export default function EditProfile() {
                     onFocus={() => { setActiveInput("password"); setKeyboardVisible(true) }}
                 />
 
-                <button
-                    className="next-btn"
-                    type="button"
-                    onClick={handleBadgeClick}
-                >
-                    {badgenumber === null ? "Badge zu Profil hinzufügen" : "Badge von Konto lösen"}
-                </button>
+                <p className="badge-status">
+                    {badgenumber === null
+                        ? "Kein Badge mit deinem Konto verknüpft."
+                        : `Badge verknüpft: ${badgenumber}`}
+                </p>
+
+                {badgenumber !== null && (
+                    <button
+                        className="next-btn"
+                        type="button"
+                        onClick={handleBadgeClick}
+                    >
+                        Badge von Konto lösen
+                    </button>
+                )}
 
                 {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
                 <button className="next-btn" type="submit">Änderungen speichern</button>
