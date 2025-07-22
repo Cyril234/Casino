@@ -24,6 +24,8 @@ import FormAfterLoginWithBadge from './components/login/FormAfterLoginWithBadge'
 import Slot from './components/Games/Slot'
 import SlotInfo from './components/gameinformations/SlotInfo'
 import CreateAvatarWithBadge from './components/register/CreateAvatarWithBadge'
+import RouletteInfo from './components/gameinformations/RouletteInfo'
+import RaceSimulation from './components/Games/RaceSimulation'
 
 
 function App() {
@@ -51,7 +53,9 @@ function App() {
         <Route path='/leaderboard' element={<Leaderboard />} />
         <Route path='/gameoverview/horserace' element={<HorseRace />} />
         <Route path="/gameoverview/horserace/info" element={<HorseRaceInfo />} />
+        <Route path="/gameoverview/horserace/race" element={<RaceSimulation />} />
         <Route path="/gameoverview/mines/info" element={<MinenfeldInfo />} />
+        <Route path="/gameoverview/roulette/info" element={<RouletteInfo />} />
         <Route path="/gaminghistory" element={<MyGames />} />
         <Route path="/login-with-badge/form" element={<FormAfterLoginWithBadge />} />
         <Route path="/create-avatar-with-badge" element={<CreateAvatarWithBadge />} />

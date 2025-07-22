@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import '../../styles/Roulette.css';
+import { MdInfo } from 'react-icons/md';
 
 interface Bet {
 
@@ -227,6 +228,9 @@ const Roulette: React.FC = () => {
           onClick={() => navigate('/gameoverview')}
         >
           Zurück
+        </button>
+        <button className="btn info" onClick={() => navigate('/gameoverview/roulette/info')}>
+          <MdInfo size={24} />
         </button>
         {/* Rad + Kugel */}
         <div className="roulette-left">
