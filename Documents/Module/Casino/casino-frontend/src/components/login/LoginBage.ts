@@ -39,8 +39,7 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
                                 sessionStorage.setItem("authToken", token);
                                 sessionStorage.setItem("username", data.username || "");
 
-                                // Neue Navigation basierend auf isComplete
-                                if (data.isComplete === true) {
+                                if (data.username != "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267") {
                                     navigate("/gameoverview");
                                 } else {
                                     navigate("/login-with-badge/form");
