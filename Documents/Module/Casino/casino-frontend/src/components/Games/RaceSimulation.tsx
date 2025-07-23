@@ -72,7 +72,6 @@ export default function RaceSimulation() {
       setCoinsWon(wonAmount);
 
       const baseTime = 4;
-      const baseTime = 4;
       const times = horses.map((h, idx) =>
         h.horseId === winnerId ? baseTime : baseTime + (idx + 1)
       );
@@ -118,10 +117,9 @@ export default function RaceSimulation() {
               top: `${10 + idx * 8}%`,
               animationDuration: durations[idx] ? `${durations[idx]}s` : '0s'
             }}
-            onAnimationEnd={() => onWinnerAnimationEnd(idx)}
+            onAnimationEnd={onWinnerAnimationEnd}
           />
         ))}
-
       </div>
 
       {!raceRunning && winner !== null && coinsWon != null && (
@@ -132,10 +130,8 @@ export default function RaceSimulation() {
               ? `Gewonnen! +${coinsWon} Coins`
               : `Verloren! -${bet} Coins`}
           </p>
-
         </div>
       )}
     </div>
   );
 }
-
