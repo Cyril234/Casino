@@ -36,10 +36,19 @@ public class PockerController {
     }
 
     @PostMapping("/getNPCDesision")
-    public Map<String, Object> getNPCDesision(@RequestBody int potGroesse, int callAmount, int bigBlind, List<String> tableCards, List<String> handCards, int round, String style, int stack, int position) {
+    public Map<String, Object> getNPCDesision(@RequestBody NPCDecisionRequest request) {
         PockerLogik logik = new PockerLogik();
 
-        return logik.getNPCDecision(potGroesse, callAmount, bigBlind, tableCards, handCards, round, style, stack, position);
-
+        return logik.getNPCDecision(
+            request.getPotGroesse(),
+            request.getCallAmount(),
+            request.getBigBlind(),
+            request.getTableCards(),
+            request.getHandCards(),
+            request.getRound(),
+            request.getStyle(),
+            request.getStack(),
+            request.getPosition()
+        );
     }
 }
