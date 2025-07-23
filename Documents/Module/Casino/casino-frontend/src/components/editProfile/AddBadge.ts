@@ -38,7 +38,7 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
         };
 
         fetchPlayerInfo();
-    }, []);
+    }, []); 
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -61,7 +61,7 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
                         }
 
                         try {
-                            const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
+                            const res = await fetch(`http://localhost:8080/api/players/badge/${playerId}`, {
                                 method: "PUT",
                                 headers: {
                                     "Content-Type": "application/json",

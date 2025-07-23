@@ -5,6 +5,7 @@ import Slideshow from "../GameOverview/Slideshow";
 import { MdLogout, MdSettings } from "react-icons/md";
 import { FaTrophy, FaUser } from "react-icons/fa";
 import { GiConsoleController } from "react-icons/gi";
+import sounds from "../litleThings/Sounds";
 
 export default function Gameoverview() {
   const [posXPink, setPosXPink] = useState(-2000);
@@ -67,6 +68,12 @@ export default function Gameoverview() {
 
     fetchData();
   }, [token]);
+
+  useEffect(() => {
+    if (token && soundstatus) {
+      sounds.play("kasinoMusik.mp3", true, 0.1);
+    }
+  }, [token, soundstatus]);
 
   useEffect(() => {
     if (!token) return;

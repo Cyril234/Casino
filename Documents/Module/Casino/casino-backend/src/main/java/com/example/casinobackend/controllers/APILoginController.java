@@ -88,8 +88,6 @@ public class APILoginController {
 
             if (UID != "") {
 
-                System.out.println("test:" + UID);
-
                 Optional<Player> player = playerRepository.findPlayerByBadgenumber(UID);
 
                 if (player.isPresent()) {
@@ -184,13 +182,12 @@ public class APILoginController {
         new SecureRandom().nextBytes(randomBytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
-
+ 
     public String getUID() {
         return UID;
     }
 
     public void setUID(String uID) {
         UID = uID;
-        System.out.println(UID);
     }
 }

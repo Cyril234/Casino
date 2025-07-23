@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Slideshow.css";
 import { useNavigate } from "react-router-dom";
+import sounds from "../litleThings/Sounds";
 
 const slides = [
   { id: 1, img: "./public/titelbilder/blackjackTitelbild.png", link: '/gameoverview/blackjack' },
@@ -32,6 +33,8 @@ export default function Slideshow({ input, onKeyUsed }: SlideshowProps) {
 
   useEffect(() => {
     if (input === "Enter") {
+      sounds.stop("kasinoMusik.mp3");
+      sounds.play("klickSchlecht.mp3", false);
       navigate(slides[current].link);
       onKeyUsed();
     }
