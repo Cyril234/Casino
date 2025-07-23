@@ -197,7 +197,7 @@ public class Dataloader implements ApplicationRunner {
 
         if (!gameRepository.findByTitle("Minenfeld").isPresent()) {
             Game game2 = new Game();
-            game2.setTitle("Mienenfeld");
+            game2.setTitle("Minenfeld");
             gameRepository.save(game2);
         }
 
