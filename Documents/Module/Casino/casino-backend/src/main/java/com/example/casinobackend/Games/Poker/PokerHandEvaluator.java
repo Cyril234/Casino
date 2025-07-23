@@ -244,7 +244,6 @@ public class PokerHandEvaluator {
         //List<String> board = List.of("Th", "Jh", "Qd", "2h", "3h");
 
         Map<Integer, List<String>> result = evaluate(players, board);
-        System.out.println(result);
         return(result);
     }
 }

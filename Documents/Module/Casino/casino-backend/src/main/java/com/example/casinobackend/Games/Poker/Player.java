@@ -7,15 +7,18 @@ public class Player {
     private ArrayList<String> cards;
     private int chips;
     protected boolean isPlayer;
-    private int id;
+    private int amount=0;
+    private Aktion aktion; 
     
-    public Player(int position, ArrayList<String> cards, int chips, boolean isPlayer, int id) {
+    public Player(int position, ArrayList<String> cards, int chips, boolean isPlayer, int id, int amount, Aktion aktion) {
         this.position = position;
         this.cards = cards;
         this.chips = chips;
         this.isPlayer = isPlayer;
-        this.id = id;
+        this.amount = amount;
+        this.aktion = aktion;
     }
+    
     public int getPosition() {
         return position;
     }
@@ -41,11 +44,19 @@ public class Player {
         this.isPlayer = isPlayer;
     }
 
-    public int getId() {
-        return id;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public Aktion getAktion() {
+        return aktion;
+    }
+
+    public void setAktion(Aktion aktion) {
+        this.aktion = aktion;
     }
 }
