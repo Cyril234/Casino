@@ -182,25 +182,7 @@ public class APIPlayerController {
         }
 
         if (newPlayer.getBadgenumber() != null) {
-            try {
-                MessageDigest md = MessageDigest.getInstance("SHA-512");
-                byte[] hashBytes = md.digest(newPlayer.getBadgenumber().getBytes());
-                StringBuilder sb = new StringBuilder();
-                for (byte b : hashBytes) {
-                    sb.append(String.format("%02x", b));
-                }
-                String hashedBadge = sb.toString();
-
-                Optional<Player> existingBadge = playerRepository.findPlayerByBadgenumber(hashedBadge);
-                if (existingBadge.isPresent() && existingBadge.get().getPlayerId() != id) {
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body("Diese Badgenummer ist bereits vergeben.");
-                }
-
-                player.setBadgenumber(hashedBadge);
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Fehler beim Hashen der Badgenummer.");
-            }
+            player.setBadgenumber(newPlayer.getBadgenumber());
         } else {
             player.setBadgenumber(null);
         }

@@ -28,35 +28,24 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
                                 } catch (e) {
                                     throw new Error("Antwort ist kein gültiges JSON: " + responseText);
                                 }
+
                                 if (!res.ok) {
                                     throw new Error(`Server returned ${res.status}: ${responseText}`);
                                 }
+
                                 const token = data.token;
                                 if (!token) throw new Error("Kein Token erhalten");
+
                                 sessionStorage.setItem("authToken", token);
+                                sessionStorage.setItem("username", data.username || "");
 
-                                const userRes = await fetch(`http://localhost:8080/api/players/byToken/${token}`, {
-                                    method: "GET",
-                                    headers: {
-                                        "Authorization": `Bearer ${token}`,
-                                        "Accept": "*/*",
-                                        "Content-Type": "application/json"
-                                    }
-                                });
-                                if (!userRes.ok) {
-                                    throw new Error(`HTTP Fehler: ${userRes.status}`);
-                                }
-                                const userData = await userRes.json();
-
-                                sessionStorage.setItem("username", userData.username);
-                                console.log(sessionStorage.getItem("username"));
-
-                                if (sessionStorage.getItem("username") === "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267") {
+                                // Neue Navigation basierend auf isComplete
+                                if (data.isComplete === true) {
+                                    navigate("/gameoverview");
+                                } else {
                                     navigate("/login-with-badge/form");
                                 }
-                                else {
-                                    navigate("/gameoverview");
-                                }
+
                             } catch (err) {
                                 console.error(err);
                             }
@@ -74,4 +63,3 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
         };
     }, [onScan, navigate]);
 }
-
