@@ -109,7 +109,7 @@ export default function EditProfile() {
             if (!currentToken || !playerId) return;
 
             try {
-                const res = await fetch(`http://localhost:8080/api/players/${playerId}`, {
+                const res = await fetch(`http://localhost:8080/api/players/badge/${playerId}`, {
                     method: "PUT",
                     headers: {
                         "Authorization": `Bearer ${currentToken}`,
