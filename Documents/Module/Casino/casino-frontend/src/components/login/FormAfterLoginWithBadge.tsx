@@ -35,7 +35,7 @@ export default function FormAfterLoginWithBadge() {
                         "Content-Type": "application/json"
                     }
                 });
-
+ 
                 if (!res.ok) {
                     throw new Error(`HTTP Fehler: ${res.status}`);
                 }

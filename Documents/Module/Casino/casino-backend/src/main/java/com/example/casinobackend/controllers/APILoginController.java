@@ -182,7 +182,7 @@ public class APILoginController {
         new SecureRandom().nextBytes(randomBytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
-
+ 
     public String getUID() {
         return UID;
     }

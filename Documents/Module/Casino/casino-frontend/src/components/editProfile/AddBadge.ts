@@ -38,7 +38,7 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
         };
 
         fetchPlayerInfo();
-    }, []);
+    }, []); 
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {

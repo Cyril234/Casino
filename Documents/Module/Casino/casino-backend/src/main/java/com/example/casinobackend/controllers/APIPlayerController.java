@@ -199,38 +199,39 @@ public class APIPlayerController {
                 .body(playerRepository.save(player));
     }
 
-    @PutMapping("/badge/{id}")
-    public ResponseEntity<?> addBadge(@PathVariable long id, @RequestBody Player newPlayer) {
-        Optional<Player> currentPlayer = playerRepository.findById(id);
-        if (currentPlayer.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Spieler nicht gefunden.");
-        }
-
-        Player player = currentPlayer.get();
-
-        if (newPlayer.getBadgenumber() != null) {
-            try {
-                MessageDigest md = MessageDigest.getInstance("SHA-512");
-                byte[] hashBytes = md.digest(newPlayer.getBadgenumber().getBytes());
-                StringBuilder sb = new StringBuilder();
-                for (byte b : hashBytes) {
-                    sb.append(String.format("%02x", b));
-                }
-                String hashedBadgenumber = sb.toString();
-                player.setBadgenumber(hashedBadgenumber);
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Hashing fehlgeschlagen.");
-            }
-        } else {
-            player.setBadgenumber(null);
-        }
-
-        Player savedPlayer = playerRepository.save(player);
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(savedPlayer);
+@PutMapping("/badge/{id}")
+public ResponseEntity<?> addBadge(@PathVariable long id, @RequestBody Player newPlayer) {
+    Optional<Player> currentPlayer = playerRepository.findById(id);
+    if (currentPlayer.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Spieler nicht gefunden.");
     }
+
+    Player player = currentPlayer.get();
+
+    if (newPlayer.getBadgenumber() != null) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            byte[] hashBytes = md.digest(newPlayer.getBadgenumber().getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            String hashedBadgenumber = sb.toString();
+            player.setBadgenumber(hashedBadgenumber);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Hashing fehlgeschlagen.");
+        }
+    } else {
+        player.setBadgenumber(null);
+    }
+
+    Player savedPlayer = playerRepository.save(player);
+    return ResponseEntity.status(HttpStatus.OK)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(savedPlayer);
+}
+
 
     @PutMapping("/settings/{id}")
     public ResponseEntity<Player> updateSoundAndVolume(@PathVariable long id,

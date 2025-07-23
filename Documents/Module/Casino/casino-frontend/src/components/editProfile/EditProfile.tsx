@@ -116,7 +116,7 @@ export default function EditProfile() {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({ badgenumber: scannedBadge }),
-                });
+                }); 
 
                 if (res.ok) {
                     setBadgenumber(scannedBadge);

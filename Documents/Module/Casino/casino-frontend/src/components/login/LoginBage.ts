@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 export function useBadgeScanner(onScan: (scan: string) => void) {
     const inputBuffer = useRef("");
     const timeoutRef = useRef<number | null>(null);
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
