@@ -37,9 +37,23 @@ export function useBadgeScanner(onScan: (scan: string) => void) {
                                 if (!token) throw new Error("Kein Token erhalten");
 
                                 sessionStorage.setItem("authToken", token);
-                                sessionStorage.setItem("username", data.username || "");
 
-                                if (data.username != "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267") {
+                                const responsePlayer = await fetch(`http://localhost:8080/api/players/byToken/${token}`, {
+                                    method: "GET",
+                                    headers: {
+                                        "Authorization": `Bearer ${token}`,
+                                        Accept: "*/*",
+                                        "Content-Type": "application/json"
+                                    }
+                                });
+
+                                if (!responsePlayer.ok) {
+                                    throw new Error(`HTTP Fehler: ${responsePlayer.status}`);
+                                }
+                                const userdata = await responsePlayer.json();
+                                sessionStorage.setItem("username", userdata.username);
+
+                                if (userdata.username !== "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267") {
                                     navigate("/gameoverview");
                                 } else {
                                     navigate("/login-with-badge/form");
