@@ -1,53 +1,100 @@
 /* Reset & Basis */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', sans-serif; background: #1a1a1a; color: #fff; overflow: hidden; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #1a1a1a;
+  color: #fff;
+  overflow: hidden;
+}
 
 /* Vollbild-Renn-Container */
 .race-container {
-  position: relative; width: 100vw; height: 100vh;
-  background: url('../../public/HorseraceBackground.png') center/cover no-repeat;
-  overflow: hidden; display: flex; flex-direction: column; align-items: center;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: url('../../public/HorseRaceBackground.jpg') center/cover no-repeat;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding-top: 2rem;
 }
 
 /* Buttons */
-.back-btn, .start-btn {
+.back-btn,
+.start-btn {
   background: linear-gradient(145deg, #FFD700, #CCAC00);
-  color: #000; border: none; padding: 0.5rem 1rem; margin: 0.5rem;
-  border-radius: 6px; cursor: pointer; font-size: 1rem; z-index: 10;
+  color: #000;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  z-index: 10;
   transition: transform 0.1s;
 }
-.back-btn:hover, .start-btn:hover {
+
+.back-btn:hover,
+.start-btn:hover {
   transform: translateY(-2px);
 }
 
 /* Error */
-.error { color: #ff4d4d; margin: 1rem; z-index: 10; }
+.error {
+  color: #ff4d4d;
+  margin: 1rem;
+  z-index: 10;
+}
 
 /* Renn-Track */
 .race-track {
-  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* Pferde-Runner */
 .runner {
-  position: absolute; left: -10%; width: 8vmin; opacity: 0.8;
+  position: absolute;
+  left: -10%;
+  width: 8vmin;
+  opacity: 0.8;
   transform: translateY(-50%);
 }
+
 .running {
   animation: runTrack linear forwards;
 }
+
 @keyframes runTrack {
-  from { transform: translateX(0); }
-  to   { transform: translateX(110vw); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(110vw);
+  }
 }
 
 /* Sieger-Banner */
 .finish-banner {
-  position: absolute; top: 50%; left: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0,0,0,0.8); color: #FFD700;
-  padding: 1rem 2rem; border-radius: 8px; text-align: center; z-index: 10;
+  background: rgba(0, 0, 0, 0.8);
+  color: #FFD700;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  text-align: center;
+  z-index: 10;
 }
  
 .finish-banner {

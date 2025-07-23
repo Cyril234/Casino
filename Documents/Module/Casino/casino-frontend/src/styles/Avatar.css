@@ -25,6 +25,7 @@
     gap: 1rem;
     overflow-wrap: break-word;
     box-sizing: border-box;
+    transform: translateY(-15rem);
 }
 
 .form-label {

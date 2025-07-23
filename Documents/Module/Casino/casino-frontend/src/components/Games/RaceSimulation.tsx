@@ -36,6 +36,7 @@ export default function RaceSimulation() {
   const [raceRunning, setRaceRunning] = useState(false);
   const [durations, setDurations] = useState<number[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
 
   const loadHorsesAndStart = async () => {
     if (!token || playerId === undefined) {
@@ -67,8 +68,10 @@ export default function RaceSimulation() {
       const wonAmount: number = data.coinsWon ?? 0;
 
       setWinner(winnerId);
+      setWinnerIndex(horses.findIndex(h => h.horseId === winnerId));
       setCoinsWon(wonAmount);
 
+      const baseTime = 4;
       const baseTime = 4;
       const times = horses.map((h, idx) =>
         h.horseId === winnerId ? baseTime : baseTime + (idx + 1)
@@ -115,9 +118,10 @@ export default function RaceSimulation() {
               top: `${10 + idx * 8}%`,
               animationDuration: durations[idx] ? `${durations[idx]}s` : '0s'
             }}
-            onAnimationEnd={h.horseId === winner ? onWinnerAnimationEnd : undefined}
+            onAnimationEnd={() => onWinnerAnimationEnd(idx)}
           />
         ))}
+
       </div>
 
       {!raceRunning && winner !== null && coinsWon != null && (
@@ -128,8 +132,10 @@ export default function RaceSimulation() {
               ? `Gewonnen! +${coinsWon} Coins`
               : `Verloren! -${bet} Coins`}
           </p>
+
         </div>
       )}
     </div>
   );
 }
+

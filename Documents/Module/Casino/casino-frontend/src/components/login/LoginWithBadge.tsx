@@ -60,7 +60,7 @@ export default function LoginWithBadge() {
         <div className="unique-register-card full-width">
           <h1 className="unique-register-title">Badge-Login</h1>
           <p className="unique-register-desc">
-            Halte deinen Badge an den Leser am Automaten, um dich anzumelden!
+            Halte deinen Badge an den Leser am Automaten, um dich anzumelden oder zu registrieren!
           </p>
           <button
             className="unique-register-button"

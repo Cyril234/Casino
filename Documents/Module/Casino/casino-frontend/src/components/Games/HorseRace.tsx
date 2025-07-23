@@ -4,7 +4,6 @@ import '../../styles/HorseRaceBet.css';
 import coinImg from '../../../public/pokergeld.png';
 import { MdInfo } from 'react-icons/md';
 
-// Pferde-Bilder
 import blitz from '../../../public/horses/blitz.png';
 import donner from '../../../public/horses/donner.png';
 import eis from '../../../public/horses/eis.png';
@@ -38,7 +37,6 @@ type LocationState = {
 
 export default function HorseRace() {
     const navigate = useNavigate();
-    useNavigate()
     const [playerId, setPlayerId] = useState(0);
     const [coinsBalance, setCoinsBalance] = useState(0);
     const [bet, setBet] = useState(0);
@@ -55,6 +53,20 @@ export default function HorseRace() {
         fetchPlayer(token);
         fetchHorses(token);
     }, [navigate]);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowRight') {
+                setHorseIndex(prev => (prev + 1) % allHorses.length);
+            } else if (e.key === 'ArrowLeft') {
+                setHorseIndex(prev => (prev - 1 + allHorses.length) % allHorses.length);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [allHorses]);
 
     async function fetchPlayer(token: string) {
         try {

@@ -1,4 +1,4 @@
-"""
+
 from gpiozero import Button
 from gpiozero import LED
 from time import sleep
@@ -38,11 +38,11 @@ def inputButton():
         sleep(0.15)
 
     if button_3.is_pressed:
-        pyautogui.hotkey("Enter")
+        pyautogui.hotkey("Tab")
         sleep(0.15)
 
     if button_4.is_pressed:
-        pyautogui.hotkey("Enter")
+        pyautogui.hotkey("Esc")
         sleep(0.15)
 
     if joystick_1.is_pressed:
@@ -62,18 +62,17 @@ def inputButton():
         sleep(0.15)
 
     if joystick_5.is_pressed:
-        pyautogui.hotkey("s")
+        pyautogui.hotkey("Tab")
         sleep(0.15)
 
     if joystick_6.is_pressed:
-        pyautogui.press("d")
+        pyautogui.press("Tab")
         sleep(0.15)
 
     if joystick_7.is_pressed:
-        pyautogui.hotkey("w")
+        pyautogui.hotkey("Tab")
         sleep(0.15)
 
     if joystick_8.is_pressed:
-        pyautogui.hotkey("a")
+        pyautogui.hotkey("Tab")
         sleep(0.15)
-"""

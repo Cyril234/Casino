@@ -8,8 +8,8 @@ public class NPC extends Player{
     private double tightness;
     private double bluffFactor;
     
-    public NPC(String style, String name, double tightness, double bluffFactor, int position, ArrayList<String> cards, int chips, int id) {
-        super(position, cards, chips, false, id);
+    public NPC(String style, String name, double tightness, double bluffFactor, int position, ArrayList<String> cards, int chips, int id, int amount, Aktion aktion) {
+        super(position, cards, chips, false, id, amount, aktion);
         this.style = style;
         this.name = name;
         this.tightness = tightness;
