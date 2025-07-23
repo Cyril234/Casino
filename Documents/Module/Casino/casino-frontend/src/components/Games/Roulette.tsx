@@ -223,15 +223,12 @@ const Roulette: React.FC = () => {
   return (
     <div className="background">
       <div className="roulette-layout">
-        <button
-          className="back"
-          onClick={() => navigate('/gameoverview')}
-        >
+      <button className="back-button" onClick={() => navigate("/gameoverview")}>
           Zurück
         </button>
-        <button className="btn info" onClick={() => navigate('/gameoverview/roulette/info')}>
-          <MdInfo size={24} />
-        </button>
+         <div className="info-button-2" onClick={() => navigate('/gameoverview/roulette/info')}>
+                            <MdInfo />
+                        </div>
         {/* Rad + Kugel */}
         <div className="roulette-left">
           <div className="roulette-wheel-wrapper">
