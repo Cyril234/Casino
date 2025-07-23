@@ -38,7 +38,7 @@ public class PferderennenController {
     }
 
     @PostMapping("{playerId}/result")
-    public Horse reveal(@PathVariable Long playerId, @RequestParam int horseId,
+    public Map<String, Object> reveal(@PathVariable Long playerId, @RequestParam int horseId,
             @RequestParam int coins) {
         Horse horse = pferderennenservice.findById(horseId).orElseThrow();
         Player player = playerRepository.findById(playerId).orElseThrow();

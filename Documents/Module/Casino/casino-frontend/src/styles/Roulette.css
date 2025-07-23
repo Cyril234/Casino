@@ -188,3 +188,12 @@ body {
   width: 3rem;
 }
  
+/* Guthaben */
+.balance-area {
+  position: absolute; top: 1rem; right: 1rem;
+  background: rgba(0,0,0,0.6);
+  padding: 0.5rem 1rem; border-radius: 6px;
+  display: flex; align-items: center; gap: 0.5rem;
+  z-index: 10;
+}
+.coin-small { width: 2rem; height: 2rem; }

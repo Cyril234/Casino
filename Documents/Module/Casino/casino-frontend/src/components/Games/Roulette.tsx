@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import coinImg from "../../../public/pokergeld.png";
 
 import axios from 'axios';
 
@@ -223,12 +224,12 @@ const Roulette: React.FC = () => {
   return (
     <div className="background">
       <div className="roulette-layout">
-      <button className="back-button" onClick={() => navigate("/gameoverview")}>
+        <button className="back-button" onClick={() => navigate("/gameoverview")}>
           Zurück
         </button>
-         <div className="info-button-2" onClick={() => navigate('/gameoverview/roulette/info')}>
-                            <MdInfo />
-                        </div>
+        <div className="info-button-2" onClick={() => navigate('/gameoverview/roulette/info')}>
+          <MdInfo />
+        </div>
         {/* Rad + Kugel */}
         <div className="roulette-left">
           <div className="roulette-wheel-wrapper">
@@ -248,8 +249,10 @@ const Roulette: React.FC = () => {
         {/* UI */}
         <div className="bet-panel">
           <h2> Roulette</h2>
-          <div className="balance">
-            Guthaben: <strong>{coinsBalance}</strong> Coins
+          <div className="balance-area">
+
+            Guthaben: <strong>{coinsBalance}</strong>
+            <img src={coinImg} alt="Münze" className="coin-small" />
           </div>
           <div className="bet-amount">
             <label>Einsatz pro Feld:</label>

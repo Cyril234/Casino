@@ -50,19 +50,35 @@ body { font-family: 'Segoe UI', sans-serif; background: #1a1a1a; color: #fff; ov
   padding: 1rem 2rem; border-radius: 8px; text-align: center; z-index: 10;
 }
  
-/* src/styles/RaceSimulation.css additions */
-.finish-banner h2 {
-  margin-bottom: 0.5rem;
-}
-.win-amount {
-  color: #7CFC00;
-  font-size: 1.2rem;
+.finish-banner {
+  margin-top: 2rem;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  font-size: 1.4rem;
   font-weight: bold;
-}
-.lose-amount {
-  color: #ff4d4d;
-  font-size: 1.2rem;
-  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 }
 
- 
+.finish-banner.win {
+  background-color: rgba(0, 200, 0, 0.1);
+  color: #27c827;
+  border: 2px solid #27c827;
+}
+
+.finish-banner.lose {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: #ff4d4d;
+  border: 2px solid #ff4d4d;
+}
+
+.finish-banner.neutral {
+  background-color: rgba(200, 200, 200, 0.1);
+  color: #aaa;
+  border: 2px solid #ccc;
+}
+
+.result-text {
+  margin-top: 1rem;
+  font-size: 1.6rem;
+}

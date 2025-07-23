@@ -123,10 +123,11 @@ public class PferderennenService {
                 "playerBalance", player.getCoins());
     }
 
-    public Horse decideWinner(Player player, Horse gewaehlt, int einsatz) {
+    public Map<String, Object> decideWinner(Player player, Horse gewaehlt, int einsatz) {
         double r = Math.random();
         double kumuliert = 0.0;
         Horse gewinner = null;
+        int resultreward = 0;
 
         for (Horse p : horses) {
             kumuliert += p.getWinningProbability();
@@ -142,7 +143,7 @@ public class PferderennenService {
 
         if (gewaehlt.getName().equals(gewinner.getName())) {
             // neuer, einheitlicher Basisfaktor für alle
-            double basisFaktor = 0.375 / gewinner.getWinningProbability();
+            double basisFaktor = 0.3 / gewinner.getWinningProbability();
             double bonusFaktor = 1.0;
 
             switch (gewinner.getName()) {
@@ -181,7 +182,7 @@ public class PferderennenService {
             }
 
             double auszahlung = einsatz * basisFaktor * bonusFaktor;
-            int resultreward = (int) Math.round(auszahlung);
+            resultreward = (int) Math.round(auszahlung);
             player.setCoins(player.getCoins() + resultreward);
         }
 
@@ -194,7 +195,11 @@ public class PferderennenService {
         result.setSettedcoins(einsatz);
         result.setFinishingbalance(player.getCoins());
         playingattemptRepository.save(result);
-        return gewinner;
+        
+        return Map.of(
+                "horse", gewinner,
+                "coinsWon", resultreward        
+        );
     }
 
 }

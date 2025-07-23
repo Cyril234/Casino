@@ -85,7 +85,7 @@ export default function HorseRace() {
 
     const handleBet = () => {
         navigate('/gameoverview/horserace/race', {
-            state: { horseIndex, bet, playerId },
+            state: { horseIndex, bet, playerId,  },
         });
     };
 
