@@ -325,7 +325,7 @@ export default function BlackJackGame() {
       {showResult && resultAmount != null && (
         <div className={`status-box ${resultAmount >= 0 ? "win" : "lose"}`}>
 
-          {resultAmount >= 0 ? `+${resultAmount - bet}` : `${resultAmount} `}
+          {resultAmount > 0 ? `+${resultAmount - bet}` : `${resultAmount} `}
           <img src={coinImg} alt="Münze" className="coin-small" />
 
         </div>
