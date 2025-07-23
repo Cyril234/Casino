@@ -1,8 +1,8 @@
-#from inputButton import inputButton
+from inputButton import inputButton
 from inputRFID import inputRFID
 from time import sleep
 
 while True:
-    #inputButton()
+    inputButton()
     inputRFID()
     sleep(0.05)
