@@ -37,6 +37,7 @@ export default function RaceSimulation() {
   const [raceRunning, setRaceRunning] = useState(false);
   const [durations, setDurations] = useState<number[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
 
   const loadHorsesAndStart = async () => {
     if (!token || playerId === undefined) {
@@ -44,7 +45,6 @@ export default function RaceSimulation() {
       return;
     }
     try {
-      // 1. Pferde abrufen
       const resH = await fetch(
         `http://localhost:8080/api/horserace/horses`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -52,31 +52,28 @@ export default function RaceSimulation() {
       const horses: Horse[] = await resH.json();
       setAllHorses(horses);
 
-      // 2. Spiel starten
       await fetch(
         `http://localhost:8080/api/horserace/${playerId}/startgame?horseId=${horses[horseIndex].horseId}&coins=${bet}`,
         { method: 'POST', headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // 3. Ergebnis holen
       const resR = await fetch(
         `http://localhost:8080/api/horserace/${playerId}/result?horseId=${horses[horseIndex].horseId}&coins=${bet}`,
         { method: 'POST', headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await resR.json();
       console.log('Race result:', data);
-      // Passe hier den Key an, falls dein Backend z.B. coins_won zurückliefert
       const winnerId: number = data.horseId;
       const wonAmount: number = data.coinsWon ?? data.coins_won ?? 0;
       setWinner(winnerId);
+      setWinnerIndex(horses.findIndex(h => h.horseId === winnerId));
       setCoinsWon(wonAmount);
 
-      // 4. Animationsdauern festlegen: Sieger am schnellsten
-      const baseTime = 4; // Sieger braucht 4s
+      const baseTime = 4;
       const times = horses.map((h, idx) =>
         h.horseId === winnerId
           ? baseTime
-          : baseTime + (idx + 1) // jeder andere 1s länger je Position
+          : baseTime + (idx + 1)
       );
       setDurations(times);
       setRaceRunning(true);
@@ -87,9 +84,8 @@ export default function RaceSimulation() {
     }
   };
 
-  // Sobald das Gewinner-Pferd seine Animation beendet, stoppt das Rennen
-  const onWinnerAnimationEnd = (e: React.AnimationEvent<HTMLImageElement>) => {
-    if (Number(e.currentTarget.dataset.horseId) === winner) {
+  const onWinnerAnimationEnd = (idx: number) => {
+    if (idx === winnerIndex) {
       setRaceRunning(false);
     }
   };
@@ -121,20 +117,23 @@ export default function RaceSimulation() {
               top: `${10 + idx * 8}%`,
               animationDuration: durations[idx] ? `${durations[idx]}s` : '0s'
             }}
-            onAnimationEnd={h.horseId === winner ? onWinnerAnimationEnd : undefined}
+            onAnimationEnd={() => onWinnerAnimationEnd(idx)}
           />
         ))}
+
       </div>
 
       {!raceRunning && winner !== null && coinsWon != null && (
         <div className="finish-banner">
           <h2>Sieger: {allHorses.find(h => h.horseId === winner)?.name}</h2>
-          <p className={coinsWon >= 0 ? 'win-amount' : 'lose-amount'}>
-            {coinsWon > 0 ? `Gewonnen ` : `Verloren `}
+          <p className={coinsWon > 0 ? 'win-amount' : 'lose-amount'}>
+            {coinsWon > 0
+              ? `Gewonnen! Du erhälst ${coinsWon} Münzen!`
+              : `Verloren!`}
           </p>
+
         </div>
       )}
     </div>
   );
 }
- 
