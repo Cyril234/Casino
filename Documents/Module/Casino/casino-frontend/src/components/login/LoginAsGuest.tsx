@@ -40,7 +40,7 @@ export default function LoginAsGuest() {
         <div className="guest-login-card full-width">
           <h1 className="guest-login-title">Anmeldung als Gast</h1>
           <div className="guest-login-desc">
-            Verwende fast alle Funktionen ...
+            Verwende fast alle Funktionen, ganz ohne ein Konto zu erstellen!
           </div>
           <div className="guest-login-buttons">
             <button className="guest-login-button" onClick={goToGameoverview}>
