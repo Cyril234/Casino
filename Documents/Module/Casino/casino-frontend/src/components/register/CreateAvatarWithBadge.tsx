@@ -14,8 +14,8 @@ export default function CreateAvatarWithBadge() {
         };
     }, [token]);
 
-    const [avatarName, setAvatarName] = useState("");
-    const [avatarDescription, setAvatarDescription] = useState("");
+    const [avatarName, setAvatarName] = useState<string>();
+    const [avatarDescription, setAvatarDescription] = useState<string>();
 
     const [haircolorOptions, setHaircolorOptions] = useState<string[]>([]);
     const [skincolorOptions, setSkincolorOptions] = useState<string[]>([]);
