@@ -195,4 +195,6 @@ public class Player {
     public void setLastlogindate(LocalDate lastlogindate) {
         this.lastlogindate = lastlogindate;
     }
+
+    
 }

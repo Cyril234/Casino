@@ -10,7 +10,6 @@ const sounds = (() => {
     async play(filename: string, loop: boolean = false, baseVolume: number = 1): Promise<void> {
       filename = "../../../public/sounds/" + filename;
 
-      // Verhindere doppeltes Abspielen
       if (sounds.has(filename)) {
         const entry = sounds.get(filename);
         if (!entry?.audio.ended && !entry?.audio.paused) {
@@ -37,16 +36,22 @@ const sounds = (() => {
         if (!res.ok) throw new Error(`HTTP Fehler: ${res.status}`);
         const data = await res.json();
 
-        console.log(data);
+        const volumeFactor = data.volume / 100;
+        const isSoundEnabled = data.soundstatus === "ON";
 
-        const volume = baseVolume * (data.volume/100); // 👈 Lautstärke-Kombination
+        if (!isSoundEnabled || volumeFactor <= 0) {
+          console.log(`Sound ${filename} wird nicht abgespielt (Soundstatus: ${data.soundstatus}, Lautstärke: ${volumeFactor})`);
+          return;
+        }
+
+        const volume = baseVolume * volumeFactor;
 
         const audio = new Audio(filename);
         audio.volume = volume;
         audio.loop = loop;
 
         await audio.play();
-        console.log(`Spiele ${filename} (loop: ${loop}) mit Lautstärke ${volume} (base: ${baseVolume}, user: ${data.volume/100})`);
+        console.log(`Spiele ${filename} (loop: ${loop}) mit Lautstärke ${volume} (base: ${baseVolume}, user: ${volumeFactor})`);
 
         if (loop) {
           sounds.set(filename, { audio, isLooping: true });
@@ -57,7 +62,7 @@ const sounds = (() => {
     },
 
     stop(filename: string): void {
-      filename = "../../../public/sounds/"+filename;
+      filename = "../../../public/sounds/" + filename;
       const entry = sounds.get(filename);
       if (!entry) {
         console.warn(`Kein laufender Sound mit dem Namen ${filename} gefunden.`);

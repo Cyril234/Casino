@@ -3,6 +3,7 @@ package com.example.casinobackend.controllers;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.casinobackend.entities.Avatar;
 import com.example.casinobackend.entities.Player;
+import com.example.casinobackend.enums.Soundstatus;
 import com.example.casinobackend.repositories.AvatarRepository;
 import com.example.casinobackend.repositories.PlayerRepository;
 
@@ -242,21 +244,39 @@ public class APIPlayerController {
     }
 
     @PutMapping("/settings/{id}")
-    public ResponseEntity<Player> updateSoundAndVolume(@PathVariable long id,
-            @RequestBody Player newPlayer) {
-        Optional<Player> currentPlayer = playerRepository.findById(id);
+    public ResponseEntity<?> updateSettings(@PathVariable Long id, @RequestBody Map<String, Object> settings) {
+        Optional<Player> optionalPlayer = playerRepository.findById(id);
+        if (optionalPlayer.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Spieler nicht gefunden.");
+        }
 
-        return currentPlayer
-                .map(player -> {
-                    player.setVolume(newPlayer.getVolume());
-                    player.setSoundstatus(newPlayer.getSoundstatus());
-                    return ResponseEntity
-                            .status(HttpStatus.OK)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .body(playerRepository.save(player));
-                }).orElseGet(() -> ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .build());
+        Player player = optionalPlayer.get();
+
+        try {
+            if (settings.containsKey("soundstatus")) {
+                Object rawValue = settings.get("soundstatus");
+                try {
+                    Soundstatus status = Soundstatus.valueOf(rawValue.toString().toUpperCase());
+                    player.setSoundstatus(status);
+                } catch (IllegalArgumentException e) {
+                    return ResponseEntity.badRequest().body("Ungültiger Wert für soundstatus. Erlaubt: ON oder OFF.");
+                }
+            }
+
+            if (settings.containsKey("volume")) {
+                Object volumeValue = settings.get("volume");
+                if (volumeValue instanceof Number) {
+                    player.setVolume(((Number) volumeValue).intValue());
+                } else {
+                    return ResponseEntity.badRequest().body("Ungültiger Wert für volume.");
+                }
+            }
+
+            playerRepository.save(player);
+            return ResponseEntity.ok("Einstellungen erfolgreich gespeichert.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Fehler beim Verarbeiten der Einstellungen: " + e.getMessage());
+        }
     }
 
 }
