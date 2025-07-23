@@ -6,6 +6,7 @@ import tableImage from "../../assets/TableBlackJack/table.png";
 import { useNavigate } from "react-router";
 import { MdInfo } from "react-icons/md";
 
+
 const cardModules = import.meta.glob(
   "../../assets/Blackjack/*.png",
   { eager: true }
@@ -201,9 +202,9 @@ export default function BlackJackGame() {
         <button className="back-button" onClick={() => navigate("/gameoverview")}>
           Zurück
         </button>
-        <button className="info-button" onClick={() => navigate("/gameoverview/blackjack/info")}>
+        <div className="info-button" onClick={() => navigate('/gameoverview/blackjack/info')}>
           <MdInfo />
-        </button>
+        </div>
       </div>
 
       <div className="balance-area">

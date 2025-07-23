@@ -137,10 +137,12 @@ export default function SlotGame() {
     <div className="slot-machine">
       <div className="slot-container">
         <div className="slot-header">
-          <button onClick={() => navigate("/gameoverview")}>Zurück</button>
-          <button onClick={() => navigate("/gameoverview/slot/info")}><MdInfo /></button>
+<button className="back-button" onClick={() => navigate("/gameoverview")}>
+          Zurück
+        </button>           <div className="info-button-2" onClick={() => navigate('/gameoverview/slot/info')}>
+                                    <MdInfo />
         </div>
-
+</div>
         <div className="slot-balance">
           Dein Guthaben: <strong>{coinsBalance}</strong>
           <img src={coinImg} alt="Münze" className="coin-icon" />

@@ -58,6 +58,7 @@ body {
   color: #ffcc00;
   text-align: center;
   margin: 1rem 0 2rem 0;
+  justify-self: center;
   font-size: 1.4rem;
   font-weight: 600;
   text-shadow: 0 0 8px #ff6600;

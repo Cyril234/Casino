@@ -40,7 +40,7 @@ body {
 }
 
 .register-form-wrapper {
-  width: 100vw;
+  width: 50vw;
   background: #1a0000;
   border-radius: 20px;
   padding: 3rem 2.5rem;
@@ -50,7 +50,6 @@ body {
     5px 0 20px #ff9900,
     10px 0 40px #ff3300,
     inset 0 0 20px #ffcc00;
-  width: 50%;
   min-width: 320px;
   box-sizing: border-box;
   color: #ffcc00;
@@ -72,6 +71,7 @@ body {
   display: flex;
   width: 100%; /* passt sich an .register-form-wrapper an */
   flex-direction: column;
+  justify-self: center;
   gap: 1.8rem;
 }
 

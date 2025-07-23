@@ -16,12 +16,16 @@ import org.springframework.stereotype.Repository;
 import com.example.casinobackend.entities.Game;
 import com.example.casinobackend.entities.Player;
 import com.example.casinobackend.entities.Playingattempt;
+import com.example.casinobackend.repositories.GameRepository;
 import com.example.casinobackend.repositories.PlayingattemptRepository;
 
 import jakarta.transaction.Transactional;
 
 @Repository
 public class MienenfeldRepository {
+
+    @Autowired
+    private final GameRepository gameRepository;
 
     private static class MineGameSession {
 
@@ -47,6 +51,10 @@ public class MienenfeldRepository {
 
     @Autowired
     private PlayingattemptRepository playingattemptRepository;
+
+    MienenfeldRepository(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
+    }
 
     @Transactional
     public Map<String, Object> startGame(Player player, Game game, int coins, int fields, int bombs) {
@@ -96,7 +104,15 @@ public class MienenfeldRepository {
         session.revealed.add(index);
 
         if (session.fieldMap.get(index)) {
+            Game game = gameRepository.findByTitle("Minenfeld").orElseThrow();
             session.active = false;
+            Playingattempt result = new Playingattempt();
+            result.setDate(LocalDateTime.now());
+            result.setGame(game);
+            result.setPlayer(player);
+            result.setSettedcoins(session.bet);
+            result.setFinishingbalance(player.getCoins());
+            playingattemptRepository.save(result);
             sessions.remove(player.getPlayerId());
 
             return Map.of(
