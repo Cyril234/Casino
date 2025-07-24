@@ -6,8 +6,8 @@ import pyautogui
 
 button_1 = Button(4)
 button_2 = Button(17)
-button_3 = Button(14)
-button_4 = Button(23)
+button_right_green = Button(14)
+button_right_yellow = Button(23)
 
 joystick_1 = Button(6)
 joystick_2 = Button(13)
@@ -30,49 +30,38 @@ led_4.on()
 
 def inputButton():
     if button_1.is_pressed:
-        pyautogui.hotkey("Enter")
+        pyautogui.press("tab")
         sleep(0.15)
 
     if button_2.is_pressed:
-        pyautogui.hotkey("Space")
+        pyautogui.press("space")
         sleep(0.15)
 
-    if button_3.is_pressed:
-        pyautogui.hotkey("Tab")
+    if button_right_green.is_pressed:
+        pyautogui.press("enter")
         sleep(0.15)
 
-    if button_4.is_pressed:
-        pyautogui.hotkey("Esc")
+    if button_right_yellow.is_pressed:
+        pyautogui.press("esc")
         sleep(0.15)
 
     if joystick_1.is_pressed:
-        pyautogui.hotkey("ArrowRight")
+        pyautogui.press("right")
         sleep(0.15)
 
     if joystick_2.is_pressed:
-        pyautogui.hotkey("ArrowUp")
+        pyautogui.press("up")
         sleep(0.15)
 
     if joystick_3.is_pressed:
-        pyautogui.hotkey("ArrowLeft")
+        pyautogui.press("left")
         sleep(0.15)
 
     if joystick_4.is_pressed:
-        pyautogui.hotkey("ArrowDown")
+        pyautogui.press("down")
         sleep(0.15)
 
-    if joystick_5.is_pressed:
-        pyautogui.hotkey("Tab")
+    if joystick_5.is_pressed or joystick_6.is_pressed or joystick_7.is_pressed or joystick_8.is_pressed:
+        pyautogui.press("tab")
         sleep(0.15)
 
-    if joystick_6.is_pressed:
-        pyautogui.press("Tab")
-        sleep(0.15)
-
-    if joystick_7.is_pressed:
-        pyautogui.hotkey("Tab")
-        sleep(0.15)
-
-    if joystick_8.is_pressed:
-        pyautogui.hotkey("Tab")
-        sleep(0.15)
