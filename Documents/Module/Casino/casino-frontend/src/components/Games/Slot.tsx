@@ -80,7 +80,7 @@ export default function SlotGame() {
     if (!authToken) return;
     const handleSound = async () => {
       if (soundstatus && volume > 0) {
-        await sounds.play("slotmusic.wav", true, 0.1);
+        await sounds.play("slotmusic.wav", true, 0.4);
       } else {
         sounds.stop("slotmusic.wav");
       }

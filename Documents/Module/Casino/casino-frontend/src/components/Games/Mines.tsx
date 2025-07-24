@@ -59,7 +59,7 @@ export default function MinesGame() {
     if (!authToken) return;
     const handleSound = async () => {
       if (soundstatus && volume > 0) {
-        await sounds.play("horseracemusic.wav", true, 0.1);
+        await sounds.play("horseracemusic.wav", true, 0.4);
       } else {
         sounds.stop("horseracemusic.wav");
       }

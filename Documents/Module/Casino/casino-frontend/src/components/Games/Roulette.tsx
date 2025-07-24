@@ -85,7 +85,7 @@ const Roulette: React.FC = () => {
     if (!token) return;
     const handleSound = async () => {
       if (soundstatus && volume > 0) {
-        await sounds.play("roulettemusic.wav", true, 0.1);
+        await sounds.play("roulettemusic.wav", true, 0.4);
       } else {
         sounds.stop("roulettemusic.wav");
       }

@@ -94,7 +94,7 @@ export default function BlackJackGame() {
     if (!authToken) return;
     const handleSound = async () => {
       if (soundstatus && volume > 0) {
-        await sounds.play("blackjackmusic.wav", true, 0.1);
+        await sounds.play("blackjackmusic.wav", true, 0.4);
       } else {
         sounds.stop("blackjackmusic.wav");
       }
