@@ -9,10 +9,10 @@ button_2 = Button(17)
 button_right_green = Button(14)
 button_right_yellow = Button(23)
 
-joystick_1 = Button(6)
-joystick_2 = Button(13)
-joystick_3 = Button(19)
-joystick_4 = Button(26)
+joystick_right_right = Button(6)
+joystick_right_up = Button(13)
+joystick_right_left = Button(19)
+joystick_right_down = Button(26)
 joystick_5 = Button(24)
 joystick_6 = Button(25)
 joystick_7 = Button(8)
@@ -38,26 +38,26 @@ def inputButton():
         sleep(0.15)
 
     if button_right_green.is_pressed:
-        pyautogui.press("enter")
-        sleep(0.15)
-
-    if button_right_yellow.is_pressed:
         pyautogui.press("esc")
         sleep(0.15)
 
-    if joystick_1.is_pressed:
+    if button_right_yellow.is_pressed:
+        pyautogui.press("enter")
+        sleep(0.15)
+
+    if joystick_right_right.is_pressed:
         pyautogui.press("right")
         sleep(0.15)
 
-    if joystick_2.is_pressed:
+    if joystick_right_up.is_pressed:
         pyautogui.press("up")
         sleep(0.15)
 
-    if joystick_3.is_pressed:
+    if joystick_right_left.is_pressed:
         pyautogui.press("left")
         sleep(0.15)
 
-    if joystick_4.is_pressed:
+    if joystick_right_down.is_pressed:
         pyautogui.press("down")
         sleep(0.15)
 
