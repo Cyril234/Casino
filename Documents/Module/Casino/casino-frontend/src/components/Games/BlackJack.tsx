@@ -209,7 +209,7 @@ export default function BlackJackGame() {
 
       if (data.result === "PLAYER_WINS" && typeof data.coinsWon === "number") {
         setResultAmount(data.coinsWon);
-        setCoinsBalance((prev) => prev + data.coinsWon);
+        setCoinsBalance((prev) => prev + (data.coinsWon / 2));
       } else if (data.result === "DEALER_WINS") {
         setResultAmount(-bet);
         setCoinsBalance((prev) => prev - bet);
@@ -300,7 +300,7 @@ export default function BlackJackGame() {
 
         {showResult && resultAmount != null && (
           <div className={`status-box ${resultAmount >= 0 ? "win" : "lose"}`}>
-            {resultAmount >= 0 ? `+${resultAmount}` : `${resultAmount}`}
+            {resultAmount >= 0 ? `+${resultAmount / 2}` : `${resultAmount}`}
             <img src={coinImg} alt="Münze" className="coin-small" />
           </div>
         )}
