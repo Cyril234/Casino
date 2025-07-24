@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-
 import "../../styles/BlackJack.css";
 import coinImg from "../../../public/pokergeld.png";
 import tableImage from "../../assets/TableBlackJack/table.png";
 import { useLocation, useNavigate } from "react-router";
 import { MdInfo } from "react-icons/md";
 import sounds from "../litleThings/Sounds";
-
 
 const cardModules = import.meta.glob(
   "../../assets/Blackjack/*.png",
@@ -25,7 +23,9 @@ function getCardImage(n: string) {
   return cardImages[n] || "";
 }
 
-function calculateHandValue(hand: string[]): number {
+function calculateHandValue(hand: string[] | undefined): number {
+  if (!hand || !Array.isArray(hand)) return 0;
+
   let total = 0;
   let aces = 0;
   hand.forEach(card => {
@@ -45,7 +45,6 @@ function calculateHandValue(hand: string[]): number {
     aces -= 1;
   }
   return total;
-
 }
 
 export default function BlackJackGame() {
@@ -63,14 +62,11 @@ export default function BlackJackGame() {
   const [soundstatus, setSoundstatus] = useState(false);
   const [volume, setVolume] = useState(0);
 
-
   const authToken = sessionStorage.getItem("authToken");
-
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-
     const fetchPlayer = async () => {
       if (!authToken) return;
       sounds.stop("casinomusic.mp3");
@@ -87,11 +83,9 @@ export default function BlackJackGame() {
         if (typeof data.coins === "number") {
           setCoinsBalance(data.coins);
         }
-
       } catch (err) {
         console.error("Fehler beim Laden der Spieler‑Daten:", err);
       }
-
     };
     fetchPlayer();
   }, [authToken, location.key]);
@@ -114,7 +108,7 @@ export default function BlackJackGame() {
       navigate("/");
       return;
     }
-  })
+  });
 
   const startGame = async () => {
     if (!playerId) return;
@@ -128,17 +122,15 @@ export default function BlackJackGame() {
         setErrorMessage(await res.text());
         return;
       }
-
       const data = await res.json();
-      setPlayerHand(data.playerHand);
-      setDealerHand(data.dealerHand);
+      setPlayerHand(data.playerHand ?? []);
+      setDealerHand(data.dealerHand ?? []);
       setStatus("IN_PROGRESS");
       setGameActive(true);
       setResultAmount(null);
     } catch {
       setErrorMessage("Ein Fehler ist aufgetreten.");
     }
-
   };
 
   const hit = async () => {
@@ -152,18 +144,50 @@ export default function BlackJackGame() {
         setErrorMessage(await res.text());
         return;
       }
-
       const data = await res.json();
-      setPlayerHand(data.playerHand);
+      setPlayerHand(data.playerHand ?? []);
       setStatus(data.status);
       if (data.status !== "IN_PROGRESS") {
         await stand();
       }
-
     } catch {
       setErrorMessage("Fehler bei Hit.");
     }
+  };
 
+  const double = async () => {
+    if (!playerId) return;
+    try {
+      const res = await fetch(
+        `http://localhost:8080/blackjack/${playerId}/double`,
+        { method: "POST", headers: { Authorization: `Bearer ${authToken}` } }
+      );
+      if (!res.ok) {
+        setErrorMessage(await res.text());
+        return;
+      }
+
+      const data = await res.json();
+      setPlayerHand(data.playerHand ?? []);
+      setDealerHand(data.dealerHand ?? []);
+      setStatus(data.result);
+      setGameActive(false);
+
+      if (data.result === "PLAYER_WINS" && typeof data.coinsWon === "number") {
+        setResultAmount(data.coinsWon);
+        setCoinsBalance((prev) => prev + (data.coinsWon / 2));
+      } else if (data.result === "DEALER_WINS") {
+        setResultAmount(-bet * 2);
+        setCoinsBalance((prev) => prev - (bet * 2));
+      } else {
+        setResultAmount(0);
+      }
+
+      setShowResult(true);
+      setTimeout(() => setShowResult(false), 2000);
+    } catch (err) {
+      setErrorMessage("Fehler bei Double.");
+    }
   };
 
   const stand = async () => {
@@ -177,58 +201,44 @@ export default function BlackJackGame() {
         setStatus("FEHLER");
         return;
       }
-
       const data = await res.json();
-      setPlayerHand(data.playerHand);
-      setDealerHand(data.dealerHand);
+      setPlayerHand(data.playerHand ?? []);
+      setDealerHand(data.dealerHand ?? []);
       setStatus(data.result);
       setGameActive(false);
 
       if (data.result === "PLAYER_WINS" && typeof data.coinsWon === "number") {
         setResultAmount(data.coinsWon);
-
-        setCoinsBalance(prev => prev + (data.coinsWon / 2));
-
+        setCoinsBalance((prev) => prev + data.coinsWon);
       } else if (data.result === "DEALER_WINS") {
         setResultAmount(-bet);
-        setCoinsBalance(prev => prev - bet);
+        setCoinsBalance((prev) => prev - bet);
       } else {
         setResultAmount(0);
-
       }
 
       setShowResult(true);
       setTimeout(() => setShowResult(false), 2000);
-
     } catch {
       setStatus("FEHLER");
     }
-
   };
 
   const playerValue = calculateHandValue(playerHand);
-
-  const dealerValue =
-
-    status !== "IN_PROGRESS" ? calculateHandValue(dealerHand) : undefined;
-
-
-
+  const dealerValue = status !== "IN_PROGRESS" ? calculateHandValue(dealerHand) : undefined;
 
   return (
     <div className="blackjack-table" style={{ backgroundImage: `url(${tableImage})` }}>
-
       <div className="top-left">
         <button className="back-button" onClick={() => navigate("/gameoverview")}>
           Zurück
         </button>
-        <div className="info-button" onClick={() => navigate('/gameoverview/blackjack/info')}>
+        <div className="info-button" onClick={() => navigate("/gameoverview/blackjack/info")}>
           <MdInfo />
         </div>
       </div>
 
       <div className="balance-area">
-
         Dein Guthaben: <strong>{coinsBalance}</strong>
         <img src={coinImg} alt="Münze" className="coin-small" />
       </div>
@@ -248,15 +258,15 @@ export default function BlackJackGame() {
         </button>
         {errorMessage && <div className="error">{errorMessage}</div>}
       </div>
-      <div>
 
+      <div>
         <div className="score player">
-          Du: {playerHand.length}
+          Du: {playerHand?.length ?? 0}
           <div className="hand-value">Wert: {playerValue}</div>
         </div>
 
         <div className="dealer-hand">
-          {dealerHand.map((c, i) => (
+          {dealerHand?.map((c, i) => (
             <div
               key={`d-${i}`}
               className="card"
@@ -264,9 +274,9 @@ export default function BlackJackGame() {
             />
           ))}
         </div>
-        <div className="player-hand">
 
-          {playerHand.map((c, i) => (
+        <div className="player-hand">
+          {playerHand?.map((c, i) => (
             <div
               key={`p-${i}`}
               className="card"
@@ -274,84 +284,27 @@ export default function BlackJackGame() {
             />
           ))}
         </div>
-        <div className="player-hand">
 
-          {playerHand.map((c, i) => (
-            <div
-              key={`p-${i}`}
-              className="card"
-              style={{ backgroundImage: `url(${getCardImage(c)})` }}
-            />
-          ))}
-        </div>
         {gameActive && (
           <div className="controls">
             <button onClick={hit}>Hit</button>
             <button onClick={stand}>Stand</button>
+            <button onClick={double}>Double</button>
           </div>
+        )}
 
+        <div className="score dealer">
+          Dealer: {dealerHand?.length ?? 0}
+          {dealerValue != null && <div className="hand-value">Wert: {dealerValue}</div>}
+        </div>
+
+        {showResult && resultAmount != null && (
+          <div className={`status-box ${resultAmount >= 0 ? "win" : "lose"}`}>
+            {resultAmount >= 0 ? `+${resultAmount}` : `${resultAmount}`}
+            <img src={coinImg} alt="Münze" className="coin-small" />
+          </div>
         )}
       </div>
-      <div className="score dealer">
-
-        Dealer: {dealerHand.length}
-
-        {dealerValue != null && <div className="hand-value">Wert: {dealerValue}</div>}
-      </div>
-      <div className="score player">
-
-        Du: {playerHand.length}
-        <div className="hand-value">Wert: {playerValue}</div>
-      </div>
-
-      <div className="dealer-hand">
-
-        {dealerHand.map((c, i) => (
-          <div
-
-            key={`d-${i}`}
-
-            className="card"
-
-            style={{ backgroundImage: `url(${getCardImage(c)})` }}
-
-          />
-
-        ))}
-      </div>
-      <div className="player-hand">
-
-        {playerHand.map((c, i) => (
-          <div
-
-            key={`p-${i}`}
-
-            className="card"
-
-            style={{ backgroundImage: `url(${getCardImage(c)})` }}
-
-          />
-
-        ))}
-      </div>
-      {gameActive && (
-        <div className="controls">
-          <button onClick={hit}>Hit</button>
-          <button onClick={stand}>Stand</button>
-        </div>
-
-      )}
-
-      {showResult && resultAmount != null && (
-        <div className={`status-box ${resultAmount >= 0 ? "win" : "lose"}`}>
-
-          {resultAmount > 0 ? `+${resultAmount - bet}` : `${resultAmount} `}
-          <img src={coinImg} alt="Münze" className="coin-small" />
-
-        </div>
-
-      )}
     </div>
   );
 }
-
