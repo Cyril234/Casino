@@ -46,19 +46,19 @@ def inputButton():
         sleep(0.15)
 
     if joystick_1.is_pressed:
-        pyautogui.hotkey("Right")
+        pyautogui.hotkey("ArrowRight")
         sleep(0.15)
 
     if joystick_2.is_pressed:
-        pyautogui.hotkey("Up")
+        pyautogui.hotkey("ArrowUp")
         sleep(0.15)
 
     if joystick_3.is_pressed:
-        pyautogui.hotkey("Left")
+        pyautogui.hotkey("ArrowLeft")
         sleep(0.15)
 
     if joystick_4.is_pressed:
-        pyautogui.hotkey("Down")
+        pyautogui.hotkey("ArrowDown")
         sleep(0.15)
 
     if joystick_5.is_pressed:

@@ -39,15 +39,10 @@ const Roulette: React.FC = () => {
 
   const location = useLocation();
   const wheelNumbers = [
-
     0, 32, 15, 19, 4, 21, 2, 25, 17, 34,
-
     6, 27, 13, 36, 11, 30, 8, 23, 10, 5,
-
     24, 16, 33, 1, 20, 14, 31, 9, 22, 18,
-
     29, 7, 28, 12, 35, 3, 26
-
   ];
 
   const anglePerPocket = 360 / wheelNumbers.length;
@@ -106,10 +101,33 @@ const Roulette: React.FC = () => {
 
   const handleSpin = async () => {
     if (!playerId || bets.length === 0) return;
+
     setLoading(true);
     setError(null);
     setResult(null);
 
+    const wheelElem = document.querySelector('.roulette-wheel') as HTMLElement;
+    const ballElem = document.querySelector('.roulette-ball') as HTMLElement;
+
+    if (wheelElem && ballElem) {
+      wheelElem.classList.add('no-transition');
+      ballElem.classList.add('no-transition');
+
+      setWheelRotation(0);
+      setBallRotation(720);
+
+      setTimeout(() => {
+        wheelElem.classList.remove('no-transition');
+        ballElem.classList.remove('no-transition');
+
+        spinWithResult();
+      }, 10);
+    } else {
+      spinWithResult();
+    }
+  };
+
+  const spinWithResult = async () => {
     try {
       const res = await axios.post(`http://localhost:8080/roulette/${playerId}/spin-multi`, bets,
         {
@@ -123,10 +141,14 @@ const Roulette: React.FC = () => {
       const rolled: number = res.data.rolledNumber;
       const idx = wheelNumbers.indexOf(rolled);
       const spins = 360 * 5;
-      const newWheelRot = spins + (wheelNumbers.length - idx) * anglePerPocket;
-      const newBallRot = spins + idx * anglePerPocket;
-      setWheelRotation(newWheelRot);
-      setBallRotation(newBallRot);
+      const offsetCorrection = -4.86;
+      const correctedIdx = idx;
+      const targetWheelDeg = (wheelNumbers.length - idx) * anglePerPocket;
+      const targetBallDeg = (correctedIdx + 0.5) * anglePerPocket + offsetCorrection;
+
+      setWheelRotation(spins + targetWheelDeg);
+      //setBallRotation(spins + targetBallDeg);
+      setBallRotation(0);
 
       setTimeout(() => {
         setResult(res.data);
@@ -139,6 +161,9 @@ const Roulette: React.FC = () => {
       setLoading(false);
     }
   };
+
+
+
   const rouletteGrid = Array.from({ length: 37 }, (_, i) => i);
   const extras = [
     { label: 'RED', type: 'COLOR' },
@@ -169,14 +194,14 @@ const Roulette: React.FC = () => {
             <div
               className="roulette-wheel"
               style={{ transform: `rotate(${wheelRotation}deg)` }}
-            >
+            />
               <div
                 className="roulette-ball"
                 style={{
                   transform: `rotate(${ballRotation}deg) translateY(-160px)`
                 }}
+                
               />
-            </div>
           </div>
         </div>
         <div className="bet-panel">

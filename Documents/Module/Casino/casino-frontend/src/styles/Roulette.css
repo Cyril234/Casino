@@ -1,16 +1,13 @@
-/* RouletteLayout.css */
-
-/* Grundlegende Reset-Regeln */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-back{
+
+back {
   height: 12rem;
 }
 
-/* Vollbild-Layout für Roulette */
 html,
 body {
   width: 100%;
@@ -20,7 +17,6 @@ body {
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* Haupt-Container füllt gesamten Viewport */
 .roulette-layout {
   display: flex;
   width: 100vw;
@@ -28,7 +24,6 @@ body {
   background-image: url("../../public/grass.png");
 }
 
-/* Linker Bereich (Rad) */
 .roulette-left {
   flex: 2;
   display: flex;
@@ -42,7 +37,7 @@ body {
 
 .roulette-wheel-wrapper {
   position: relative;
-  width: 60vmin;   /* responsive Größe */
+  width: 60vmin;
   height: 60vmin;
   max-width: 480px;
   max-height: 480px;
@@ -52,7 +47,7 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-image: url('../../public/image.png');
+  background-image: url('../../public/roulettePixelart.png');
   background-size: contain;
   background-repeat: no-repeat;
   transition: transform 4s ease-out;
@@ -64,15 +59,15 @@ body {
   left: 50%;
   width: 24px;
   height: 24px;
-  margin: -12px 0 0 -12px;
   background: white;
   border: 2px solid black;
   border-radius: 50%;
-  transition: transform 4s ease-out;
   z-index: 2;
+  transform: rotate(0deg);
+  transform-origin: 0% 50%; /* Center rotation */
+  transition: transform 4s ease-out; 
 }
 
-/* Rechter Bereich (Wetten) */
 .bet-panel {
   flex: 1;
   background-color: rgba(44, 42, 42, 0.95);
@@ -141,10 +136,22 @@ body {
   color: white;
 }
 
-.cell.red { background-color: #e74c3c; }
-.cell.black { background-color: #2c3e50; }
-.cell.green { background-color: #27ae60; }
-.cell.selected { border-color: gold; box-shadow: 0 0 8px gold; }
+.cell.red {
+  background-color: #e74c3c;
+}
+
+.cell.black {
+  background-color: #000000;
+}
+
+.cell.green {
+  background-color: #378f5b;
+}
+
+.cell.selected {
+  border-color: gold;
+  box-shadow: 0 0 8px gold;
+}
 
 .spin-btn {
   margin-top: 15px;
@@ -187,13 +194,25 @@ body {
   border-radius: 0.8rem;
   width: 3rem;
 }
- 
-/* Guthaben */
+
 .balance-area {
-  position: absolute; top: 1rem; right: 1rem;
-  background: rgba(0,0,0,0.6);
-  padding: 0.5rem 1rem; border-radius: 6px;
-  display: flex; align-items: center; gap: 0.5rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   z-index: 10;
 }
-.coin-small { width: 2rem; height: 2rem; }
+
+.coin-small {
+  width: 2rem;
+  height: 2rem;
+}
+
+.no-transition {
+  transition: none !important;
+}
