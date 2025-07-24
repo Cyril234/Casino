@@ -1,12 +1,9 @@
-import { useState } from "react";
+// LoginWithEmailAndPassword.tsx
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import '../../styles/LoginWithUsernameAndPassword.css';
-
-const keys = [
-  "Q","W","E","R","T","Z","U","I","O","P",
-  "A","S","D","F","G","H","J","K","L",
-  "Y","X","C","V","B","N","M"
-];
+import sounds from "../litleThings/Sounds";
+import VirtualKeyboard from "../../Keyboard/Virtual_Keyboard";
 
 export default function LoginWithEmailAndPassword() {
   const [username, setUsername] = useState("");
@@ -19,6 +16,15 @@ export default function LoginWithEmailAndPassword() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    sounds.stop("casinomusic.mp3");
+    sounds.stop("blackjackmusic.wav");
+    sounds.stop("horseracemusic.wav");
+    sounds.stop("minesmusic.wav");
+    sounds.stop("roulettemusic.wav");
+    sounds.stop("slotmusic.wav");
+  }, []);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -27,6 +33,7 @@ export default function LoginWithEmailAndPassword() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
+
       if (!res.ok) {
         const errorText = await res.text();
         setErrorMsg(errorText);
@@ -47,26 +54,36 @@ export default function LoginWithEmailAndPassword() {
     }
   };
 
-  function onFocusField(field: "username" | "password") {
+  const onFocusField = (field: "username" | "password") => {
     setFocusedField(field);
     setShowKeyboard(true);
-  }
+  };
 
-  function onKeyPress(key: string) {
+  const onBlurField = () => {
+    setTimeout(() => {
+      const active = document.activeElement;
+      if (active?.id !== "username" && active?.id !== "password") {
+        setShowKeyboard(false);
+        setFocusedField(null);
+      }
+    }, 100);
+  };
+
+  const onKeyPress = (key: string) => {
     if (focusedField === "username") {
       setUsername(prev => prev + key);
     } else if (focusedField === "password") {
       setPassword(prev => prev + key);
     }
-  }
+  };
 
-  function onBackspace() {
+  const onBackspace = () => {
     if (focusedField === "username") {
       setUsername(prev => prev.slice(0, -1));
     } else if (focusedField === "password") {
       setPassword(prev => prev.slice(0, -1));
     }
-  }
+  };
 
   return (
     <main className="casino-login-container">
@@ -80,6 +97,7 @@ export default function LoginWithEmailAndPassword() {
             value={username}
             onChange={e => setUsername(e.target.value)}
             onFocus={() => onFocusField("username")}
+            onBlur={onBlurField}
             required
             className="casino-login-input"
             autoComplete="off"
@@ -92,10 +110,12 @@ export default function LoginWithEmailAndPassword() {
             value={password}
             onChange={e => setPassword(e.target.value)}
             onFocus={() => onFocusField("password")}
+            onBlur={onBlurField}
             required
             className="casino-login-input"
             autoComplete="off"
           />
+
           <button
             type="button"
             className="casino-login-button casino-login-button--toggle"
@@ -103,7 +123,9 @@ export default function LoginWithEmailAndPassword() {
           >
             {showPw ? "Verbergen" : "Anzeigen"}
           </button>
+
           {errorMsg && <p className="register-error">{errorMsg}</p>}
+
           <div className="casino-login-buttons">
             <button className="casino-login-button" type="submit">Anmelden</button>
             <button
@@ -116,36 +138,12 @@ export default function LoginWithEmailAndPassword() {
           </div>
         </form>
 
-        {/* Virtuelle Tastatur */}
         {showKeyboard && (
-          <div className="virtual-keyboard">
-            <div className="keyboard-keys">
-              {keys.map(key => (
-                <button
-                  key={key}
-                  type="button"
-                  className="keyboard-key"
-                  onClick={() => onKeyPress(key)}
-                >
-                  {key}
-                </button>
-              ))}
-              <button
-                type="button"
-                className="keyboard-key keyboard-backspace"
-                onClick={onBackspace}
-              >
-                ⌫
-              </button>
-              <button
-                type="button"
-                className="keyboard-key keyboard-close"
-                onClick={() => setShowKeyboard(false)}
-              >
-                ✖ 
-              </button>
-            </div>
-          </div>
+          <VirtualKeyboard
+            onKeyPress={onKeyPress}
+            onBackspace={onBackspace}
+            onClose={() => setShowKeyboard(false)}
+          />
         )}
       </section>
     </main>

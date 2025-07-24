@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router';
 import '../../styles/LoginWithBadge.css';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useBadgeScanner } from './LoginBage';
+import sounds from '../litleThings/Sounds';
 
 export default function LoginWithBadge() {
   const navigate = useNavigate();
@@ -12,6 +13,15 @@ export default function LoginWithBadge() {
   if (sessionStorage.getItem("username")) {
     sessionStorage.removeItem("username");
   }
+
+  useEffect(() => {
+    sounds.stop("casinomusic.mp3");
+    sounds.stop("blackjackmusic.wav");
+    sounds.stop("horseracemusic.wav");
+    sounds.stop("minesmusic.wav");
+    sounds.stop("roulettemusic.wav");
+    sounds.stop("slotmusic.wav");
+  });
 
   const handleBadgeScan = useCallback(async (scan: string) => {
     try {

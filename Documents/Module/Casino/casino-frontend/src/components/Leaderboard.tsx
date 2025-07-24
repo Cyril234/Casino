@@ -22,7 +22,6 @@ export default function Leaderboard() {
 
   const navigate = useNavigate();
 
-  // API-Logik: Lade User-Daten
   useEffect(() => {
     const token = sessionStorage.getItem("authToken");
     const fetchData = async () => {

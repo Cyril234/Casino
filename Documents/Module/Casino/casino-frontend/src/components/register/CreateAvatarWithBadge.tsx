@@ -3,6 +3,7 @@ import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import AvatarPreview from "../avatarpreview/AvatarPreview";
 import "../../styles/Avatar.css"
+import sounds from "../litleThings/Sounds";
 
 export default function CreateAvatarWithBadge() {
     const navigate = useNavigate();
@@ -59,6 +60,14 @@ export default function CreateAvatarWithBadge() {
         fetchEnum("trouserstype", setTrouserstypeOptions);
         fetchEnum("trouserscolor", setTrouserscolorOptions);
         fetchEnum("shoes", setShoesOptions);
+
+        sounds.stop("casinomusic.mp3");
+        sounds.stop("blackjackmusic.wav");
+        sounds.stop("horseracemusic.wav");
+        sounds.stop("minesmusic.wav");
+        sounds.stop("roulettemusic.wav");
+        sounds.stop("slotmusic.wav");
+
     }, []);
 
     useEffect(() => {

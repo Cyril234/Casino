@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { MdInfo } from "react-icons/md";
 import "../../styles/Slot.css";
 import coinImg from "../../../public/pokergeld.png";
- 
-// Dynamisch alle Slot-Symbole importieren
+import sounds from "../litleThings/Sounds";
+
 const symbolModules = import.meta.glob(
   "../../../public/slot-symbols/*.png",
   { eager: true }
@@ -26,7 +26,6 @@ export default function SlotGame() {
   const navigate = useNavigate();
   const authToken = sessionStorage.getItem("authToken");
 
-  // State-Variablen
   const [playerId, setPlayerId] = useState<number | null>(null);
   const [coinsBalance, setCoinsBalance] = useState(0);
   const [bet, setBet] = useState(1);
@@ -42,16 +41,20 @@ export default function SlotGame() {
   const [coinsWon, setCoinsWon] = useState(0);
   const [attempts, setAttempts] = useState(0);
 
-  // Refs für Timer
+  const [soundstatus, setSoundstatus] = useState(false);
+  const [volume, setVolume] = useState(0);
+
+  const location = useLocation();
+
   const spinInterval = useRef<number | null>(null);
   const spinTimeout = useRef<number | null>(null);
 
-  // Spieler-Daten laden
   useEffect(() => {
     if (!authToken) {
       navigate("/");
       return;
     }
+    sounds.stop("casinomusic.mp3");
     async function fetchPlayer() {
       try {
         const res = await fetch(
@@ -62,15 +65,30 @@ export default function SlotGame() {
         const data = await res.json();
         setPlayerId(data.playerId);
         setCoinsBalance(data.coins);
+        setVolume(data.volume);
+        setSoundstatus(data.soundstatus === "ON");
         setAttempts(data.attempts ?? 0);
       } catch {
         setErrorMessage("Fehler beim Laden des Spielers.");
       }
     }
     fetchPlayer();
-  }, [authToken, navigate]);
+  }, [authToken, navigate, location.key]);
 
-  // Spin-Funktion
+
+  useEffect(() => {
+    if (!authToken) return;
+    const handleSound = async () => {
+      if (soundstatus && volume > 0) {
+        await sounds.play("slotmusic.wav", true, 0.1);
+      } else {
+        sounds.stop("slotmusic.wav");
+      }
+    };
+
+    handleSound();
+  }, [soundstatus, volume, authToken]);
+
   const spin = () => {
     if (!playerId) return;
     if (bet < 1 || bet > coinsBalance) {
@@ -137,17 +155,17 @@ export default function SlotGame() {
     <div className="slot-machine">
       <div className="slot-container">
         <div className="slot-header">
-<button className="back-button" onClick={() => navigate("/gameoverview")}>
-          Zurück
-        </button>           <div className="info-button-2" onClick={() => navigate('/gameoverview/slot/info')}>
-                                    <MdInfo />
+          <button className="back-button" onClick={() => navigate("/gameoverview")}>
+            Zurück
+          </button>           <div className="info-button-2" onClick={() => navigate('/gameoverview/slot/info')}>
+            <MdInfo />
+          </div>
         </div>
-</div>
         <div className="slot-balance">
           Dein Guthaben: <strong>{coinsBalance}</strong>
           <img src={coinImg} alt="Münze" className="coin-icon" />
         </div>
-       
+
 
         <div className="slot-bet-area">
           <label htmlFor="bet">Einsatz</label>
@@ -187,4 +205,3 @@ export default function SlotGame() {
     </div>
   );
 }
- 

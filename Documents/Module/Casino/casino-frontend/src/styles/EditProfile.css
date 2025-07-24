@@ -84,16 +84,6 @@ input:focus {
     transform: translateY(-2px);
     box-shadow: 0 8px 16px rgba(255, 215, 0, 0.7);
 }
-.virtual-keyboard {
-  margin-top: 1rem;
-  background: #eee;
-  padding: 15px 20px;
-  border-radius: 8px;
-  user-select: none;
-  max-width: 900px;   
-  width: 100%;
-  box-sizing: border-box;
-}
 
 .keyboard-row {
   display: flex;

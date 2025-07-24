@@ -7,6 +7,7 @@ import cardImg2 from "../assets/Blackjack/5♠.png";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useBadgeScanner } from "./login/LoginBage";
+import sounds from "./litleThings/Sounds";
 
 export default function Start() {
     const navigate = useNavigate();
@@ -22,6 +23,13 @@ export default function Start() {
         if (sessionStorage.getItem("username")) {
             sessionStorage.removeItem("username")
         }
+
+        sounds.stop("casinomusic.mp3");
+        sounds.stop("blackjackmusic.wav");
+        sounds.stop("horseracemusic.wav");
+        sounds.stop("minesmusic.wav");
+        sounds.stop("roulettemusic.wav");
+
     })
 
     function handleLogin() {

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import AvatarPreview from "../avatarpreview/AvatarPreview";
 import "../../styles/Avatar.css"
+import sounds from "../litleThings/Sounds";
 
 interface PlayerDto {
     id: number;
@@ -65,6 +66,14 @@ export default function CreateAvatar() {
         fetchEnum("trouserstype", setTrouserstypeOptions);
         fetchEnum("trouserscolor", setTrouserscolorOptions);
         fetchEnum("shoes", setShoesOptions);
+
+        sounds.stop("casinomusic.mp3");
+        sounds.stop("blackjackmusic.wav");
+        sounds.stop("horseracemusic.wav");
+        sounds.stop("minesmusic.wav");
+        sounds.stop("roulettemusic.wav");
+        sounds.stop("slotmusic.wav");
+
     }, []);
 
     useEffect(() => {

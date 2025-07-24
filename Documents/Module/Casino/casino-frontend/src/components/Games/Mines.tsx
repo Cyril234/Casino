@@ -3,8 +3,9 @@ import "../../styles/Mienenfeld.css";
 import tableBg from "../../../public/MinenfeldHintergrund.png";
 import bombImg from "../../../public/bombe.png";
 import coinImg from "../../../public/pokergeld.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MdInfo } from "react-icons/md";
+import sounds from "../litleThings/Sounds";
 
 export default function MinesGame() {
   const authToken = sessionStorage.getItem("authToken");
@@ -19,7 +20,10 @@ export default function MinesGame() {
   const [gameActive, setGameActive] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [bombIndex, setBombIndex] = useState<number | null>(null);
+  const [soundstatus, setSoundstatus] = useState(false);
+  const [volume, setVolume] = useState(0);
 
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,6 +36,7 @@ export default function MinesGame() {
 
   useEffect(() => {
     if (!authToken) return;
+    sounds.stop("casinomusic.mp3");
     (async () => {
       try {
         const res = await fetch(
@@ -42,11 +47,26 @@ export default function MinesGame() {
         const data = await res.json();
         setPlayerId(data.playerId);
         setCoinsBalance(data.coins || 0);
+        setVolume(data.volume);
+        setSoundstatus(data.soundstatus === "ON");
       } catch (err) {
         console.error("Fehler beim Laden des Spielers:", err);
       }
     })();
-  }, [authToken]);
+  }, [authToken, location.key]);
+
+  useEffect(() => {
+    if (!authToken) return;
+    const handleSound = async () => {
+      if (soundstatus && volume > 0) {
+        await sounds.play("horseracemusic.wav", true, 0.1);
+      } else {
+        sounds.stop("horseracemusic.wav");
+      }
+    };
+
+    handleSound();
+  }, [soundstatus, volume, authToken]);
 
   const startGame = async () => {
     if (!playerId || bet <= 0 || bombs >= fields || bombs <= 0) return;

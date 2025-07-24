@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../styles/Register.css";
 import { useNavigate } from "react-router-dom";
+import sounds from "../litleThings/Sounds";
 
 interface PlayerDto {
   id: number;
@@ -14,9 +15,9 @@ interface TokenResponse {
 }
 
 const keys = [
-  "Q","W","E","R","T","Z","U","I","O","P",
-  "A","S","D","F","G","H","J","K","L",
-  "Y","X","C","V","B","N","M",
+  "Q", "W", "E", "R", "T", "Z", "U", "I", "O", "P",
+  "A", "S", "D", "F", "G", "H", "J", "K", "L",
+  "Y", "X", "C", "V", "B", "N", "M",
   "@"
 ];
 
@@ -29,6 +30,16 @@ export default function Register() {
   const [errorMsg, setErrorMsg] = useState("");
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [focusedField, setFocusedField] = useState<"username" | "email" | "password" | null>(null);
+
+
+  useEffect(() => {
+    sounds.stop("casinomusic.mp3");
+    sounds.stop("blackjackmusic.wav");
+    sounds.stop("horseracemusic.wav");
+    sounds.stop("minesmusic.wav");
+    sounds.stop("roulettemusic.wav");
+    sounds.stop("slotmusic.wav");
+  });
 
   const handleNext = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -206,7 +217,7 @@ export default function Register() {
                 className="keyboard-key keyboard-close"
                 onClick={() => setShowKeyboard(false)}
               >
-                ✖ 
+                ✖
               </button>
             </div>
           </div>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../../styles/HorseRaceBet.css';
 import coinImg from '../../../public/pokergeld.png';
 import { MdInfo } from 'react-icons/md';
+import sounds from "../litleThings/Sounds";
 
 import blitz from '../../../public/horses/blitz.png';
 import donner from '../../../public/horses/donner.png';
@@ -43,16 +44,22 @@ export default function HorseRace() {
     const [allHorses, setAllHorses] = useState<Horse[]>([]);
     const [horseIndex, setHorseIndex] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
+    const [soundstatus, setSoundstatus] = useState(false);
+    const [volume, setVolume] = useState(0);
+
+    const location = useLocation();
+    const token = sessionStorage.getItem('authToken');
+
 
     useEffect(() => {
-        const token = sessionStorage.getItem('authToken');
+        sounds.stop("casinomusic.mp3");
         if (!token) {
             navigate('/');
             return;
         }
         fetchPlayer(token);
         fetchHorses(token);
-    }, [navigate]);
+    }, [navigate, , location.key]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -68,6 +75,19 @@ export default function HorseRace() {
         };
     }, [allHorses]);
 
+    useEffect(() => {
+        if (!token) return;
+        const handleSound = async () => {
+            if (soundstatus && volume > 0) {
+                await sounds.play("blackjackmusic.wav", true, 0.1);
+            } else {
+                sounds.stop("horseracemusic.wav");
+            }
+        };
+
+        handleSound();
+    }, [soundstatus, volume, token]);
+
     async function fetchPlayer(token: string) {
         try {
             const res = await fetch(
@@ -77,6 +97,8 @@ export default function HorseRace() {
             const data = await res.json();
             setPlayerId(data.playerId);
             setCoinsBalance(data.coins);
+            setVolume(data.volume);
+            setSoundstatus(data.soundstatus === "ON");
         } catch {
             console.error('Fehler beim Laden des Spielers');
         }
@@ -97,7 +119,7 @@ export default function HorseRace() {
 
     const handleBet = () => {
         navigate('/gameoverview/horserace/race', {
-            state: { horseIndex, bet, playerId,  },
+            state: { horseIndex, bet, playerId, },
         });
     };
 

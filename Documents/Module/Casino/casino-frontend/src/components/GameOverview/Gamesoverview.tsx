@@ -45,7 +45,11 @@ export default function Gameoverview() {
 
   useEffect(() => {
     if (!token) return;
-
+    sounds.stop("blackjackmusic.wav");
+    sounds.stop("horseracemusic.wav");
+    sounds.stop("minesmusic.wav");
+    sounds.stop("roulettemusic.wav");
+    sounds.stop("slotmusic.wav");
     const fetchAndHandleSound = async () => {
       try {
         const res = await fetch(`http://localhost:8080/api/players/byToken/${token}`, {
@@ -77,7 +81,7 @@ export default function Gameoverview() {
 
     const handleSound = async () => {
       if (soundstatus && volume > 0) {
-        await sounds.play("kasinoMusik.mp3", true, 0.1);
+        await sounds.play("casinomusic.mp3", true, 0.1);
       } else {
         sounds.stop("casinomusic.mp3");
       }

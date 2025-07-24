@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "../../styles/FormAfterLoginWithBadge.css";
+import sounds from "../litleThings/Sounds";
 
 export default function FormAfterLoginWithBadge() {
     const navigate = useNavigate();
@@ -17,6 +18,13 @@ export default function FormAfterLoginWithBadge() {
             navigate("/");
             return;
         }
+
+        sounds.stop("casinomusic.mp3");
+        sounds.stop("blackjackmusic.wav");
+        sounds.stop("horseracemusic.wav");
+        sounds.stop("minesmusic.wav");
+        sounds.stop("roulettemusic.wav");
+        sounds.stop("slotmusic.wav");
     });
 
     useEffect(() => {
@@ -35,7 +43,7 @@ export default function FormAfterLoginWithBadge() {
                         "Content-Type": "application/json"
                     }
                 });
- 
+
                 if (!res.ok) {
                     throw new Error(`HTTP Fehler: ${res.status}`);
                 }

@@ -194,21 +194,6 @@ body {
     0 0 20px #ffcc00,
     inset 0 0 12px #ff6600;
 }
-.virtual-keyboard {
-  position: fixed;
-  top: 30rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #222;
-  padding: 20px 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.9);
-  max-width: 900px;  
-  width: 90vw;
-  z-index: 1000;
-  user-select: none;
-  box-sizing: border-box;
-}
 
 .keyboard-row {
   display: flex;

@@ -1,9 +1,21 @@
 import { useNavigate } from 'react-router';
 import '../../styles/Loginoverview.css';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useBadgeScanner } from './LoginBage';
+import sounds from '../litleThings/Sounds';
 
 export default function Loginoverview() {
+
+    useEffect(() => {
+        sounds.stop("casinomusic.mp3");
+        sounds.stop("blackjackmusic.wav");
+        sounds.stop("horseracemusic.wav");
+        sounds.stop("minesmusic.wav");
+        sounds.stop("roulettemusic.wav");
+        sounds.stop("slotmusic.wav");
+    });
+
+
     const navigate = useNavigate();
 
     const goToEmailPwd = () => navigate('/login-with-email-and-password');

@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router";
 import "../../styles/LoginAsGuest.css"
+import { useEffect } from "react";
+import sounds from "../litleThings/Sounds";
 
 export default function LoginAsGuest() {
 
@@ -11,6 +13,15 @@ export default function LoginAsGuest() {
   if (sessionStorage.getItem("username")) {
     sessionStorage.removeItem("username");
   }
+
+  useEffect(() => {
+    sounds.stop("casinomusic.mp3");
+    sounds.stop("blackjackmusic.wav");
+    sounds.stop("horseracemusic.wav");
+    sounds.stop("minesmusic.wav");
+    sounds.stop("roulettemusic.wav");
+    sounds.stop("slotmusic.wav");
+  });
 
   async function goToGameoverview() {
     try {
@@ -31,8 +42,6 @@ export default function LoginAsGuest() {
       alert("Fehler beim Login als Gast!")
     }
   }
-
-
 
   return (
     <>

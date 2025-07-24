@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import "../../styles/BlackJack.css";
 import coinImg from "../../../public/pokergeld.png";
 import tableImage from "../../assets/TableBlackJack/table.png";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { MdInfo } from "react-icons/md";
+import sounds from "../litleThings/Sounds";
 
 
 const cardModules = import.meta.glob(
@@ -59,16 +60,20 @@ export default function BlackJackGame() {
 
   const [resultAmount, setResultAmount] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
+  const [soundstatus, setSoundstatus] = useState(false);
+  const [volume, setVolume] = useState(0);
 
 
   const authToken = sessionStorage.getItem("authToken");
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
 
     const fetchPlayer = async () => {
       if (!authToken) return;
+      sounds.stop("casinomusic.mp3");
       try {
         const res = await fetch(
           `http://localhost:8080/api/players/byToken/${authToken}`,
@@ -77,6 +82,8 @@ export default function BlackJackGame() {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         setPlayerId(data.playerId);
+        setVolume(data.volume);
+        setSoundstatus(data.soundstatus === "ON");
         if (typeof data.coins === "number") {
           setCoinsBalance(data.coins);
         }
@@ -87,7 +94,20 @@ export default function BlackJackGame() {
 
     };
     fetchPlayer();
-  }, [authToken]);
+  }, [authToken, location.key]);
+
+  useEffect(() => {
+    if (!authToken) return;
+    const handleSound = async () => {
+      if (soundstatus && volume > 0) {
+        await sounds.play("blackjackmusic.wav", true, 0.1);
+      } else {
+        sounds.stop("blackjackmusic.wav");
+      }
+    };
+
+    handleSound();
+  }, [soundstatus, volume, authToken]);
 
   useEffect(() => {
     if (!authToken) {
