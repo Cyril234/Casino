@@ -22,7 +22,7 @@ export default function MinesGame() {
   const [bombIndex, setBombIndex] = useState<number | null>(null);
   const [soundstatus, setSoundstatus] = useState(false);
   const [volume, setVolume] = useState(0);
-
+ 
   const location = useLocation();
   const navigate = useNavigate();
 

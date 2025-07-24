@@ -131,6 +131,7 @@ export default function FormAfterLoginWithBadge() {
                         className="form-input"
                         placeholder="Bsp. SchlauerFuchs12"
                         onChange={e => setUsername(e.target.value)}
+                        required
                     />
 
                     <label htmlFor="email" className="form-label">Email</label>
@@ -140,6 +141,7 @@ export default function FormAfterLoginWithBadge() {
                         className="form-input"
                         placeholder="Bsp. peter.muster@icloud.com"
                         onChange={e => setEmail(e.target.value)}
+                        required
                     />
 
                     <label htmlFor="password" className="form-label">Passwort</label>
@@ -150,6 +152,7 @@ export default function FormAfterLoginWithBadge() {
                             className="form-input"
                             placeholder="Gib dein Passwort hier ein"
                             onChange={e => setPassword(e.target.value)}
+                            required
                         />
                     </div>
 

@@ -81,7 +81,7 @@ export default function Gameoverview() {
 
     const handleSound = async () => {
       if (soundstatus && volume > 0) {
-        await sounds.play("casinomusic.mp3", true, 1);
+        await sounds.play("casinomusic.mp3", true, 0.6);
       } else {
         sounds.stop("casinomusic.mp3");
       }
