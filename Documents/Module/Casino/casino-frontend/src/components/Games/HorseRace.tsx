@@ -79,7 +79,7 @@ export default function HorseRace() {
         if (!token) return;
         const handleSound = async () => {
             if (soundstatus && volume > 0) {
-                await sounds.play("blackjackmusic.wav", true, 0.4);
+                await sounds.play("blackjackmusic.wav", true, 1);
             } else {
                 sounds.stop("horseracemusic.wav");
             }
