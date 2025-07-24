@@ -2,12 +2,14 @@ package com.example.casinobackend.Games.Mienenfeld;
 
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.casinobackend.entities.Game;
 import com.example.casinobackend.entities.Player;
@@ -31,8 +33,9 @@ public class MienenfeldController {
 
     @PostMapping("/{playerId}/start")
     public Map<String, Object> startGame(@PathVariable Long playerId, @RequestParam int bombs, @RequestParam int fields, @RequestParam int coins) {
-        Player player = playerRepo.findById(playerId).orElseThrow();
-        Game game = gameRepo.findByTitle("Mienenfeld").orElseThrow();
+        Player player = playerRepo.findById(playerId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found"));
+        Game game = gameRepo.findByTitle("Minenfeld").orElseThrow();
         return minesRepo.startGame(player, game, coins, fields, bombs);
     }
 
@@ -45,7 +48,7 @@ public class MienenfeldController {
     @PostMapping("/{playerId}/cashout")
     public Map<String, Object> cashout(@PathVariable Long playerId) {
         Player player = playerRepo.findById(playerId).orElseThrow();
-        Game game = gameRepo.findByTitle("Mienenfeld").orElseThrow();
+        Game game = gameRepo.findByTitle("Minenfeld").orElseThrow();
         return minesRepo.cashout(player, game);
     }
 }

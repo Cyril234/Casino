@@ -2,16 +2,21 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "../../styles/FormAfterLoginWithBadge.css";
 import sounds from "../litleThings/Sounds";
+import VirtualKeyboard from "../../Keyboard/Virtual_Keyboard";
 
 export default function FormAfterLoginWithBadge() {
     const navigate = useNavigate();
     const token = sessionStorage.getItem("authToken");
+
     const [username, setUsername] = useState<string>("");
-    const [password, setPassword] = useState<String>("");
-    const [badgenumber, setBadgenumber] = useState<String>("");
-    const [playerId, setPlayerId] = useState<Number>(0);
-    const [email, setEmail] = useState<String>("");
-    const [errorMsg, setErrorMsg] = useState<String>("");
+    const [password, setPassword] = useState<string>("");
+    const [badgenumber, setBadgenumber] = useState<string>("");
+    const [playerId, setPlayerId] = useState<number>(0);
+    const [email, setEmail] = useState<string>("");
+    const [errorMsg, setErrorMsg] = useState<string>("");
+
+    const [showKeyboard, setShowKeyboard] = useState(false);
+    const [focusedField, setFocusedField] = useState<"username" | "email" | "password" | null>(null);
 
     useEffect(() => {
         if (!token) {
@@ -25,14 +30,11 @@ export default function FormAfterLoginWithBadge() {
         sounds.stop("minesmusic.wav");
         sounds.stop("roulettemusic.wav");
         sounds.stop("slotmusic.wav");
-    });
+    }, []);
 
     useEffect(() => {
         const fetchPlayerId = async () => {
-            if (!token) {
-                console.error("Kein Auth-Token gefunden.");
-                return;
-            }
+            if (!token) return;
 
             try {
                 const res = await fetch(`http://localhost:8080/api/players/byToken/${token}`, {
@@ -44,10 +46,7 @@ export default function FormAfterLoginWithBadge() {
                     }
                 });
 
-                if (!res.ok) {
-                    throw new Error(`HTTP Fehler: ${res.status}`);
-                }
-
+                if (!res.ok) throw new Error(`HTTP Fehler: ${res.status}`);
                 const data = await res.json();
                 setPlayerId(data.playerId);
                 setBadgenumber(data.badgenumber);
@@ -65,6 +64,41 @@ export default function FormAfterLoginWithBadge() {
         fetchPlayerId();
     }, [token]);
 
+    const onFocusField = (field: "username" | "email" | "password") => {
+        setFocusedField(field);
+        setShowKeyboard(true);
+    };
+
+    const onBlurField = () => {
+        setTimeout(() => {
+            const active = document.activeElement;
+            if (!["username", "email", "password"].includes(active?.id || "")) {
+                setShowKeyboard(false);
+                setFocusedField(null);
+            }
+        }, 100);
+    };
+
+    const onKeyPress = (key: string) => {
+        if (focusedField === "username") {
+            setUsername(prev => prev + key);
+        } else if (focusedField === "email") {
+            setEmail(prev => prev + key);
+        } else if (focusedField === "password") {
+            setPassword(prev => prev + key);
+        }
+    };
+
+    const onBackspace = () => {
+        if (focusedField === "username") {
+            setUsername(prev => prev.slice(0, -1));
+        } else if (focusedField === "email") {
+            setEmail(prev => prev.slice(0, -1));
+        } else if (focusedField === "password") {
+            setPassword(prev => prev.slice(0, -1));
+        }
+    };
+
     const cancel = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -75,7 +109,7 @@ export default function FormAfterLoginWithBadge() {
                     "Content-Type": "application/json"
                 }
             });
-            if (!res) {
+            if (!res.ok) {
                 console.log("Fehler beim Löschen!");
             }
             navigate("/");
@@ -107,6 +141,7 @@ export default function FormAfterLoginWithBadge() {
                 }
                 return;
             }
+
             sessionStorage.setItem("username", username);
             navigate("/create-avatar-with-badge");
 
@@ -129,8 +164,11 @@ export default function FormAfterLoginWithBadge() {
                         id="username"
                         type="text"
                         className="form-input"
-                        placeholder="Bsp. SchlauerFuchs12"
+                        value={username}
                         onChange={e => setUsername(e.target.value)}
+                        onFocus={() => onFocusField("username")}
+                        onBlur={onBlurField}
+                        autoComplete="off"
                         required
                     />
 
@@ -139,28 +177,40 @@ export default function FormAfterLoginWithBadge() {
                         id="email"
                         type="email"
                         className="form-input"
-                        placeholder="Bsp. peter.muster@icloud.com"
+                        value={email}
                         onChange={e => setEmail(e.target.value)}
+                        onFocus={() => onFocusField("email")}
+                        onBlur={onBlurField}
+                        autoComplete="off"
                         required
                     />
 
                     <label htmlFor="password" className="form-label">Passwort</label>
-                    <div style={{ width: "100%" }}>
-                        <input
-                            id="password"
-                            type="password"
-                            className="form-input"
-                            placeholder="Gib dein Passwort hier ein"
-                            onChange={e => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
+                    <input
+                        id="password"
+                        type="password"
+                        className="form-input"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        onFocus={() => onFocusField("password")}
+                        onBlur={onBlurField}
+                        autoComplete="off"
+                        required
+                    />
 
                     {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
 
                     <button className="next-btn" type="submit">Weiter</button>
                     <button className="next-btn" type="button" onClick={cancel}>Abbrechen</button>
                 </form>
+
+                {showKeyboard && (
+                    <VirtualKeyboard
+                        onKeyPress={onKeyPress}
+                        onBackspace={onBackspace}
+                        onClose={() => setShowKeyboard(false)}
+                    />
+                )}
             </div>
         </>
     );
