@@ -147,7 +147,6 @@ const Roulette: React.FC = () => {
       const targetBallDeg = (correctedIdx + 0.5) * anglePerPocket + offsetCorrection;
 
       setWheelRotation(spins + targetWheelDeg);
-      //setBallRotation(spins + targetBallDeg);
       setBallRotation(0);
 
       setTimeout(() => {

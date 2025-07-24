@@ -42,7 +42,7 @@ def inputButton():
         sleep(0.15)
 
     if button_right_yellow.is_pressed:
-        pyautogui.press("enter")
+        pyautogui.press("Enter")
         sleep(0.15)
 
     if joystick_right_right.is_pressed:
