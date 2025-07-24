@@ -1,4 +1,3 @@
-// LoginWithEmailAndPassword.tsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import '../../styles/LoginWithUsernameAndPassword.css';

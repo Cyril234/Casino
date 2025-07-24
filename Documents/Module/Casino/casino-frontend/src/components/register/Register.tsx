@@ -31,7 +31,6 @@ export default function Register() {
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [focusedField, setFocusedField] = useState<"username" | "email" | "password" | null>(null);
 
-
   useEffect(() => {
     sounds.stop("casinomusic.mp3");
     sounds.stop("blackjackmusic.wav");
@@ -39,7 +38,7 @@ export default function Register() {
     sounds.stop("minesmusic.wav");
     sounds.stop("roulettemusic.wav");
     sounds.stop("slotmusic.wav");
-  });
+  }, []);
 
   const handleNext = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,6 +107,17 @@ export default function Register() {
     setShowKeyboard(true);
   }
 
+  function onBlurField() {
+    setTimeout(() => {
+      const active = document.activeElement;
+      const allowedIds = ["username", "email", "password"];
+      if (!(active instanceof HTMLElement) || !allowedIds.includes(active.id)) {
+        setShowKeyboard(false);
+        setFocusedField(null);
+      }
+    }, 100);
+  }
+
   function onKeyPress(key: string) {
     if (focusedField === "username") {
       setUsername(prev => prev + key);
@@ -141,6 +151,7 @@ export default function Register() {
             value={username}
             onChange={e => setUsername(e.target.value)}
             onFocus={() => onFocusField("username")}
+            onBlur={onBlurField}
             required
             className="register-input"
             autoComplete="off"
@@ -153,6 +164,7 @@ export default function Register() {
             value={email}
             onChange={e => setEmail(e.target.value)}
             onFocus={() => onFocusField("email")}
+            onBlur={onBlurField}
             required
             className="register-input"
             autoComplete="off"
@@ -166,6 +178,7 @@ export default function Register() {
               value={password}
               onChange={e => setPassword(e.target.value)}
               onFocus={() => onFocusField("password")}
+              onBlur={onBlurField}
               required
               className="register-input"
               autoComplete="off"
