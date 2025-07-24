@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "../../styles/EditProfile.css";
 import { useBadgeScanner } from "./AddBadge";
+import VirtualKeyboard from "../../Keyboard/Virtual_Keyboard";
 
 export default function EditProfile() {
 
@@ -179,8 +180,8 @@ export default function EditProfile() {
         if (!activeInput) return;
 
         const updater = (old: string) => {
-            if (key === "Delete") return old.slice(0, -1);
-            if (key === "x") {
+            if (key === "⌫") return old.slice(0, -1);
+            if (key === "✖") {
                 setKeyboardVisible(false);
                 return old;
             }
@@ -192,37 +193,10 @@ export default function EditProfile() {
         if (activeInput === "password") setPassword(prev => updater(prev ?? ""));
     };
 
-    function VirtualKeyboard() {
-        const keysRow1 = ["q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "@"];
-        const keysRow2 = ["a", "s", "d", "f", "g", "h", "j", "k", "l", "x", "Delete"];
-        const keysRow3 = ["y", "x", "c", "v", "b", "n", "m"];
-
-        return (
-            <div className="virtual-keyboard">
-                <div className="keyboard-row">
-                    {keysRow1.map((k) => (
-                        <button key={k} className="keyboard-key" onClick={() => onKeyPress(k)}>
-                            {k === "x" ? "x" : k === "Delete" ? "Del" : k}
-                        </button>
-                    ))}
-                </div>
-                <div className="keyboard-row">
-                    {keysRow2.map((k) => (
-                        <button key={k} className="keyboard-key" onClick={() => onKeyPress(k)}>
-                            {k === "x" ? "x" : k === "Delete" ? "Del" : k}
-                        </button>
-                    ))}
-                </div>
-                <div className="keyboard-row">
-                    {keysRow3.map((k) => (
-                        <button key={k} className="keyboard-key" onClick={() => onKeyPress(k)}>
-                            {k}
-                        </button>
-                    ))}
-                </div>
-            </div>
-        );
-    }
+    const onInputBlur = () => {
+        setKeyboardVisible(false);
+        setActiveInput(null);
+    };
 
     return (
         <div className="page-wrapper">
@@ -237,6 +211,7 @@ export default function EditProfile() {
                     placeholder={username}
                     onChange={e => setUsername(e.target.value)}
                     onFocus={() => { setActiveInput("username"); setKeyboardVisible(true) }}
+                    onBlur={onInputBlur}
                 />
 
                 <label htmlFor="email" className="form-label">Email</label>
@@ -247,6 +222,7 @@ export default function EditProfile() {
                     placeholder={email}
                     onChange={e => setEmail(e.target.value)}
                     onFocus={() => { setActiveInput("email"); setKeyboardVisible(true) }}
+                    onBlur={onInputBlur}
                 />
 
                 <label htmlFor="password" className="form-label">Passwort</label>
@@ -257,6 +233,7 @@ export default function EditProfile() {
                     placeholder="Gib dein neues Passwort hier ein"
                     onChange={e => setPassword(e.target.value)}
                     onFocus={() => { setActiveInput("password"); setKeyboardVisible(true) }}
+                    onBlur={onInputBlur}
                 />
 
                 <p className="badge-status">
@@ -281,7 +258,7 @@ export default function EditProfile() {
                 <button className="next-btn" type="button" onClick={() => navigate('/gameoverview')}>Zurück zur Übersicht</button>
             </form>
 
-            {keyboardVisible && <VirtualKeyboard />}
+            {keyboardVisible && <VirtualKeyboard onKeyPress={onKeyPress} onBackspace={() => onKeyPress("⌫")} onClose={() => setKeyboardVisible(false)} />}
         </div>
     );
 }
