@@ -79,7 +79,7 @@ export default function Gameoverview() {
       if (soundstatus && volume > 0) {
         await sounds.play("kasinoMusik.mp3", true, 0.1);
       } else {
-        sounds.stop("kasinoMusik.mp3");
+        sounds.stop("casinomusic.mp3");
       }
     };
 
