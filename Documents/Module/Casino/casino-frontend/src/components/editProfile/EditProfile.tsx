@@ -116,7 +116,7 @@ export default function EditProfile() {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({ badgenumber: scannedBadge }),
-                }); 
+                });
 
                 if (res.ok) {
                     setBadgenumber(scannedBadge);
@@ -261,8 +261,8 @@ export default function EditProfile() {
 
                 <p className="badge-status">
                     {badgenumber === null
-                        ? "Kein Badge mit deinem Konto verknüpft. Scanne deinen Badge am leser, um ihn mit deinem Account zu verknüpfen."
-                        : "Ein Badge ist mit deinem Konto verknüpft."}
+                        ? "Im Moment ist noch kein Badge mit deinem Konto verknüpft... Scanne deinen Badge am leser, um ihn mit deinem Account zu verknüpfen!"
+                        : "Es ist bereits ein Badge ist mit deinem Konto verknüpft! Du kannst dich mit deinem Badge anmelden."}
                 </p>
 
                 {badgenumber !== null && (
@@ -277,8 +277,8 @@ export default function EditProfile() {
 
                 {errorMsg && <p className="error-message" role="alert">{errorMsg}</p>}
                 <button className="next-btn" type="submit">Änderungen speichern</button>
-                <button className="next-btn" onClick={handleDeleteProfile}>Profil löschen</button>
-                <button className="next-btn" type="button" onClick={() => navigate('/gameoverview')}>Zurück</button>
+                <button className="next-btn" onClick={handleDeleteProfile}>Mein Profil löschen</button>
+                <button className="next-btn" type="button" onClick={() => navigate('/gameoverview')}>Zurück zur Übersicht</button>
             </form>
 
             {keyboardVisible && <VirtualKeyboard />}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../../styles/Gameoverview.css";
 import Slideshow from "../GameOverview/Slideshow";
 import { MdLogout, MdSettings } from "react-icons/md";
@@ -22,6 +22,7 @@ export default function Gameoverview() {
 
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const navigate = useNavigate();
+  const location = useLocation();
   const token = sessionStorage.getItem("authToken");
 
   const dropdownItems = [
@@ -43,55 +44,78 @@ export default function Gameoverview() {
   }, [dropdownItems.length]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    if (!token) return;
+
+    const fetchAndHandleSound = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/players/byToken/${token}`, {
+        const res = await fetch(`http://localhost:8080/api/players/byToken/${token}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`,
-            Accept: "*/*",
             "Content-Type": "application/json"
           }
         });
 
-        if (!response.ok) throw new Error(`HTTP Fehler: ${response.status}`);
+        if (!res.ok) throw new Error(`HTTP Fehler: ${res.status}`);
+        const data = await res.json();
 
-        const data = await response.json();
         setUsername(data.username);
         setCoins(data.coins);
         setVolume(data.volume);
-        setSoundstatus(data.soundstatus);
+        setSoundstatus(data.soundstatus === "ON");
+
       } catch (err) {
-        console.error(err);
+        console.error("Fehler beim Laden der Benutzerdaten:", err);
       }
     };
 
-    fetchData();
-  }, [token]);
-
-  useEffect(() => {
-    if (token && soundstatus) {
-      sounds.play("kasinoMusik.mp3", true, 0.1);
-    }
-  }, [token, soundstatus]);
+    fetchAndHandleSound();
+  }, [token, location.key]);
 
   useEffect(() => {
     if (!token) return;
-    fetch(`http://localhost:8080/api/players/byToken/${token}`)
-      .then(res => {
-        if (!res.ok) throw new Error("Fehler beim Laden des Users");
-        return res.json();
-      })
-      .then(data => {
-        setCoins(data.coins);
-        setUsername(data.username);
-      })
-      .catch(err => {
-        setCoins(0);
-        setUsername("");
-        console.error(err);
+
+    const handleSound = async () => {
+      if (soundstatus && volume > 0) {
+        await sounds.play("kasinoMusik.mp3", true, 0.1);
+      } else {
+        sounds.stop("casinomusic.mp3");
+      }
+    };
+
+    handleSound();
+  }, [soundstatus, volume, token]);
+
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setPosXPink(prev => {
+        if (prev < -400) return prev + Math.floor(Math.random() * 6);
+        if (prev > 2320) return prev - Math.floor(Math.random() * 6);
+        return prev + Math.floor(Math.random() * 11) - 5;
       });
-  }, []);
+
+      setPosYPink(prev => {
+        if (posXPink < -400) return prev + Math.floor(Math.random() * 6);
+        if (posXPink > 1480) return prev - Math.floor(Math.random() * 6);
+        return prev + Math.floor(Math.random() * 11) - 5;
+      });
+
+      setPosXOrange(prev => {
+        if (posXPink < -400) return prev + Math.floor(Math.random() * 6);
+        if (posXPink > 2320) return prev - Math.floor(Math.random() * 6);
+        return prev + Math.floor(Math.random() * 11) - 5;
+      });
+
+      setPosYOrange(prev => {
+        if (posXPink < -400) return prev + Math.floor(Math.random() * 6);
+        if (posXPink > 1480) return prev - Math.floor(Math.random() * 6);
+        return prev + Math.floor(Math.random() * 11) - 5;
+      });
+    }, 50);
+
+    return () => clearInterval(intervalId);
+  }, [posXPink]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -129,36 +153,6 @@ export default function Gameoverview() {
   }, [open, selectedIndex, dropdownItems]);
 
   const handleKeyUsed = () => setLastKey(null);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setPosXPink(prev => {
-        if (prev < -400) return prev + Math.floor(Math.random() * 6);
-        if (prev > 2320) return prev - Math.floor(Math.random() * 6);
-        return prev + Math.floor(Math.random() * 11) - 5;
-      });
-
-      setPosYPink(prev => {
-        if (posXPink < -400) return prev + Math.floor(Math.random() * 6);
-        if (posXPink > 1480) return prev - Math.floor(Math.random() * 6);
-        return prev + Math.floor(Math.random() * 11) - 5;
-      });
-
-      setPosXOrange(prev => {
-        if (posXPink < -400) return prev + Math.floor(Math.random() * 6);
-        if (posXPink > 2320) return prev - Math.floor(Math.random() * 6);
-        return prev + Math.floor(Math.random() * 11) - 5;
-      });
-
-      setPosYOrange(prev => {
-        if (posXPink < -400) return prev + Math.floor(Math.random() * 6);
-        if (posXPink > 1480) return prev - Math.floor(Math.random() * 6);
-        return prev + Math.floor(Math.random() * 11) - 5;
-      });
-    }, 50);
-
-    return () => clearInterval(intervalId);
-  }, [posXPink]);
 
   return (
     <div className="gameoverview diagonal-grid">

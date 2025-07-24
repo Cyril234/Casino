@@ -49,7 +49,7 @@ export default function MinesGame() {
   }, [authToken]);
 
   const startGame = async () => {
-    if (!playerId || bet <= 0 || bombs >= fields) return;
+    if (!playerId || bet <= 0 || bombs >= fields || bombs <= 0) return;
     setErrorMessage("");
     try {
       const res = await fetch(
@@ -86,7 +86,7 @@ export default function MinesGame() {
         setBombIndex(index);
       } else {
         setRevealed(Array.from(data.revealed));
-        setCurrentProfit(data.currentProfit);
+        setCurrentProfit(data.currentProfit - bet);
       }
     } catch {
       setErrorMessage("Fehler beim Aufdecken.");

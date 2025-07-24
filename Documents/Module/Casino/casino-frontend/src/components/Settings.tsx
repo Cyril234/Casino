@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import "../styles/Settings.css"
+import "../styles/Settings.css";
 
 export default function Settings() {
     const [volume, setVolume] = useState(50);
-    const [sound, setSound] = useState(true);
+    const [sound, setSound] = useState<boolean>(false); // UI-Wert true/false
     const [playerId, setPlayerId] = useState<number | undefined>(undefined);
     const currentToken = sessionStorage.getItem("authToken");
     const navigate = useNavigate();
@@ -32,8 +32,8 @@ export default function Settings() {
 
                 const data = await res.json();
                 setPlayerId(data.playerId);
-                setSound(data.soundstatus);
                 setVolume(data.volume);
+                setSound(data.soundstatus === "ON");
 
             } catch (err) {
                 console.error("Fehler beim Abrufen der Spieler-ID:", err);
@@ -42,8 +42,6 @@ export default function Settings() {
 
         fetchPlayerId();
     }, [currentToken]);
-
-
 
     async function saveSettings() {
         if (!playerId) {
@@ -58,7 +56,10 @@ export default function Settings() {
                     "Authorization": `Bearer ${currentToken}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ volume, sound }),
+                body: JSON.stringify({
+                    soundstatus: sound ? "ON" : "OFF",
+                    volume
+                }),
             });
 
             if (response.ok) {
@@ -103,7 +104,7 @@ export default function Settings() {
                         />
                         <span className="slider round"></span>
                     </label>
-                    <span>{sound ? "An" : "Aus"}</span>
+                    <span style={{ marginTop: 30 }}>{sound ? "An" : "Aus"}</span>
                 </div>
 
                 <button type="submit">Einstellungen speichern</button>
@@ -111,5 +112,4 @@ export default function Settings() {
             </form>
         </div>
     );
-
 }
