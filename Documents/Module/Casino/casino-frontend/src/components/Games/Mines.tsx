@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../styles/Mienenfeld.css";
 import tableBg from "../../../public/MinenfeldHintergrund.png";
 import bombImg from "../../../public/bombe.png";
@@ -26,6 +26,8 @@ export default function MinesGame() {
 
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [focusedField, setFocusedField] = useState<"bet" | "bombs" | null>(null);
+
+  const startButtonRef = useRef<HTMLButtonElement>(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -68,7 +70,6 @@ export default function MinesGame() {
         sounds.stop("horseracemusic.wav");
       }
     };
-
     handleSound();
   }, [soundstatus, volume, authToken]);
 
@@ -108,6 +109,11 @@ export default function MinesGame() {
         setGameActive(false);
         setCoinsBalance(prev => prev - bet);
         setBombIndex(index);
+
+        // Fokus auf Start-Button nach kurzer Zeit
+        setTimeout(() => {
+          startButtonRef.current?.focus();
+        }, 300);
       } else {
         setRevealed(Array.from(data.revealed));
         setCurrentProfit(data.currentProfit - bet);
@@ -129,6 +135,11 @@ export default function MinesGame() {
       setCoinsBalance(data.finalBalance);
       setStatus(`Auszahlung: +${data.profit} Coins`);
       setGameActive(false);
+
+      // Fokus auf Start-Button nach kurzer Zeit
+      setTimeout(() => {
+        startButtonRef.current?.focus();
+      }, 300);
     } catch {
       setErrorMessage("Fehler beim Cashout.");
     }
@@ -201,8 +212,8 @@ export default function MinesGame() {
                 backgroundImage: isSafe
                   ? `url(${coinImg})`
                   : isClickedBomb
-                    ? `url(${bombImg})`
-                    : undefined,
+                  ? `url(${bombImg})`
+                  : undefined,
                 backgroundSize: "70%",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
@@ -223,14 +234,16 @@ export default function MinesGame() {
         <button className="back-button" onClick={() => navigate("/gameoverview")}>
           Zurück
         </button>
-        <button className="info-button-2" onClick={() => navigate('/gameoverview/mines/info')}>
+        <button className="info-button-2" onClick={() => navigate("/gameoverview/mines/info")}>
           <MdInfo />
         </button>
       </div>
+
       <div className="balance-area">
         Guthaben: <strong>{coinsBalance}</strong>
         <img src={coinImg} alt="Münze" className="coin-small" />
       </div>
+
       {!gameActive && (
         <div className="config-area">
           <label>
@@ -261,11 +274,15 @@ export default function MinesGame() {
               onBlur={handleBlur}
             />
           </label>
-          <button onClick={startGame}>Start</button>
+          <button ref={startButtonRef} onClick={startGame}>
+            Start
+          </button>
           {errorMessage && <div className="error">{errorMessage}</div>}
         </div>
       )}
+
       {renderGrid()}
+
       {gameActive && (
         <div className="controls">
           <p className="profit-display">
@@ -275,6 +292,7 @@ export default function MinesGame() {
           <button onClick={cashout}>Cashout</button>
         </div>
       )}
+
       {status === "LOSE" && <div className="status-box lose">Verloren!</div>}
       {status === "CASHOUT" && <div className="status-box win">Auszahlung: +{currentProfit}</div>}
 

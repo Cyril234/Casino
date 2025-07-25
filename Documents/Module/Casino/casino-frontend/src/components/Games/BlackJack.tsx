@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../../styles/BlackJack.css";
 import coinImg from "../../../public/pokergeld.png";
 import tableImage from "../../assets/TableBlackJack/table.png";
@@ -13,7 +13,6 @@ const cardModules = import.meta.glob(
 ) as Record<string, { default: string }>;
 
 const cardImages: Record<string, string> = {};
-
 Object.entries(cardModules).forEach(([path, m]) => {
   const file = path.split("/").pop()!;
   const name = file.replace(".png", "");
@@ -26,7 +25,6 @@ function getCardImage(n: string) {
 
 function calculateHandValue(hand: string[] | undefined): number {
   if (!hand || !Array.isArray(hand)) return 0;
-
   let total = 0;
   let aces = 0;
   hand.forEach(card => {
@@ -57,7 +55,6 @@ export default function BlackJackGame() {
   const [playerId, setPlayerId] = useState<number | null>(null);
   const [coinsBalance, setCoinsBalance] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
-
   const [resultAmount, setResultAmount] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [soundstatus, setSoundstatus] = useState(false);
@@ -65,6 +62,8 @@ export default function BlackJackGame() {
 
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [focusedField, setFocusedField] = useState<"bet" | null>(null);
+
+  const startButtonRef = useRef<HTMLButtonElement>(null);
 
   const authToken = sessionStorage.getItem("authToken");
   const navigate = useNavigate();
@@ -214,7 +213,10 @@ export default function BlackJackGame() {
       }
 
       setShowResult(true);
-      setTimeout(() => setShowResult(false), 2000);
+      setTimeout(() => {
+        setShowResult(false);
+        startButtonRef.current?.focus(); // FOKUS nach Spielende
+      }, 2000);
     } catch (err) {
       setErrorMessage("Fehler bei Double.");
     }
@@ -248,7 +250,10 @@ export default function BlackJackGame() {
       }
 
       setShowResult(true);
-      setTimeout(() => setShowResult(false), 2000);
+      setTimeout(() => {
+        setShowResult(false);
+        startButtonRef.current?.focus(); // FOKUS nach Spielende
+      }, 2000);
     } catch {
       setStatus("FEHLER");
     }
@@ -287,7 +292,11 @@ export default function BlackJackGame() {
           onBlur={handleBlur}
           placeholder="Einsatz eingeben"
         />
-        <button onClick={startGame} disabled={gameActive || bet <= 0}>
+        <button
+          ref={startButtonRef}
+          onClick={startGame}
+          disabled={gameActive || bet <= 0}
+        >
           Spiel starten
         </button>
         {errorMessage && <div className="error">{errorMessage}</div>}
@@ -331,7 +340,9 @@ export default function BlackJackGame() {
           <div className="controls">
             <button onClick={hit}>Hit</button>
             <button onClick={stand}>Stand</button>
-            <button onClick={double}>Double</button>
+            {playerHand?.length === 2 && (
+              <button onClick={double}>Double</button>
+            )}
           </div>
         )}
 
