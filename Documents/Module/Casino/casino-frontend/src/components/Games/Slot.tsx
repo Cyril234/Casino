@@ -49,6 +49,7 @@ export default function SlotGame() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const keyboardRef = useRef<HTMLDivElement>(null);
+  const spinButtonRef = useRef<HTMLButtonElement>(null);
 
   const location = useLocation();
   const spinInterval = useRef<number | null>(null);
@@ -135,7 +136,10 @@ export default function SlotGame() {
         setErrorMessage("Fehler beim Spin.");
       } finally {
         setIsSpinning(false);
-        setTimeout(() => setShowResult(false), 3000);
+        setTimeout(() => {
+          setShowResult(false);
+          spinButtonRef.current?.focus()
+        }, 3000);
       }
     }, 2000);
   };
@@ -250,7 +254,11 @@ export default function SlotGame() {
             ref={inputRef}
             placeholder="Einsatz..."
           />
-          <button onClick={spin} disabled={isSpinning || bet < 1}>
+          <button
+            onClick={spin}
+            disabled={isSpinning || bet < 1}
+            ref={spinButtonRef}
+          >
             Spin
           </button>
           {errorMessage && <div className="slot-error">{errorMessage}</div>}

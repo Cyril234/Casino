@@ -43,6 +43,7 @@ public class BlackJackRepository {
         List<String> dealerHand = new ArrayList<>();
 
         playerHand.add(deck.drawCard());
+        playerHand.add(deck.drawCard());
 
         dealerHand.add("?");
         dealerHand.add(deck.drawCard());
