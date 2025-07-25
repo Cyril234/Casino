@@ -137,7 +137,7 @@ export default function Gameoverview() {
             item.action();
             setOpen(false);
           }
-        } else if (e.key === "Escape") {
+        } else if (e.key === "Tab") {
           e.preventDefault();
           setOpen(false);
         }

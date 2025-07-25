@@ -85,13 +85,16 @@ body {
 }
 
 .bet-amount {
-  margin: 10px 0;
+  margin: 60px 0;
 }
 
 .bet-amount input {
-  width: 60px;
+  width: 10rem;
+  height: 2rem;
   padding: 4px;
   font-size: 1em;
+  margin-left: 1rem;
+  border-radius: 8px;
 }
 
 .special-bets {
@@ -110,6 +113,8 @@ body {
   cursor: pointer;
   font-weight: bold;
   transition: 0.3s;
+  height: 3.5rem;
+  font-size: 1rem;
   color: black;
 }
 
@@ -130,10 +135,16 @@ body {
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
+  height: 2.6rem;
   border: 2px solid transparent;
   user-select: none;
+  font-size: 1.3rem;
   text-align: center;
   color: white;
+}
+
+.cell :hover {
+  cursor: pointer;
 }
 
 .cell.red {
@@ -176,11 +187,16 @@ body {
 }
 
 .result {
-  margin-top: 15px;
+  margin-top: 40px;
   background-color: #222;
   padding: 10px;
   border-radius: 8px;
   font-size: 1.1em;
+}
+
+.result p {
+  text-align: left;
+  margin-top: 2rem;
 }
 
 .error {
@@ -215,4 +231,10 @@ body {
 
 .no-transition {
   transition: none !important;
+}
+
+.focused {
+  outline: 3px solid yellow;
+  border-radius: 5px;
+  z-index: 2;
 }

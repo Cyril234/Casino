@@ -43,15 +43,6 @@ export default function HorseRaceInfo() {
                     <li><strong>Pfeil</strong>: 3% Gewinnchance → 12x Auszahlung</li>
                 </ul>
             </div>
-
-            <div className="info-section">
-                <h2>Strategie-Tipp</h2>
-                <p>
-                    Du kannst auf sichere Pferde setzen und kleinere Gewinne erzielen oder auf riskante Pferde mit hohen Auszahlungen hoffen.
-                    Dein Spielstil entscheidet – aber dein Glück auch!
-                </p>
-            </div>
-
             <div className="info-section">
                 <h2>Hinweise</h2>
                 <ul>

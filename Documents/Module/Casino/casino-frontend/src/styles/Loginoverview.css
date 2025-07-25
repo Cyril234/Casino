@@ -145,7 +145,7 @@
     text-shadow: 0 1px 4px #7b1e1e;
 }
 
-.start-btn {
+.login-btn {
     width: 100%;
     min-width: unset;
     margin-top: 2rem;
@@ -163,7 +163,7 @@
 }
 
 
-.start-btn:hover {
+.login-btn:hover {
     background: linear-gradient(90deg, #d7263d 0%, #ffd700 100%);
     color: #7b1e1e;
     transform: scale(1.07);

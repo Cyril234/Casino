@@ -263,9 +263,9 @@ export default function BlackJackGame() {
         <button className="back-button" onClick={() => navigate("/gameoverview")}>
           Zurück
         </button>
-        <div className="info-button" onClick={() => navigate("/gameoverview/blackjack/info")}>
+        <button className="info-button" onClick={() => navigate("/gameoverview/blackjack/info")}>
           <MdInfo />
-        </div>
+        </button>
       </div>
 
       <div className="balance-area">

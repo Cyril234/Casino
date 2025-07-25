@@ -34,10 +34,49 @@ const Roulette: React.FC = () => {
   const [ballRotation, setBallRotation] = useState<number>(0);
   const [soundstatus, setSoundstatus] = useState(false);
   const [volume, setVolume] = useState(0);
-  const [showKeyboard, setShowKeyboard] = useState(false);
+    const [showKeyboard, setShowKeyboard] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const keyboardRef = useRef<HTMLDivElement>(null);
+
+  const rouletteGrid = Array.from({ length: 37 }, (_, i) => i);
+  const extras = [
+    { label: 'RED', type: 'COLOR' },
+    { label: 'BLACK', type: 'COLOR' },
+    { label: 'EVEN', type: 'EVENODD' },
+    { label: 'ODD', type: 'EVENODD' },
+    { label: 'LOW', type: 'HIGHLOW' },
+    { label: 'HIGH', type: 'HIGHLOW' },
+    { label: '1ST12', type: 'DOZEN' },
+    { label: '2ND12', type: 'DOZEN' },
+    { label: '3RD12', type: 'DOZEN' },
+    { label: 'ROW1', type: 'ROW' },
+    { label: 'ROW2', type: 'ROW' },
+    { label: 'ROW3', type: 'ROW' }
+  ];
+
+  type BetItem = {
+    type: string;
+    value: string;
+    label: string;
+    isExtra?: boolean;
+  };
+
+  const bettableFields: BetItem[] = [
+    ...rouletteGrid.map(n => ({
+      type: 'NUMBER',
+      value: n.toString(),
+      label: n.toString(),
+    })),
+    ...extras.map(e => ({
+      type: e.type,
+      value: e.label,
+      label: e.label,
+      isExtra: true,
+    }))
+  ];
+
+  const [focusedIndex, setFocusedIndex] = useState<number>(0);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -93,6 +132,42 @@ const Roulette: React.FC = () => {
   }, [soundstatus, volume, token]);
 
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (document.activeElement?.tagName === "INPUT") return;
+
+      let newIndex = focusedIndex;
+
+      switch (e.key) {
+        case "ArrowRight":
+          newIndex = (focusedIndex + 1) % bettableFields.length;
+          break;
+        case "ArrowLeft":
+          newIndex = (focusedIndex - 1 + bettableFields.length) % bettableFields.length;
+          break;
+        case "ArrowUp":
+          newIndex = (focusedIndex - 3 + bettableFields.length) % bettableFields.length;
+          break;
+        case "ArrowDown":
+          newIndex = (focusedIndex + 3) % bettableFields.length;
+          break;
+        case "Enter":
+        case " ":
+          const bet = bettableFields[focusedIndex];
+          toggleBet(bet.type, bet.value);
+          e.preventDefault();
+          return;
+        default:
+          return;
+      }
+
+      setFocusedIndex(newIndex);
+      e.preventDefault();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [focusedIndex]);
+useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Node;
       if (
@@ -107,7 +182,6 @@ const Roulette: React.FC = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
   const toggleBet = (type: string, value: string) => {
     setBets(prev => {
       const exists = prev.find(b => b.type === type && b.value === value);
@@ -175,7 +249,6 @@ const Roulette: React.FC = () => {
       setLoading(false);
     }
   };
-
   const onKeyPress = (key: string) => {
     const newAmountStr = betAmount === 0 ? key : betAmount.toString() + key;
     const newAmountNum = Number(newAmountStr);
@@ -194,31 +267,15 @@ const Roulette: React.FC = () => {
     setShowKeyboard(false);
   };
 
-  const rouletteGrid = Array.from({ length: 37 }, (_, i) => i);
-  const extras = [
-    { label: 'RED', type: 'COLOR' },
-    { label: 'BLACK', type: 'COLOR' },
-    { label: 'EVEN', type: 'EVENODD' },
-    { label: 'ODD', type: 'EVENODD' },
-    { label: 'LOW', type: 'HIGHLOW' },
-    { label: 'HIGH', type: 'HIGHLOW' },
-    { label: '1ST12', type: 'DOZEN' },
-    { label: '2ND12', type: 'DOZEN' },
-    { label: '3RD12', type: 'DOZEN' },
-    { label: 'ROW1', type: 'ROW' },
-    { label: 'ROW2', type: 'ROW' },
-    { label: 'ROW3', type: 'ROW' }
-  ];
-
   return (
     <div className="background">
       <div className="roulette-layout">
         <button className="back-button" onClick={() => navigate("/gameoverview")}>
           Zurück
         </button>
-        <div className="info-button-2" onClick={() => navigate('/gameoverview/roulette/info')}>
+        <button className="info-button-2" onClick={() => navigate('/gameoverview/roulette/info')}>
           <MdInfo />
-        </div>
+        </button>
         <div className="roulette-left">
           <div className="roulette-wheel-wrapper">
             <div
@@ -234,7 +291,6 @@ const Roulette: React.FC = () => {
           </div>
         </div>
         <div className="bet-panel">
-          <h2>Roulette</h2>
           <div className="balance-area">
             Guthaben: <strong>{coinsBalance}</strong>
             <img src={coinImg} alt="Münze" className="coin-small" />
@@ -271,26 +327,36 @@ const Roulette: React.FC = () => {
           )}
 
           <div className="number-bets">
-            {rouletteGrid.map(n => (
-              <div
-                key={n}
-                className={`cell ${n === 0 ? 'green' : n % 2 === 0 ? 'black' : 'red'} ${bets.find(b => b.type === 'NUMBER' && b.value === n.toString()) ? 'selected' : ''}`}
-                onClick={() => toggleBet('NUMBER', n.toString())}
-              >
-                {n}
-              </div>
-            ))}
+            {rouletteGrid.map((n, i) => {
+              const isFocused = focusedIndex === i;
+              return (
+                <button
+                  key={n}
+                  className={`cell ${n === 0 ? 'green' : n % 2 === 0 ? 'black' : 'red'}
+                    ${bets.find(b => b.type === 'NUMBER' && b.value === n.toString()) ? 'selected' : ''}
+                    ${isFocused ? 'focused' : ''}`}
+                  onClick={() => toggleBet('NUMBER', n.toString())}
+                >
+                  {n}
+                </button>
+              );
+            })}
           </div>
           <div className="special-bets">
-            {extras.map(({ label, type }) => (
-              <div
-                key={label}
-                className={`special-bet ${bets.find(b => b.type === type && b.value === label) ? 'selected' : ''}`}
-                onClick={() => toggleBet(type, label)}
-              >
-                {label}
-              </div>
-            ))}
+            {extras.map(({ label, type }, i) => {
+              const indexInFullList = rouletteGrid.length + i;
+              const isFocused = focusedIndex === indexInFullList;
+              return (
+                <button
+                  key={label}
+                  className={`special-bet ${bets.find(b => b.type === type && b.value === label) ? 'selected' : ''}
+                    ${isFocused ? 'focused' : ''}`}
+                  onClick={() => toggleBet(type, label)}
+                >
+                  {label}
+                </button>
+              );
+            })}
           </div>
           <button
             className="spin-button"
@@ -299,11 +365,14 @@ const Roulette: React.FC = () => {
           >
             {loading ? 'Dreht...' : 'Spin'}
           </button>
+          {error && <div className="error">{error}</div>}
           {result && (
-            <div className="result-area">
-              <p>Gewonnene Summe: {result.totalPayout}</p>
-              <p>Neues Guthaben: {result.newBalance}</p>
-              <p>Ergebnis: {result.result}</p>
+            <div className="result">
+              <h2>Resultat:</h2>
+              <p><strong>Zahl:</strong> {result.rolledNumber}</p>
+              <p><strong>Farbe:</strong> {result.rolledColor}</p>
+              <p>{(result.result === "LOSE") ? "Du hast verloren" : "Du hast gewonnen"}!</p>
+              <p><strong>Gewinn:</strong> {result.totalPayout}</p>
             </div>
           )}
           {error && <div className="error-message">{error}</div>}
