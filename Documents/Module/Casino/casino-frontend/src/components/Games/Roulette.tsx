@@ -34,7 +34,8 @@ const Roulette: React.FC = () => {
   const [ballRotation, setBallRotation] = useState<number>(0);
   const [soundstatus, setSoundstatus] = useState(false);
   const [volume, setVolume] = useState(0);
-    const [showKeyboard, setShowKeyboard] = useState(false);
+  const [showKeyboard, setShowKeyboard] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState<number>(0);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const keyboardRef = useRef<HTMLDivElement>(null);
@@ -129,6 +130,8 @@ const Roulette: React.FC = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (showKeyboard) return;
+
       const active = document.activeElement;
       const tag = active?.tagName;
       const isRealFocusable =
@@ -150,10 +153,19 @@ const Roulette: React.FC = () => {
           newIndex = (focusedIndex - 1 + bettableFields.length) % bettableFields.length;
           break;
         case "ArrowUp":
-          newIndex = (focusedIndex - 3 + bettableFields.length) % bettableFields.length;
+          if (focusedIndex >= rouletteGrid.length) {
+            newIndex = focusedIndex - 1 < rouletteGrid.length ? rouletteGrid.length - 1 : focusedIndex - 1;
+          } else {
+            newIndex = (focusedIndex - 3 + rouletteGrid.length) % rouletteGrid.length;
+          }
           break;
         case "ArrowDown":
-          newIndex = (focusedIndex + 3) % bettableFields.length;
+          if (focusedIndex >= rouletteGrid.length) {
+            newIndex = (focusedIndex + 1) % bettableFields.length;
+          } else {
+            const down = focusedIndex + 3;
+            newIndex = down < rouletteGrid.length ? down : rouletteGrid.length;
+          }
           break;
         case "Enter":
         case " ":
@@ -171,8 +183,9 @@ const Roulette: React.FC = () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [focusedIndex]);
-useEffect(() => {
+  }, [focusedIndex, bettableFields, showKeyboard]);
+
+  useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Node;
       if (
@@ -187,6 +200,16 @@ useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const handleTab = (e: KeyboardEvent) => {
+      if (e.key === "Tab") e.preventDefault();
+    };
+    const keyboardNode = document.getElementById("virtual-keyboard");
+    keyboardNode?.addEventListener("keydown", handleTab);
+    return () => keyboardNode?.removeEventListener("keydown", handleTab);
+  }, [showKeyboard]);
+
   const toggleBet = (type: string, value: string) => {
     setBets(prev => {
       const exists = prev.find(b => b.type === type && b.value === value);
@@ -251,6 +274,7 @@ useEffect(() => {
       setLoading(false);
     }
   };
+
   const onKeyPress = (key: string) => {
     const newAmountStr = betAmount === 0 ? key : betAmount.toString() + key;
     const newAmountNum = Number(newAmountStr);
@@ -272,32 +296,39 @@ useEffect(() => {
   return (
     <div className="background">
       <div className="roulette-layout">
-        <button className="back-button" onClick={() => navigate("/gameoverview")}>Zurück</button>
-        <button className="info-button-2" onClick={() => navigate('/gameoverview/roulette/info')}><MdInfo /></button>
+        <button className="back-button">Zurück</button>
+        <button className="info-button-2"><MdInfo /></button>
+
         <div className="roulette-left">
           <div className="roulette-wheel-wrapper">
             <div className="roulette-wheel" style={{ transform: `rotate(${wheelRotation}deg)` }} />
             <div className="roulette-ball" style={{ transform: `rotate(${ballRotation}deg) translateY(-160px)` }} />
           </div>
         </div>
+
         <div className="bet-panel">
           <div className="balance-area">
             Guthaben: <strong>{coinsBalance}</strong>
             <img src={coinImg} alt="Münze" className="coin-small" />
           </div>
+
           <div className="bet-amount">
             <label>Einsatz pro Feld:</label>
             <input
               ref={inputRef}
               type="text"
               value={betAmount}
+              tabIndex={0}
               className="hello"
               readOnly
               onFocus={() => setShowKeyboard(true)}
               onBlur={() => {
                 setTimeout(() => {
                   const active = document.activeElement;
-                  if (active !== inputRef.current) {
+                  if (
+                    active !== inputRef.current &&
+                    (!keyboardRef.current || !keyboardRef.current.contains(active))
+                  ) {
                     setShowKeyboard(false);
                   }
                 }, 100);
@@ -307,7 +338,7 @@ useEffect(() => {
           </div>
 
           {showKeyboard && (
-            <div ref={keyboardRef}>
+            <div ref={keyboardRef} id="virtual-keyboard">
               <VirtualKeyboard
                 onKeyPress={onKeyPress}
                 onBackspace={onBackspace}
@@ -323,6 +354,7 @@ useEffect(() => {
               return (
                 <div
                   key={n}
+                  tabIndex={-1}
                   className={`cell ${n === 0 ? 'green' : n % 2 === 0 ? 'black' : 'red'} ${isSelected ? 'selected' : ''} ${isFocused ? 'focused' : ''}`}
                   onClick={() => {
                     toggleBet('NUMBER', n.toString());
@@ -343,6 +375,7 @@ useEffect(() => {
               return (
                 <div
                   key={label}
+                  tabIndex={-1}
                   className={`special-bet ${isSelected ? 'selected' : ''} ${isFocused ? 'focused' : ''}`}
                   onClick={() => {
                     toggleBet(type, label);
@@ -354,6 +387,7 @@ useEffect(() => {
               );
             })}
           </div>
+
           <button
             className="spin-button"
             onClick={handleSpin}
@@ -361,6 +395,7 @@ useEffect(() => {
           >
             {loading ? 'Dreht...' : 'Spin'}
           </button>
+
           {error && <div className="error">{error}</div>}
           {result && (
             <div className="result">
@@ -371,7 +406,6 @@ useEffect(() => {
               <p><strong>Gewinn:</strong> {result.totalPayout}</p>
             </div>
           )}
-          {error && <div className="error-message">{error}</div>}
         </div>
       </div>
     </div>
