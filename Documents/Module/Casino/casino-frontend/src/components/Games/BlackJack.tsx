@@ -5,7 +5,7 @@ import tableImage from "../../assets/TableBlackJack/table.png";
 import { useLocation, useNavigate } from "react-router";
 import { MdInfo } from "react-icons/md";
 import sounds from "../litleThings/Sounds";
-import VirtualKeyboard from "../../Keyboard/Virtuel_Numberboard";
+import VirtualKeyboard from "../../Keyboard/Virtual_Numberboard";
 
 const cardModules = import.meta.glob(
   "../../assets/Blackjack/*.png",

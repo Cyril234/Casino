@@ -4,7 +4,7 @@ import { MdInfo } from "react-icons/md";
 import "../../styles/Slot.css";
 import coinImg from "../../../public/pokergeld.png";
 import sounds from "../litleThings/Sounds";
-import VirtualKeyboard from "../../Keyboard/Virtuel_Numberboard";
+import VirtualKeyboard from "../../Keyboard/Virtual_Numberboard";
 
 const symbolModules = import.meta.glob(
   "../../../public/slot-symbols/*.png",

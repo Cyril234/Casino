@@ -95,7 +95,6 @@ export default function RaceSimulation() {
       <button className="back-btn" onClick={() => navigate(-1)}>
         <MdArrowBack /> Zurück
       </button>
-      <h1>Rennen simulieren</h1>
 
       {error && <div className="error">{error}</div>}
 

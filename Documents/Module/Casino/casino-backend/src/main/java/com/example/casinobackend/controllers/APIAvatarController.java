@@ -25,10 +25,10 @@ import com.example.casinobackend.repositories.PlayerRepository;
 
 import jakarta.transaction.Transactional;
 
-@CrossOrigin (origins = "http://localhost:5173", allowedHeaders = "*", methods = { RequestMethod.GET, 
-    RequestMethod.DELETE, 
-    RequestMethod.PUT, 
-    RequestMethod.POST,
+@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = { RequestMethod.GET,
+        RequestMethod.DELETE,
+        RequestMethod.PUT,
+        RequestMethod.POST,
         RequestMethod.OPTIONS })
 @RestController
 @RequestMapping("/api/avatars")
@@ -55,6 +55,21 @@ public class APIAvatarController {
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(value)).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/byPlayer/{playerId}")
+    public ResponseEntity<Avatar> getAvatarFromPlayer(@PathVariable Long playerId) {
+        Optional<Player> player = playerRepository.findById(playerId);
+        if (player.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Optional<Avatar> avatar = avatarRepository.findByPlayer(player.get());
+        return avatar.map(value -> ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(value))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")

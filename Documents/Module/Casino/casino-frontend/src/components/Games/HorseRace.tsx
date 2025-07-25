@@ -4,7 +4,7 @@ import '../../styles/HorseRaceBet.css';
 import coinImg from '../../../public/pokergeld.png';
 import { MdInfo } from 'react-icons/md';
 import sounds from "../litleThings/Sounds";
-import VirtualKeyboard from '../../Keyboard/Virtuel_Numberboard';
+import VirtualKeyboard from '../../Keyboard/Virtual_Numberboard';
 
 import blitz from '../../../public/horses/blitz.png';
 import donner from '../../../public/horses/donner.png';

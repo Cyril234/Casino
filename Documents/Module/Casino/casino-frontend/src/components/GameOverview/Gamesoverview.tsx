@@ -6,6 +6,7 @@ import { MdLogout, MdSettings } from "react-icons/md";
 import { FaTrophy, FaUser } from "react-icons/fa";
 import { GiConsoleController } from "react-icons/gi";
 import sounds from "../litleThings/Sounds";
+import ProfilePreview from "../avatarpreview/ProfilePreview";
 
 export default function Gameoverview() {
   const [posXPink, setPosXPink] = useState(-2000);
@@ -13,12 +14,24 @@ export default function Gameoverview() {
   const [posXOrange, setPosXOrange] = useState(2000);
   const [posYOrange, setPosYOrange] = useState(2000);
   const [username, setUsername] = useState<String>("");
+  const [currentPlayerId, setCurrentPlayerId] = useState();
   const [volume, setVolume] = useState(0);
   const [soundstatus, setSoundstatus] = useState(false);
   const [coins, setCoins] = useState<Number>(0);
   const [lastKey, setLastKey] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const [haircolor, setHaircolor] = useState<string>("");
+  const [skincolor, setSkincolor] = useState<string>("");
+  const [beard, setBeard] = useState<boolean>(false);
+  const [eyecolor, setEyecolor] = useState<string>("");
+  const [headgear, setHeadgear] = useState<string>("");
+  const [shirt, setShirt] = useState<string>("");
+  const [trouserstype, setTrouserstype] = useState<string>("");
+  const [trouserscolor, setTrouserscolor] = useState<string>("");
+  const [shoes, setShoes] = useState<string>("");
+
 
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const navigate = useNavigate();
@@ -64,6 +77,7 @@ export default function Gameoverview() {
         const data = await res.json();
 
         setUsername(data.username);
+        setCurrentPlayerId(data.playerId);
         setCoins(data.coins);
         setVolume(data.volume);
         setSoundstatus(data.soundstatus === "ON");
@@ -90,6 +104,39 @@ export default function Gameoverview() {
     handleSound();
   }, [soundstatus, volume, token]);
 
+
+  useEffect(() => {
+    if (!currentPlayerId || !token) return;
+
+    const fetchAvatar = async () => {
+      try {
+        const res = await fetch(`http://localhost:8080/api/avatars/byPlayer/${currentPlayerId}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!res.ok) throw new Error(`HTTP Fehler: ${res.status}`);
+        const data = await res.json();
+
+        setHaircolor(data.haircolor);
+        setSkincolor(data.skincolor);
+        setBeard(data.beard);
+        setEyecolor(data.eyecolor);
+        setHeadgear(data.headgear);
+        setShirt(data.shirt);
+        setTrouserstype(data.trouserstype);
+        setTrouserscolor(data.trouserscolor);
+        setShoes(data.shoes);
+      } catch (err) {
+        console.error("Fehler beim Laden des Avatars:", err);
+      }
+    };
+
+    fetchAvatar();
+  }, [currentPlayerId, token]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -167,6 +214,20 @@ export default function Gameoverview() {
       <div className="bg-lines-game"></div>
       <img src="public/pokergeld.png" alt="Testbild" width="100" height="100" className="pokergeld" />
       <h1 className="cointext">{coins !== null ? coins.toString() : ''}</h1>
+
+      <div>
+        <ProfilePreview
+          skincolor={skincolor}
+          eyecolor={eyecolor}
+          haircolor={haircolor}
+          headgear={headgear}
+          shirt={shirt}
+          trouserstype={trouserstype}
+          trouserscolor={trouserscolor}
+          shoes={shoes}
+          beard={beard}
+        />
+      </div>
 
       <div className="dropdown">
         <div

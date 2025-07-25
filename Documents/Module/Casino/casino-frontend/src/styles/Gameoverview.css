@@ -208,8 +208,8 @@ body {
 
 .dropdown {
   position: absolute;
-  right: 50px;
-  top: 50px;
+  right: 8.2rem;
+  top: 3.5rem;
   color: #fff;
   outline: none;
 }
@@ -250,4 +250,18 @@ body {
 .dropdown-menu button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.profile-picture {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  border-radius: 50%;
+  height: 5rem;
+  width: 5rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #696666;
 }

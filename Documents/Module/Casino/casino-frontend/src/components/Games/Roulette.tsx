@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../styles/Roulette.css';
 import { MdInfo } from 'react-icons/md';
-import VirtualKeyboard from '../../Keyboard/Virtuel_Numberboard';
+import VirtualKeyboard from '../../Keyboard/Virtual_Numberboard';
 
 interface Bet {
   type: string;

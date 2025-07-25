@@ -6,7 +6,7 @@ import coinImg from "../../../public/pokergeld.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdInfo } from "react-icons/md";
 import sounds from "../litleThings/Sounds";
-import VirtualKeyboardNumber from "../../Keyboard/Virtuel_Numberboard";
+import VirtualKeyboardNumber from "../../Keyboard/Virtual_Numberboard";
 
 export default function MinesGame() {
   const authToken = sessionStorage.getItem("authToken");
