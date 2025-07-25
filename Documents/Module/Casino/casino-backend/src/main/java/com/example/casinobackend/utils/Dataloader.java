@@ -39,9 +39,9 @@ public class Dataloader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         Argon2 argon2 = Argon2Factory.create();
 
-        if (!playerRepository.findByUsername("Gast").isPresent()) {
+        if (!playerRepository.findByUsername("gast").isPresent()) {
             Player player = new Player();
-            player.setUsername("Gast");
+            player.setUsername("gast");
             player.setCoins(1000);
             player.setColortheme(com.example.casinobackend.enums.Colortheme.LIGHT);
             player.setVolume(40);
