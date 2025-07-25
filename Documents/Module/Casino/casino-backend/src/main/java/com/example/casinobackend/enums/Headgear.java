@@ -3,8 +3,7 @@ package com.example.casinobackend.enums;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Headgear {
-    CAP("Kappe"),
-    COWBOYHAT("Cowboyhut"),
+    WITHOUT("Ohne"),
     STRAWHAT("Strohhut");
 
     private final String label;

@@ -40,16 +40,16 @@ export default function Loginoverview() {
                 <div className="login-header">Anmeldevariante wählen...</div>
                 <div className="login-divider"></div>
                 <div className="login-buttons">
-                    <button className="start-btn" onClick={goToEmailPwd}>
+                    <button className="login-btn" onClick={goToEmailPwd}>
                         Anmeldung mit Username und Passwort
                     </button>
-                    <button className="start-btn" onClick={goToBadge}>
+                    <button className="login-btn" onClick={goToBadge}>
                         Anmeldung mit Badge
                     </button>
-                    <button className="start-btn" onClick={goToGuest}>
+                    <button className="login-btn" onClick={goToGuest}>
                         Anmeldung als Gast
                     </button>
-                    <button className='start-btn' onClick={goToRegister}>
+                    <button className='login-btn' onClick={goToRegister}>
                         Noch kein Konto? - Registrieren!
                     </button>
                 </div>

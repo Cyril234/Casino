@@ -126,7 +126,6 @@ export default function SlotGame() {
           return;
         }
         const data = await res.json();
-        // Finales Ergebnis
         setReels(data.slots);
         setWin(data.win);
         setCoinsWon(data.coinsWon);
@@ -137,13 +136,11 @@ export default function SlotGame() {
         setErrorMessage("Fehler beim Spin.");
       } finally {
         setIsSpinning(false);
-        // Ergebnisanzeige nach 3s ausblenden
         setTimeout(() => setShowResult(false), 3000);
       }
     }, 2000);
   };
 
-  // Aufräumen bei Unmount
   useEffect(() => {
     return () => {
       if (spinInterval.current !== null) clearInterval(spinInterval.current);
@@ -157,9 +154,9 @@ export default function SlotGame() {
         <div className="slot-header">
           <button className="back-button" onClick={() => navigate("/gameoverview")}>
             Zurück
-          </button>           <div className="info-button-2" onClick={() => navigate('/gameoverview/slot/info')}>
+          </button>           <button className="info-button-2" onClick={() => navigate('/gameoverview/slot/info')}>
             <MdInfo />
-          </div>
+          </button>
         </div>
         <div className="slot-balance">
           Dein Guthaben: <strong>{coinsBalance}</strong>

@@ -1,15 +1,12 @@
-/* RouletteInfo.css */
-
 .rouletteinfo-page {
-  max-width: 800px;
-  margin: 2rem auto;
   padding: 2rem;
-  background: #1e1e2f;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  color: #fff;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #eaeaea;
   font-family: 'Segoe UI', sans-serif;
-  line-height: 1.6;
+  background: rgba(20, 20, 20, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
 }
 
 .back-button {
@@ -28,48 +25,35 @@
   text-decoration: none;
 }
 
-.back-button:hover {
-  background: #FFE066;
-  transform: translateY(-2px);
-}
-
-.back-button:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-}
-
 .rouletteinfo-page h1 {
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
   text-align: center;
-  color: #FFD700;
+  color: #ffcc00;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 .info-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .info-section h2 {
-  font-size: 1.5rem;
+  color: #ffd700;
+  font-size: 1.6rem;
   margin-bottom: 0.5rem;
-  color: #FFD700;
-  border-bottom: 2px solid #635e4e;
-  padding-bottom: 0.25rem;
 }
 
 .info-section p,
 .info-section ul {
-  margin-left: 1rem;
-  margin-bottom: 0.75rem;
-  font-size: 1rem;
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: #f0f0f0;
 }
 
 .info-section ul {
   list-style-type: disc;
+  padding-left: 1.5rem;
 }
 
 .info-section li {
   margin-bottom: 0.5rem;
 }
- 

@@ -42,7 +42,7 @@ export default function Start() {
                 <h1 className="start-title">Willkommen im Casino!</h1>
                 <p className="start-desc">Erlebe echtes Casino-Feeling mit modernen Spielen und exklusivem Ambiente.</p>
                 <p className="start-desc">Registriere dich oder melde dich an und starte direkt durch!</p>
-                <button className="start-btn" onClick={handleLogin}>Loslegen!</button>
+                <button className="start1-btn" onClick={handleLogin}>Loslegen!</button>
                 <div className="start-deco">
                     <img src={chipImg} alt="Chip" className="chip" />
                     <img src={cardImg} alt="Karte" className="chip" />

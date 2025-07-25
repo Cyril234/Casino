@@ -183,9 +183,9 @@ export default function MinesGame() {
         <button className="back-button" onClick={() => navigate("/gameoverview")}>
           Zurück
         </button>
-        <div className="info-button-2" onClick={() => navigate('/gameoverview/mines/info')}>
+        <button className="info-button-2" onClick={() => navigate('/gameoverview/mines/info')}>
           <MdInfo />
-        </div>
+        </button>
       </div>
       <div className="balance-area">
 

@@ -1,4 +1,3 @@
-/* Reset & Basis */
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +11,6 @@ body {
   overflow: hidden;
 }
 
-/* Vollbild-Renn-Container */
 .race-container {
   position: relative;
   width: 100vw;
@@ -25,15 +23,29 @@ body {
   padding-top: 2rem;
 }
 
-/* Buttons */
-.back-btn,
+.back-btn {
+  background: linear-gradient(145deg, #FFD700, #CCAC00);
+  color: #000;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-left: -105rem;
+  border-radius: 6px;
+  width: 10rem;
+  cursor: pointer;
+  font-size: 1rem;
+  z-index: 10;
+  transition: transform 0.1s;
+}
+
 .start-btn {
   background: linear-gradient(145deg, #FFD700, #CCAC00);
   color: #000;
   border: none;
   padding: 0.5rem 1rem;
-  margin: 0.5rem;
+  margin-left: -80rem;
+  margin-top: -9.7rem;
   border-radius: 6px;
+  width: 10rem;
   cursor: pointer;
   font-size: 1rem;
   z-index: 10;
@@ -45,14 +57,12 @@ body {
   transform: translateY(-2px);
 }
 
-/* Error */
 .error {
   color: #ff4d4d;
   margin: 1rem;
   z-index: 10;
 }
 
-/* Renn-Track */
 .race-track {
   position: absolute;
   inset: 0;
@@ -60,7 +70,6 @@ body {
   z-index: 1;
 }
 
-/* Pferde-Runner */
 .runner {
   position: absolute;
   left: -10%;
@@ -83,7 +92,6 @@ body {
   }
 }
 
-/* Sieger-Banner */
 .finish-banner {
   position: absolute;
   top: 50%;
@@ -96,7 +104,7 @@ body {
   text-align: center;
   z-index: 10;
 }
- 
+
 .finish-banner {
   margin-top: 2rem;
   padding: 1.5rem 2rem;

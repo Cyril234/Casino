@@ -129,9 +129,9 @@ export default function HorseRace() {
                 <button className="back-button" onClick={() => navigate('/gameoverview')}>
                     Zurück
                 </button>
-                <div className="info-button-2" onClick={() => navigate('/gameoverview/horserace/info')}>
+                <button className="info-button-2" onClick={() => navigate('/gameoverview/horserace/info')}>         
                     <MdInfo />
-                </div>
+                </button>
             </div>
             <h1 className="titel">Pferderennen</h1>
             <div className="balance-area">
