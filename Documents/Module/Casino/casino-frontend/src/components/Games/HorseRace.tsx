@@ -4,6 +4,7 @@ import '../../styles/HorseRaceBet.css';
 import coinImg from '../../../public/pokergeld.png';
 import { MdInfo } from 'react-icons/md';
 import sounds from "../litleThings/Sounds";
+import VirtualKeyboard from '../../Keyboard/Virtuel_Numberboard';
 
 import blitz from '../../../public/horses/blitz.png';
 import donner from '../../../public/horses/donner.png';
@@ -29,13 +30,6 @@ type Horse = {
     description: string;
 };
 
-type LocationState = {
-    horseIndex: number;
-    bet: number;
-    playerId: number;
-    winnerHorseId?: number;
-};
-
 export default function HorseRace() {
     const navigate = useNavigate();
     const [playerId, setPlayerId] = useState(0);
@@ -47,9 +41,11 @@ export default function HorseRace() {
     const [soundstatus, setSoundstatus] = useState(false);
     const [volume, setVolume] = useState(0);
 
+    const [showKeyboard, setShowKeyboard] = useState(false);
+    const [focusedField, setFocusedField] = useState<"bet" | null>(null);
+
     const location = useLocation();
     const token = sessionStorage.getItem('authToken');
-
 
     useEffect(() => {
         sounds.stop("casinomusic.mp3");
@@ -59,7 +55,7 @@ export default function HorseRace() {
         }
         fetchPlayer(token);
         fetchHorses(token);
-    }, [navigate, , location.key]);
+    }, [navigate, location.key]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -119,8 +115,35 @@ export default function HorseRace() {
 
     const handleBet = () => {
         navigate('/gameoverview/horserace/race', {
-            state: { horseIndex, bet, playerId, },
+            state: { horseIndex, bet, playerId },
         });
+    };
+
+    const handleKeyPress = (key: string) => {
+        if (focusedField === "bet") {
+            setBet(prev => Number(`${prev}${key}`));
+        }
+    };
+
+    const handleBackspace = () => {
+        if (focusedField === "bet") {
+            setBet(prev => Number(String(prev).slice(0, -1)) || 0);
+        }
+    };
+
+    const handleCloseKeyboard = () => {
+        setShowKeyboard(false);
+        setFocusedField(null);
+    };
+
+    const handleBlur = () => {
+        setTimeout(() => {
+            const active = document.activeElement;
+            if (active?.id !== "bet") {
+                setShowKeyboard(false);
+                setFocusedField(null);
+            }
+        }, 100);
     };
 
     return (
@@ -133,7 +156,9 @@ export default function HorseRace() {
                     <MdInfo />
                 </button>
             </div>
+
             <h1 className="titel">Pferderennen</h1>
+
             <div className="balance-area">
                 Dein Guthaben: <strong>{coinsBalance}</strong>
                 <img src={coinImg} alt="Münze" className="coin-small" />
@@ -143,14 +168,30 @@ export default function HorseRace() {
                 <label>
                     Einsatz:
                     <input
-                        type="number"
-                        min={1}
+                        id="bet"
+                        type="text"
                         value={bet}
-                        onChange={e => setBet(Number(e.target.value) || 0)}
+                        readOnly
+                        onFocus={() => {
+                            setFocusedField("bet");
+                            setShowKeyboard(true);
+                        }}
+                        onBlur={handleBlur}
+                        placeholder="Einsatz eingeben"
                     />
                 </label>
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
             </div>
+
+            {showKeyboard && (
+                <div className="virtual-keyboardNumber">
+                    <VirtualKeyboard
+                        onKeyPress={handleKeyPress}
+                        onBackspace={handleBackspace}
+                        onClose={handleCloseKeyboard}
+                    />
+                </div>
+            )}
 
             <div className="horse-slider-container">
                 <div className="horse-card large">

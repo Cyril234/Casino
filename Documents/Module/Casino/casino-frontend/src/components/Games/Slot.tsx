@@ -4,6 +4,7 @@ import { MdInfo } from "react-icons/md";
 import "../../styles/Slot.css";
 import coinImg from "../../../public/pokergeld.png";
 import sounds from "../litleThings/Sounds";
+import VirtualKeyboard from "../../Keyboard/Virtuel_Numberboard";
 
 const symbolModules = import.meta.glob(
   "../../../public/slot-symbols/*.png",
@@ -40,12 +41,16 @@ export default function SlotGame() {
   const [win, setWin] = useState(false);
   const [coinsWon, setCoinsWon] = useState(0);
   const [attempts, setAttempts] = useState(0);
-
   const [soundstatus, setSoundstatus] = useState(false);
   const [volume, setVolume] = useState(0);
 
-  const location = useLocation();
+  const [showKeyboard, setShowKeyboard] = useState(false);
+  const [focusedField, setFocusedField] = useState<"bet" | null>(null);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  const keyboardRef = useRef<HTMLDivElement>(null);
+
+  const location = useLocation();
   const spinInterval = useRef<number | null>(null);
   const spinTimeout = useRef<number | null>(null);
 
@@ -75,7 +80,6 @@ export default function SlotGame() {
     fetchPlayer();
   }, [authToken, navigate, location.key]);
 
-
   useEffect(() => {
     if (!authToken) return;
     const handleSound = async () => {
@@ -85,7 +89,6 @@ export default function SlotGame() {
         sounds.stop("slotmusic.wav");
       }
     };
-
     handleSound();
   }, [soundstatus, volume, authToken]);
 
@@ -96,20 +99,16 @@ export default function SlotGame() {
       return;
     }
 
+    setShowKeyboard(false);
+    setFocusedField(null);
     setErrorMessage("");
     setIsSpinning(true);
     setShowResult(false);
 
-    // 1) Reel-Animation: Zufallsbilder alle 100ms
     spinInterval.current = window.setInterval(() => {
-      setReels([
-        getRandomSymbol(),
-        getRandomSymbol(),
-        getRandomSymbol(),
-      ]);
+      setReels([getRandomSymbol(), getRandomSymbol(), getRandomSymbol()]);
     }, 100);
 
-    // 2) Nach 2 Sekunden echtes Ergebnis abholen und Animation stoppen
     spinTimeout.current = window.setTimeout(async () => {
       if (spinInterval.current !== null) {
         clearInterval(spinInterval.current);
@@ -148,38 +147,124 @@ export default function SlotGame() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const isButton = target.closest("button") !== null;
+
+      if (
+        !inputRef.current?.contains(target) &&
+        !keyboardRef.current?.contains(target) &&
+        !isButton
+      ) {
+        setShowKeyboard(false);
+        setFocusedField(null);
+      }
+
+      if (isButton) {
+        setShowKeyboard(false);
+        setFocusedField(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleKeyPress = (key: string) => {
+    if (focusedField === "bet") {
+      setBet((prev) => {
+        const newVal = Number(`${prev}${key}`);
+        return newVal > coinsBalance ? prev : newVal;
+      });
+    }
+  };
+
+  const handleBackspace = () => {
+    if (focusedField === "bet") {
+      setBet((prev) => {
+        const newVal = String(prev).slice(0, -1);
+        return newVal === "" ? 0 : Number(newVal);
+      });
+    }
+  };
+
+  const handleCloseKeyboard = () => {
+    setShowKeyboard(false);
+    setFocusedField(null);
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => {
+      const active = document.activeElement;
+      if (active?.id !== "bet") {
+        setShowKeyboard(false);
+        setFocusedField(null);
+      }
+    }, 100);
+  };
+
   return (
     <div className="slot-machine">
       <div className="slot-container">
         <div className="slot-header">
-          <button className="back-button" onClick={() => navigate("/gameoverview")}>
+          <button
+            className="back-button"
+            onClick={() => {
+              setShowKeyboard(false);
+              setFocusedField(null);
+              navigate("/gameoverview");
+            }}
+          >
             Zurück
-          </button>           <button className="info-button-2" onClick={() => navigate('/gameoverview/slot/info')}>
-            <MdInfo />
           </button>
+          <div
+            className="info-button-2"
+            onClick={() => {
+              setShowKeyboard(false);
+              setFocusedField(null);
+              navigate("/gameoverview/slot/info");
+            }}
+          >
+            <MdInfo />
+          </div>
         </div>
+
         <div className="slot-balance">
           Dein Guthaben: <strong>{coinsBalance}</strong>
           <img src={coinImg} alt="Münze" className="coin-icon" />
         </div>
 
-
         <div className="slot-bet-area">
           <label htmlFor="bet">Einsatz</label>
           <input
             id="bet"
-            type="number"
+            type="text"
             value={bet}
-            min={1}
-            max={coinsBalance}
+            readOnly
             disabled={isSpinning}
-            onChange={(e) => setBet(Number(e.target.value))}
+            onFocus={() => {
+              setFocusedField("bet");
+              setShowKeyboard(true);
+            }}
+            onBlur={handleBlur}
+            ref={inputRef}
+            placeholder="Einsatz..."
           />
           <button onClick={spin} disabled={isSpinning || bet < 1}>
             Spin
           </button>
           {errorMessage && <div className="slot-error">{errorMessage}</div>}
         </div>
+
+        {showKeyboard && (
+          <div ref={keyboardRef}>
+            <VirtualKeyboard
+              onKeyPress={handleKeyPress}
+              onBackspace={handleBackspace}
+              onClose={handleCloseKeyboard}
+            />
+          </div>
+        )}
 
         <div className="slot-reels">
           {reels.map((symbol, i) => (

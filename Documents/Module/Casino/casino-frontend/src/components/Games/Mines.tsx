@@ -6,6 +6,7 @@ import coinImg from "../../../public/pokergeld.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdInfo } from "react-icons/md";
 import sounds from "../litleThings/Sounds";
+import VirtualKeyboardNumber from "../../Keyboard/Virtuel_Numberboard";
 
 export default function MinesGame() {
   const authToken = sessionStorage.getItem("authToken");
@@ -22,7 +23,10 @@ export default function MinesGame() {
   const [bombIndex, setBombIndex] = useState<number | null>(null);
   const [soundstatus, setSoundstatus] = useState(false);
   const [volume, setVolume] = useState(0);
- 
+
+  const [showKeyboard, setShowKeyboard] = useState(false);
+  const [focusedField, setFocusedField] = useState<"bet" | "bombs" | null>(null);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -130,6 +134,44 @@ export default function MinesGame() {
     }
   };
 
+  const handleKeyPress = (key: string) => {
+    if (focusedField === "bet") {
+      const newVal = String(bet) === "0" ? key : String(bet) + key;
+      setBet(Math.min(Number(newVal), 999999));
+    } else if (focusedField === "bombs") {
+      const newVal = String(bombs) === "0" ? key : String(bombs) + key;
+      const valNum = Number(newVal);
+      if (valNum > 0 && valNum < fields) {
+        setBombs(valNum);
+      }
+    }
+  };
+
+  const handleBackspace = () => {
+    if (focusedField === "bet") {
+      const newVal = String(bet).slice(0, -1);
+      setBet(newVal === "" ? 0 : Number(newVal));
+    } else if (focusedField === "bombs") {
+      const newVal = String(bombs).slice(0, -1);
+      setBombs(newVal === "" ? 0 : Number(newVal));
+    }
+  };
+
+  const handleCloseKeyboard = () => {
+    setShowKeyboard(false);
+    setFocusedField(null);
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => {
+      const active = document.activeElement;
+      if (active?.id !== "bet" && active?.id !== "bombs") {
+        setShowKeyboard(false);
+        setFocusedField(null);
+      }
+    }, 100);
+  };
+
   const renderGrid = () => {
     const lost = status.startsWith("BOMBE");
     const columns = fields <= 40 ? 5 : 8;
@@ -172,8 +214,6 @@ export default function MinesGame() {
     );
   };
 
-
-
   return (
     <div
       className={`mines-container ${status === "LOSE" ? "lost" : ""}`}
@@ -188,7 +228,6 @@ export default function MinesGame() {
         </button>
       </div>
       <div className="balance-area">
-
         Guthaben: <strong>{coinsBalance}</strong>
         <img src={coinImg} alt="Münze" className="coin-small" />
       </div>
@@ -197,19 +236,29 @@ export default function MinesGame() {
           <label>
             Bomben:
             <input
-              type="number"
+              id="bombs"
+              type="text"
               value={bombs}
-              min={1}
-              max={fields - 1}
-              onChange={e => setBombs(parseInt(e.target.value))}
+              readOnly
+              onFocus={() => {
+                setFocusedField("bombs");
+                setShowKeyboard(true);
+              }}
+              onBlur={handleBlur}
             />
           </label>
           <label>
             Einsatz:
             <input
-              type="number"
+              id="bet"
+              type="text"
               value={bet}
-              onChange={e => setBet(parseInt(e.target.value))}
+              readOnly
+              onFocus={() => {
+                setFocusedField("bet");
+                setShowKeyboard(true);
+              }}
+              onBlur={handleBlur}
             />
           </label>
           <button onClick={startGame}>Start</button>
@@ -228,6 +277,16 @@ export default function MinesGame() {
       )}
       {status === "LOSE" && <div className="status-box lose">Verloren!</div>}
       {status === "CASHOUT" && <div className="status-box win">Auszahlung: +{currentProfit}</div>}
+
+      {showKeyboard && (
+        <div className="virtual-keyboardNumber">
+          <VirtualKeyboardNumber
+            onKeyPress={handleKeyPress}
+            onBackspace={handleBackspace}
+            onClose={handleCloseKeyboard}
+          />
+        </div>
+      )}
     </div>
   );
 }

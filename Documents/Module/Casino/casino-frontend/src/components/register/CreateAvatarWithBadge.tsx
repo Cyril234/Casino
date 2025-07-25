@@ -183,7 +183,6 @@ export default function CreateAvatarWithBadge() {
     }, 100);
   };
 
-  // ⬇️ NEU: Tastatur-Callbacks
   const onKeyPress = (key: string) => {
     if (focusedField === "avatarName") {
       setAvatarName((prev) => prev + key);
@@ -250,7 +249,6 @@ export default function CreateAvatarWithBadge() {
           margin: "auto",
         }}
       >
-        {/* LEFT FORM */}
         <form
           className="create-avatar-form"
           onSubmit={handleSubmit}

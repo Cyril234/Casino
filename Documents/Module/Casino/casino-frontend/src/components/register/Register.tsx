@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "../../styles/Register.css";
 import { useNavigate } from "react-router-dom";
 import sounds from "../litleThings/Sounds";
+import VirtualKeyboard from "../../Keyboard/Virtual_Keyboard";
 
 interface PlayerDto {
   id: number;
@@ -13,13 +14,6 @@ interface PlayerDto {
 interface TokenResponse {
   token: string;
 }
-
-const keys = [
-  "Q", "W", "E", "R", "T", "Z", "U", "I", "O", "P",
-  "A", "S", "D", "F", "G", "H", "J", "K", "L",
-  "Y", "X", "C", "V", "B", "N", "M",
-  "@"
-];
 
 export default function Register() {
   const navigate = useNavigate();
@@ -102,12 +96,12 @@ export default function Register() {
     }
   };
 
-  function onFocusField(field: "username" | "email" | "password") {
+  const onFocusField = (field: "username" | "email" | "password") => {
     setFocusedField(field);
     setShowKeyboard(true);
-  }
+  };
 
-  function onBlurField() {
+  const onBlurField = () => {
     setTimeout(() => {
       const active = document.activeElement;
       const allowedIds = ["username", "email", "password"];
@@ -116,9 +110,9 @@ export default function Register() {
         setFocusedField(null);
       }
     }, 100);
-  }
+  };
 
-  function onKeyPress(key: string) {
+  const onKeyPress = (key: string) => {
     if (focusedField === "username") {
       setUsername(prev => prev + key);
     } else if (focusedField === "email") {
@@ -126,9 +120,9 @@ export default function Register() {
     } else if (focusedField === "password") {
       setPassword(prev => prev + key);
     }
-  }
+  };
 
-  function onBackspace() {
+  const onBackspace = () => {
     if (focusedField === "username") {
       setUsername(prev => prev.slice(0, -1));
     } else if (focusedField === "email") {
@@ -136,14 +130,18 @@ export default function Register() {
     } else if (focusedField === "password") {
       setPassword(prev => prev.slice(0, -1));
     }
-  }
+  };
+
+  const onCloseKeyboard = () => {
+    setShowKeyboard(false);
+    setFocusedField(null);
+  };
 
   return (
     <main className="register-page-container">
       <section className="register-form-wrapper">
         <h1 className="register-title">Registrieren</h1>
         <form className="register-form" onSubmit={handleNext}>
-
           <label htmlFor="username" className="register-label">Username</label>
           <input
             id="username"
@@ -204,36 +202,12 @@ export default function Register() {
           </button>
         </form>
 
-        {/* Virtuelle Tastatur */}
         {showKeyboard && (
-          <div className="virtual-keyboard">
-            <div className="keyboard-keys">
-              {keys.map(key => (
-                <button
-                  key={key}
-                  type="button"
-                  className="keyboard-key"
-                  onClick={() => onKeyPress(key)}
-                >
-                  {key}
-                </button>
-              ))}
-              <button
-                type="button"
-                className="keyboard-key keyboard-backspace"
-                onClick={onBackspace}
-              >
-                ⌫
-              </button>
-              <button
-                type="button"
-                className="keyboard-key keyboard-close"
-                onClick={() => setShowKeyboard(false)}
-              >
-                ✖
-              </button>
-            </div>
-          </div>
+          <VirtualKeyboard
+            onKeyPress={onKeyPress}
+            onBackspace={onBackspace}
+            onClose={onCloseKeyboard}
+          />
         )}
       </section>
     </main>

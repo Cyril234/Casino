@@ -77,7 +77,6 @@ public class RouletteRepository {
 
         player.setCoins(player.getCoins() + totalPayout);
 
-        // WICHTIG: Änderungen an Player speichern
         playerRepository.save(player);
 
         Map<String, Object> result = new HashMap<>();

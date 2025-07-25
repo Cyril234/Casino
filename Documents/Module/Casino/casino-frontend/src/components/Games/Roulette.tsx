@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import coinImg from "../../../public/pokergeld.png";
 import sounds from "../litleThings/Sounds";
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../styles/Roulette.css';
 import { MdInfo } from 'react-icons/md';
+import VirtualKeyboard from '../../Keyboard/Virtuel_Numberboard';
 
 interface Bet {
   type: string;
@@ -33,7 +34,10 @@ const Roulette: React.FC = () => {
   const [ballRotation, setBallRotation] = useState<number>(0);
   const [soundstatus, setSoundstatus] = useState(false);
   const [volume, setVolume] = useState(0);
-  const [focusedIndex, setFocusedIndex] = useState<number>(0);
+    const [showKeyboard, setShowKeyboard] = useState(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const keyboardRef = useRef<HTMLDivElement>(null);
 
   const rouletteGrid = Array.from({ length: 37 }, (_, i) => i);
   const extras = [
@@ -82,7 +86,6 @@ const Roulette: React.FC = () => {
     24, 16, 33, 1, 20, 14, 31, 9, 22, 18,
     29, 7, 28, 12, 35, 3, 26
   ];
-
   const anglePerPocket = 360 / wheelNumbers.length;
 
   useEffect(() => {
@@ -90,6 +93,7 @@ const Roulette: React.FC = () => {
       navigate('/');
       return;
     }
+
     sounds.stop("casinomusic.mp3");
 
     const fetchPlayer = async () => {
@@ -167,8 +171,22 @@ const Roulette: React.FC = () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [focusedIndex, bettableFields]);
-
+  }, [focusedIndex]);
+useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(target) &&
+        keyboardRef.current &&
+        !keyboardRef.current.contains(target)
+      ) {
+        setShowKeyboard(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const toggleBet = (type: string, value: string) => {
     setBets(prev => {
       const exists = prev.find(b => b.type === type && b.value === value);
@@ -233,6 +251,23 @@ const Roulette: React.FC = () => {
       setLoading(false);
     }
   };
+  const onKeyPress = (key: string) => {
+    const newAmountStr = betAmount === 0 ? key : betAmount.toString() + key;
+    const newAmountNum = Number(newAmountStr);
+    if (newAmountNum <= 999999) {
+      setBetAmount(newAmountNum);
+    }
+  };
+
+  const onBackspace = () => {
+    const str = betAmount.toString();
+    const newStr = str.length > 1 ? str.slice(0, -1) : '0';
+    setBetAmount(Number(newStr));
+  };
+
+  const onClose = () => {
+    setShowKeyboard(false);
+  };
 
   return (
     <div className="background">
@@ -253,13 +288,33 @@ const Roulette: React.FC = () => {
           <div className="bet-amount">
             <label>Einsatz pro Feld:</label>
             <input
-              type="number"
-              min={1}
+              ref={inputRef}
+              type="text"
               value={betAmount}
-              className='hello'
-              onChange={e => setBetAmount(Number(e.target.value))}
+              className="hello"
+              readOnly
+              onFocus={() => setShowKeyboard(true)}
+              onBlur={() => {
+                setTimeout(() => {
+                  const active = document.activeElement;
+                  if (active !== inputRef.current) {
+                    setShowKeyboard(false);
+                  }
+                }, 100);
+              }}
+              placeholder="Einsatz"
             />
           </div>
+
+          {showKeyboard && (
+            <div ref={keyboardRef}>
+              <VirtualKeyboard
+                onKeyPress={onKeyPress}
+                onBackspace={onBackspace}
+                onClose={onClose}
+              />
+            </div>
+          )}
 
           <div className="number-bets">
             {rouletteGrid.map((n, i) => {
@@ -299,9 +354,13 @@ const Roulette: React.FC = () => {
               );
             })}
           </div>
-
-          <button className="spin-btn" onClick={handleSpin} disabled={loading}>Spin</button>
-
+          <button
+            className="spin-button"
+            onClick={handleSpin}
+            disabled={loading || bets.length === 0}
+          >
+            {loading ? 'Dreht...' : 'Spin'}
+          </button>
           {error && <div className="error">{error}</div>}
           {result && (
             <div className="result">
@@ -312,6 +371,7 @@ const Roulette: React.FC = () => {
               <p><strong>Gewinn:</strong> {result.totalPayout}</p>
             </div>
           )}
+          {error && <div className="error-message">{error}</div>}
         </div>
       </div>
     </div>
