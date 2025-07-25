@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router';
 import '../../styles/LoginWithBadge.css';
-import { useCallback, useEffect, useState } from 'react';
-import { useBadgeScanner } from './LoginBage';
 import sounds from '../litleThings/Sounds';
+import { useEffect } from 'react';
 
 export default function LoginWithBadge() {
   const navigate = useNavigate();
@@ -14,8 +13,6 @@ export default function LoginWithBadge() {
     sessionStorage.removeItem("username");
   }
 
-  const [username, setUsername] = useState<string>("");
-
   useEffect(() => {
     sounds.stop("casinomusic.mp3");
     sounds.stop("blackjackmusic.wav");
@@ -24,47 +21,6 @@ export default function LoginWithBadge() {
     sounds.stop("roulettemusic.wav");
     sounds.stop("slotmusic.wav");
   });
-
-  const handleBadgeScan = useCallback(async (scan: string) => {
-    try {
-      const res = await fetch("http://localhost:8080/api/loginUID", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({ uid: scan }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        sessionStorage.setItem("authToken", data.token);
-
-        if (data.token && data.username !== "") {
-          setUsername(data.username);
-          sessionStorage.setItem("username", username);
-
-          if (
-            username ===
-            "supergeheim!ZurSicherheit_1234_geheim_sodass_niemand_unberechtigtes_auf_diese_Seite_zugreiffen_kann_1267"
-          ) {
-            navigate("/form-after-login-with-badge");
-          } else {
-            navigate("/gameoverview");
-          }
-        } else {
-          navigate("/login-overview");
-        }
-      } else {
-        navigate("/login-overview");
-      }
-    } catch (err) {
-      console.error("Verbindungsfehler:", err);
-    }
-  }, [navigate]);
-
-  useBadgeScanner(handleBadgeScan);
 
   return (
     <>
