@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import coinImg from "../../../public/pokergeld.png";
 import sounds from "../litleThings/Sounds";
-
 import axios from 'axios';
-
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import '../../styles/Roulette.css';
 import { MdInfo } from 'react-icons/md';
 
@@ -36,6 +33,7 @@ const Roulette: React.FC = () => {
   const [ballRotation, setBallRotation] = useState<number>(0);
   const [soundstatus, setSoundstatus] = useState(false);
   const [volume, setVolume] = useState(0);
+  const [focusedIndex, setFocusedIndex] = useState<number>(0);
 
   const rouletteGrid = Array.from({ length: 37 }, (_, i) => i);
   const extras = [
@@ -74,9 +72,10 @@ const Roulette: React.FC = () => {
     }))
   ];
 
-  const [focusedIndex, setFocusedIndex] = useState<number>(0);
-
   const location = useLocation();
+  const navigate = useNavigate();
+  const token = sessionStorage.getItem('authToken');
+
   const wheelNumbers = [
     0, 32, 15, 19, 4, 21, 2, 25, 17, 34,
     6, 27, 13, 36, 11, 30, 8, 23, 10, 5,
@@ -85,8 +84,6 @@ const Roulette: React.FC = () => {
   ];
 
   const anglePerPocket = 360 / wheelNumbers.length;
-  const navigate = useNavigate();
-  const token = sessionStorage.getItem('authToken');
 
   useEffect(() => {
     if (!token) {
@@ -94,13 +91,12 @@ const Roulette: React.FC = () => {
       return;
     }
     sounds.stop("casinomusic.mp3");
+
     const fetchPlayer = async () => {
       try {
         const res = await axios.get(
           `http://localhost:8080/api/players/byToken/${token}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setPlayerId(res.data.playerId);
         setCoinsBalance(res.data.coins);
@@ -124,13 +120,21 @@ const Roulette: React.FC = () => {
         sounds.stop("roulettemusic.wav");
       }
     };
-
     handleSound();
   }, [soundstatus, volume, token]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (document.activeElement?.tagName === "INPUT") return;
+      const active = document.activeElement;
+      const tag = active?.tagName;
+      const isRealFocusable =
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        tag === "SELECT" ||
+        tag === "BUTTON" ||
+        active?.getAttribute("contenteditable") === "true";
+
+      if (isRealFocusable) return;
 
       let newIndex = focusedIndex;
 
@@ -163,7 +167,7 @@ const Roulette: React.FC = () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [focusedIndex]);
+  }, [focusedIndex, bettableFields]);
 
   const toggleBet = (type: string, value: string) => {
     setBets(prev => {
@@ -186,14 +190,12 @@ const Roulette: React.FC = () => {
     if (wheelElem && ballElem) {
       wheelElem.classList.add('no-transition');
       ballElem.classList.add('no-transition');
-
       setWheelRotation(0);
       setBallRotation(720);
 
       setTimeout(() => {
         wheelElem.classList.remove('no-transition');
         ballElem.classList.remove('no-transition');
-
         spinWithResult();
       }, 10);
     } else {
@@ -203,22 +205,19 @@ const Roulette: React.FC = () => {
 
   const spinWithResult = async () => {
     try {
-      const res = await axios.post(`http://localhost:8080/roulette/${playerId}/spin-multi`, bets,
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-            'Content-Type': 'application/json'
-          }
+      const res = await axios.post(`http://localhost:8080/roulette/${playerId}/spin-multi`, bets, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+          'Content-Type': 'application/json'
         }
-      );
+      });
 
-      const rolled: number = res.data.rolledNumber;
+      const rolled = res.data.rolledNumber;
       const idx = wheelNumbers.indexOf(rolled);
       const spins = 360 * 5;
       const offsetCorrection = -4.86;
-      const correctedIdx = idx;
       const targetWheelDeg = (wheelNumbers.length - idx) * anglePerPocket;
-      const targetBallDeg = (correctedIdx + 0.5) * anglePerPocket + offsetCorrection;
+      const targetBallDeg = (idx + 0.5) * anglePerPocket + offsetCorrection;
 
       setWheelRotation(spins + targetWheelDeg);
       setBallRotation(0);
@@ -238,24 +237,12 @@ const Roulette: React.FC = () => {
   return (
     <div className="background">
       <div className="roulette-layout">
-        <button className="back-button" onClick={() => navigate("/gameoverview")}>
-          Zurück
-        </button>
-        <button className="info-button-2" onClick={() => navigate('/gameoverview/roulette/info')}>
-          <MdInfo />
-        </button>
+        <button className="back-button" onClick={() => navigate("/gameoverview")}>Zurück</button>
+        <button className="info-button-2" onClick={() => navigate('/gameoverview/roulette/info')}><MdInfo /></button>
         <div className="roulette-left">
           <div className="roulette-wheel-wrapper">
-            <div
-              className="roulette-wheel"
-              style={{ transform: `rotate(${wheelRotation}deg)` }}
-            />
-            <div
-              className="roulette-ball"
-              style={{
-                transform: `rotate(${ballRotation}deg) translateY(-160px)`
-              }}
-            />
+            <div className="roulette-wheel" style={{ transform: `rotate(${wheelRotation}deg)` }} />
+            <div className="roulette-ball" style={{ transform: `rotate(${ballRotation}deg) translateY(-160px)` }} />
           </div>
         </div>
         <div className="bet-panel">
@@ -273,52 +260,55 @@ const Roulette: React.FC = () => {
               onChange={e => setBetAmount(Number(e.target.value))}
             />
           </div>
+
           <div className="number-bets">
             {rouletteGrid.map((n, i) => {
               const isFocused = focusedIndex === i;
+              const isSelected = bets.find(b => b.type === 'NUMBER' && b.value === n.toString());
               return (
-                <button
+                <div
                   key={n}
-                  className={`cell ${n === 0 ? 'green' : n % 2 === 0 ? 'black' : 'red'}
-                    ${bets.find(b => b.type === 'NUMBER' && b.value === n.toString()) ? 'selected' : ''}
-                    ${isFocused ? 'focused' : ''}`}
-                  onClick={() => toggleBet('NUMBER', n.toString())}
+                  className={`cell ${n === 0 ? 'green' : n % 2 === 0 ? 'black' : 'red'} ${isSelected ? 'selected' : ''} ${isFocused ? 'focused' : ''}`}
+                  onClick={() => {
+                    toggleBet('NUMBER', n.toString());
+                    setFocusedIndex(i);
+                  }}
                 >
                   {n}
-                </button>
+                </div>
               );
             })}
           </div>
+
           <div className="special-bets">
             {extras.map(({ label, type }, i) => {
-              const indexInFullList = rouletteGrid.length + i;
-              const isFocused = focusedIndex === indexInFullList;
+              const index = rouletteGrid.length + i;
+              const isFocused = focusedIndex === index;
+              const isSelected = bets.find(b => b.type === type && b.value === label);
               return (
-                <button
+                <div
                   key={label}
-                  className={`special-bet ${bets.find(b => b.type === type && b.value === label) ? 'selected' : ''}
-                    ${isFocused ? 'focused' : ''}`}
-                  onClick={() => toggleBet(type, label)}
+                  className={`special-bet ${isSelected ? 'selected' : ''} ${isFocused ? 'focused' : ''}`}
+                  onClick={() => {
+                    toggleBet(type, label);
+                    setFocusedIndex(index);
+                  }}
                 >
                   {label}
-                </button>
+                </div>
               );
             })}
           </div>
-          <button
-            className="spin-btn"
-            onClick={handleSpin}
-            disabled={loading}
-          >
-            Spin
-          </button>
+
+          <button className="spin-btn" onClick={handleSpin} disabled={loading}>Spin</button>
+
           {error && <div className="error">{error}</div>}
           {result && (
             <div className="result">
               <h2>Resultat:</h2>
               <p><strong>Zahl:</strong> {result.rolledNumber}</p>
               <p><strong>Farbe:</strong> {result.rolledColor}</p>
-              <p>{(result.result === "LOSE") ? "Du hast verloren" : "Du hast gewonnen"}!</p>
+              <p>{result.result === "LOSE" ? "Du hast verloren" : "Du hast gewonnen"}!</p>
               <p><strong>Gewinn:</strong> {result.totalPayout}</p>
             </div>
           )}
