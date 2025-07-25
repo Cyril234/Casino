@@ -84,7 +84,6 @@ public class APILoginController {
             }
             String UID = sb.toString();
 
-            System.out.println("ligin" + UID);
 
             if (UID != "") {
 

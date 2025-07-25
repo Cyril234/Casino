@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import '../../styles/LoginWithBadge.css';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useBadgeScanner } from './LoginBage';
 import sounds from '../litleThings/Sounds';
 
@@ -13,6 +13,8 @@ export default function LoginWithBadge() {
   if (sessionStorage.getItem("username")) {
     sessionStorage.removeItem("username");
   }
+
+  const [username, setUsername] = useState<string>("");
 
   useEffect(() => {
     sounds.stop("casinomusic.mp3");
@@ -39,8 +41,8 @@ export default function LoginWithBadge() {
       if (res.ok) {
         sessionStorage.setItem("authToken", data.token);
 
-        if (data.token && data.token !== "") {
-          const username = data.username;
+        if (data.token && data.username !== "") {
+          setUsername(data.username);
           sessionStorage.setItem("username", username);
 
           if (
@@ -52,10 +54,10 @@ export default function LoginWithBadge() {
             navigate("/gameoverview");
           }
         } else {
-          navigate("/form-after-login-with-badge");
+          navigate("/login-overview");
         }
       } else {
-        navigate("/form-after-login-with-badge");
+        navigate("/login-overview");
       }
     } catch (err) {
       console.error("Verbindungsfehler:", err);
