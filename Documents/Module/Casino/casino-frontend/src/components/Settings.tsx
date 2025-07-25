@@ -4,7 +4,7 @@ import "../styles/Settings.css";
 
 export default function Settings() {
     const [volume, setVolume] = useState(50);
-    const [sound, setSound] = useState<boolean>(false); // UI-Wert true/false
+    const [sound, setSound] = useState<boolean>(false); 
     const [playerId, setPlayerId] = useState<number | undefined>(undefined);
     const currentToken = sessionStorage.getItem("authToken");
     const navigate = useNavigate();

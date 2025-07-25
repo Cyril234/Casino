@@ -64,7 +64,7 @@ body {
   border-radius: 50%;
   z-index: 2;
   transform: rotate(0deg);
-  transform-origin: 0% 50%; /* Center rotation */
+  transform-origin: 0% 50%;
   transition: transform 4s ease-out; 
 }
 

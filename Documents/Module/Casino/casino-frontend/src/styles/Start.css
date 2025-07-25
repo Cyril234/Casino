@@ -1,6 +1,4 @@
-/* Loginoverview.css */
 
-/* Vollbild-Hintergrund und Reset */
 html,
 body {
   margin: 0;
@@ -9,11 +7,9 @@ body {
   height: 100%;
   overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
-  /* Dunkleres Gradient für den Hintergrund */
   background: linear-gradient(135deg, #0a0000, #1a0000);
 }
 
-/* Container füllt gesamten Viewport */
 .start-container {
   position: fixed;
   top: 0;
@@ -25,7 +21,6 @@ body {
   align-items: center;
 }
 
-/* Karten-Container zentriert */
 .start-card {
   background: #1a0000;
   border: 2px solid #ff6600;
@@ -40,7 +35,6 @@ body {
   text-align: center;
 }
 
-/* Überschrift */
 .login-header {
   font-size: 2rem;
   color: #ffcc00;
@@ -50,14 +44,12 @@ body {
   margin-bottom: 1rem;
 }
 
-/* Button-Gruppe */
 .login-buttons {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
 }
 
-/* Standard-Button */
 .start-btn {
   background: linear-gradient(90deg, #ff6600, #ffcc00);
   color: #1a0000;
@@ -89,6 +81,5 @@ body {
     inset 0 0 6px #ff6600;
 }
 
-/* Optional: weitere Styles hier */
 
  

@@ -4,7 +4,7 @@ import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import AvatarPreview from "../avatarpreview/AvatarPreview";
 import "../../styles/Avatar.css";
 import sounds from "../litleThings/Sounds";
-import VirtualKeyboard from "../../Keyboard/Virtual_Keyboard"; // <- Importiert
+import VirtualKeyboard from "../../Keyboard/Virtual_Keyboard"; 
 
 interface PlayerDto {
   id: number;

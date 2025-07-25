@@ -10,7 +10,7 @@ type VirtualKeyboardProps = {
 const keys = [
     "Q", "W", "E", "R", "T", "Z", "U", "I", "O", "P",
     "A", "S", "D", "F", "G", "H", "J", "K", "L",
-    "Y", "X", "C", "V", "B", "N", "M"
+    "Y", "X", "C", "V", "B", "N", "M", "@"
 ];
 
 const COLUMNS = 10;
@@ -22,8 +22,8 @@ const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
 }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [isLowerCase, setIsLowerCase] = useState(false);
-    const totalKeys = keys.length + 3; // + Shift + Backspace + Close
-
+    const totalKeys = keys.length + 3;
+    
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "ArrowRight" || e.key === "ArrowDown") {

@@ -240,16 +240,12 @@ body {
   margin-left: 0.5em;
 }
 
-/* Loginoverview.css */
-
-/* Grundlegende Reset-Regeln */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Vollbild-Hintergrund mit dunkel-goldenem Verlauf */
 html,
 body {
   width: 100%;
@@ -259,7 +255,6 @@ body {
   background: linear-gradient(135deg, #000000, #080000);
 }
 
-/* Container füllt den gesamten Viewport */
 .start-container {
   position: fixed;
   top: 0;
@@ -271,7 +266,6 @@ body {
   align-items: center;
 }
 
-/* Kartliches Layoutfeld */
 .start-card {
   background: #1a0000;
   border: 2px solid #ff6600;
@@ -286,7 +280,6 @@ body {
   text-align: center;
 }
 
-/* Überschrift */
 .login-header {
   font-size: 2rem;
   color: #ffcc00;
@@ -298,14 +291,12 @@ body {
 
 
 
-/* Buttons-Gruppe */
 .login-buttons {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
 }
 
-/* Primärer Button-Stil */
 .start-btn {
   background: linear-gradient(90deg, #ff6600, #ffcc00);
   color: #1a0000;
@@ -337,7 +328,6 @@ body {
     inset 0 0 6px #ff6600;
 }
 
-/* Obere Linke Buttons-Container */
 .top-left {
   position: absolute;
   top: 10px;
@@ -347,7 +337,6 @@ body {
   z-index: 20;
 }
 
-/* Zurück-Button (links) */
 .back-button {
   background: linear-gradient(145deg, #FFD700, #CCAC00);
   color: #000;
@@ -366,7 +355,6 @@ body {
   box-shadow: 0 6px 12px rgba(0,0,0,0.6);
 }
 
-/* Info-Button (rechts) */
 .info-button {
   background: linear-gradient(145deg, #ffe97f, #d6a431);
   border: none;
@@ -388,7 +376,7 @@ body {
 .info-button svg {
   width: 1.5rem;
   height: 1.5rem;
-  fill: #ffffff; /* gold */
+  fill: #ffffff; 
   display: block;
 }
 

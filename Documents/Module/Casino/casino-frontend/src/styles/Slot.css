@@ -4,7 +4,6 @@
   box-sizing: border-box;
 }
 
-/* Vollflächiges Slot-Maschinen-Background */
 .slot-machine {
   position: relative;
   width: 60vw;
@@ -14,7 +13,6 @@
   overflow: hidden;
 }
 
-/* UI-Container */
 .slot-container {
   position: absolute;
   top: 0;
@@ -23,7 +21,6 @@
   height: 100%;
 }
 
-/* Header-Buttons oben links */
 .slot-header {
   position: absolute;
   top: 20px;
@@ -50,7 +47,6 @@
   cursor: pointer;
 }
 
-/* Guthaben und Versuche oben rechts */
 .slot-balance, .slot-attempts {
   position: absolute;
   top: 20px;
@@ -65,7 +61,7 @@
 }
 
 .slot-attempts {
-  top: 60px; /* etwas tiefer für Versuche */
+  top: 60px;
 }
 
 .slot-balance {
@@ -84,7 +80,6 @@
   font-size: 1.2rem;
 }
 
-/* Einsatz-Box unten Mitte */
 .slot-bet-area {
   position: absolute;
   bottom: 100px;
@@ -155,11 +150,10 @@
   margin-left: 1rem;
 }
 
-/* Reel-Fenster mit Clip und Animation */
 .slot-reels {
   position: absolute;
-  top: 450px;    /* anpassen, damit es exakt im Fenster sitzt */
-  left: 182px;   /* anpassen */
+  top: 450px;    
+  left: 182px;   
   width: calc(3 * 220px + 2 * 40px);
   height: 220px;
   display: flex;
@@ -173,7 +167,6 @@
   background: no-repeat center center / contain;
 }
 
-/* Spin-Animation: Background-Position verschieben */
 .slot-reel.spinning {
   animation: spin-bg 0.3s linear infinite;
 }
@@ -184,7 +177,6 @@
   100% { background-position: center -440px; }
 }
 
-/* Ergebnis-Kasten unten */
 .slot-result {
   position: absolute;
   bottom: 20px;

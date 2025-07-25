@@ -5,6 +5,7 @@ import tableImage from "../../assets/TableBlackJack/table.png";
 import { useLocation, useNavigate } from "react-router";
 import { MdInfo } from "react-icons/md";
 import sounds from "../litleThings/Sounds";
+import VirtualKeyboard from "../../Keyboard/Virtuel_Numberboard";
 
 const cardModules = import.meta.glob(
   "../../assets/Blackjack/*.png",
@@ -62,6 +63,9 @@ export default function BlackJackGame() {
   const [soundstatus, setSoundstatus] = useState(false);
   const [volume, setVolume] = useState(0);
 
+  const [showKeyboard, setShowKeyboard] = useState(false);
+  const [focusedField, setFocusedField] = useState<"bet" | null>(null);
+
   const authToken = sessionStorage.getItem("authToken");
   const navigate = useNavigate();
   const location = useLocation();
@@ -99,7 +103,6 @@ export default function BlackJackGame() {
         sounds.stop("blackjackmusic.wav");
       }
     };
-
     handleSound();
   }, [soundstatus, volume, authToken]);
 
@@ -109,6 +112,33 @@ export default function BlackJackGame() {
       return;
     }
   });
+
+  const handleKeyPress = (key: string) => {
+    if (focusedField === "bet") {
+      setBet(prev => Number(`${prev}${key}`));
+    }
+  };
+
+  const handleBackspace = () => {
+    if (focusedField === "bet") {
+      setBet(prev => Number(String(prev).slice(0, -1)) || 0);
+    }
+  };
+
+  const handleCloseKeyboard = () => {
+    setShowKeyboard(false);
+    setFocusedField(null);
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => {
+      const active = document.activeElement;
+      if (active?.id !== "bet") {
+        setShowKeyboard(false);
+        setFocusedField(null);
+      }
+    }, 100);
+  };
 
   const startGame = async () => {
     if (!playerId) return;
@@ -247,16 +277,28 @@ export default function BlackJackGame() {
         <h3>Einsatz</h3>
         <input
           id="bet"
-          type="number"
+          type="text"
           value={bet}
-          onChange={(e) => setBet(Number(e.target.value))}
-          disabled={gameActive}
+          readOnly
+          onFocus={() => {
+            setFocusedField("bet");
+            setShowKeyboard(true);
+          }}
+          onBlur={handleBlur}
           placeholder="Einsatz eingeben"
         />
         <button onClick={startGame} disabled={gameActive || bet <= 0}>
           Spiel starten
         </button>
         {errorMessage && <div className="error">{errorMessage}</div>}
+
+        {showKeyboard && (
+          <VirtualKeyboard
+            onKeyPress={handleKeyPress}
+            onBackspace={handleBackspace}
+            onClose={handleCloseKeyboard}
+          />
+        )}
       </div>
 
       <div>

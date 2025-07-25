@@ -204,7 +204,6 @@ export default function Register() {
           </button>
         </form>
 
-        {/* Virtuelle Tastatur */}
         {showKeyboard && (
           <div className="virtual-keyboard">
             <div className="keyboard-keys">

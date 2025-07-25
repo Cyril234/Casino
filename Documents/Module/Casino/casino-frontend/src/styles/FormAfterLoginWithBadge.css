@@ -1,4 +1,3 @@
-/* Container-Wrapper */
 .page-wrapper {
     display: flex;
     flex-direction: column;
@@ -7,7 +6,6 @@
     background-color: #121212;
 }
 
-/* Hauptüberschrift */
 h1 {
     color: gold;
     margin-bottom: 2rem;
@@ -17,7 +15,6 @@ h1 {
     text-align: center;
 }
 
-/* Einleitender Text */
 p {
     color: #ddd;
     font-size: 1.2rem;
@@ -26,7 +23,6 @@ p {
     margin-bottom: 2.5rem;
 }
 
-/* Formular-Container */
 .register-form {
     width: 100%;
     max-width: 550px;

@@ -4,10 +4,8 @@ public class LoginPasswordRequest {
         private String username;
     private String password;
 
-    // Standard-Konstruktor
     public LoginPasswordRequest() {}
 
-    // Getter und Setter
     public String getUsername() {
         return username;
     }
