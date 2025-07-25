@@ -142,7 +142,6 @@ public class PferderennenService {
         }
 
         if (gewaehlt.getName().equals(gewinner.getName())) {
-            // neuer, einheitlicher Basisfaktor für alle
             double basisFaktor = 0.3 / gewinner.getWinningProbability();
             double bonusFaktor = 1.0;
 
@@ -195,11 +194,10 @@ public class PferderennenService {
         result.setSettedcoins(einsatz);
         result.setFinishingbalance(player.getCoins());
         playingattemptRepository.save(result);
-        
+
         return Map.of(
                 "horse", gewinner,
-                "coinsWon", resultreward        
-        );
+                "coinsWon", resultreward);
     }
 
 }
