@@ -407,10 +407,10 @@ const Roulette: React.FC = () => {
           {result && (
             <div className="result">
               <h2>Resultat:</h2>
-              <p><strong>Zahl:</strong> {result.rolledNumber}</p>
-              <p><strong>Farbe:</strong> {result.rolledColor}</p>
-              <p>{result.result === "LOSE" ? "Du hast verloren" : "Du hast gewonnen"}!</p>
-              <p><strong>Gewinn:</strong> {result.totalPayout}</p>
+              <strong>Zahl:</strong> {result.rolledNumber}<br/>
+              <strong>Farbe:</strong> {result.rolledColor}<br/>
+              {result.result === "LOSE" ? "Du hast verloren" : "Du hast gewonnen"}!<br/>
+              <strong>Gewinn:</strong> {result.totalPayout}
             </div>
           )}
         </div>

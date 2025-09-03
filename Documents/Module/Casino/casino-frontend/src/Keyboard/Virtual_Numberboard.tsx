@@ -19,11 +19,24 @@ const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+            if (e.key === "ArrowRight") {
                 setSelectedIndex(i => (i + 1) % totalKeys);
                 e.preventDefault();
-            } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+            } else if (e.key === "ArrowLeft") {
                 setSelectedIndex(i => (i - 1 + totalKeys) % totalKeys);
+                e.preventDefault();
+            }else if (e.key === "ArrowUp") {
+                if(selectedIndex > 3){
+                    setSelectedIndex(i => (i - 4 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }
+            }else if (e.key === "ArrowDown") {
+                if(selectedIndex < 8){
+                    setSelectedIndex(i => (i + 4 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }
+            }else if (e.key === "Escape"){
+                onClose();
                 e.preventDefault();
             } else if (e.key === "Enter") {
                 if (selectedIndex < keys.length) {

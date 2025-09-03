@@ -60,6 +60,8 @@ export default function BlackJackGame() {
   const [soundstatus, setSoundstatus] = useState(false);
   const [volume, setVolume] = useState(0);
 
+  const [keyDown, setKeyDown] = useState(true);
+
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [focusedField, setFocusedField] = useState<"bet" | null>(null);
 
@@ -259,6 +261,30 @@ export default function BlackJackGame() {
     }
   };
 
+    useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+
+
+      }
+      setKeyDown(false);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [open]);
+
+
+
+
+
   const playerValue = calculateHandValue(playerHand);
   const dealerValue = status !== "IN_PROGRESS" ? calculateHandValue(dealerHand) : undefined;
 
@@ -286,6 +312,7 @@ export default function BlackJackGame() {
           value={bet}
           readOnly
           onFocus={() => {
+            setKeyDown(false);
             setFocusedField("bet");
             setShowKeyboard(true);
           }}
@@ -302,11 +329,15 @@ export default function BlackJackGame() {
         {errorMessage && <div className="error">{errorMessage}</div>}
 
         {showKeyboard && (
+          
+          
           <VirtualKeyboard
             onKeyPress={handleKeyPress}
             onBackspace={handleBackspace}
             onClose={handleCloseKeyboard}
           />
+          
+
         )}
       </div>
 

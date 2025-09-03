@@ -26,13 +26,54 @@ const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+            if (e.key === "ArrowRight") {
                 setSelectedIndex(i => (i + 1) % totalKeys);
                 e.preventDefault();
-            } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+            } else if (e.key === "ArrowLeft") {
+                console.log("Arrow left");
                 setSelectedIndex(i => (i - 1 + totalKeys) % totalKeys);
                 e.preventDefault();
-            } else if (e.key === "Enter") {
+            }else if (e.key === "ArrowUp") {
+                if(selectedIndex === 28){
+                    setSelectedIndex(i => (i - 4 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }else if(selectedIndex === 29){
+                    setSelectedIndex(i => (i - 3 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }else if(selectedIndex === 30){
+                    setSelectedIndex(i => (i - 1 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }else if(selectedIndex > 3){
+                    setSelectedIndex(i => (i - 4 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }
+            }else if (e.key === "ArrowDown") {
+                if(selectedIndex < 24){
+                    setSelectedIndex(i => (i + 4 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }else if(selectedIndex === 24){
+                    setSelectedIndex(i => (i + 4 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }else if(selectedIndex === 25){
+                    setSelectedIndex(i => (i + 3 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }else if(selectedIndex === 26){
+                    setSelectedIndex(i => (i + 3 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }else if(selectedIndex === 27){
+                    setSelectedIndex(i => (i + 2 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }else if(selectedIndex === 28){
+                    setSelectedIndex(i => (i + 2 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }else if(selectedIndex === 29){
+                    setSelectedIndex(i => (i + 1 + totalKeys) % totalKeys);
+                    e.preventDefault();
+                }
+            } else if (e.key === "Escape"){
+                onClose();
+                e.preventDefault();
+            }else if (e.key === "Enter") {
                 if (selectedIndex < keys.length) {
                     const key = isLowerCase ? keys[selectedIndex].toLowerCase() : keys[selectedIndex];
                     onKeyPress(key);

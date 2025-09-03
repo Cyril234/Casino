@@ -57,19 +57,39 @@ export default function HorseRace() {
         fetchHorses(token);
     }, [navigate, location.key]);
 
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'ArrowRight') {
-                setHorseIndex(prev => (prev + 1) % allHorses.length);
-            } else if (e.key === 'ArrowLeft') {
-                setHorseIndex(prev => (prev - 1 + allHorses.length) % allHorses.length);
-            }
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [allHorses]);
+useEffect(() => {
+  const isTextInputLike = (el: Element | null) => {
+    if (!el || !(el instanceof HTMLElement)) return false;
+    const tag = el.tagName.toLowerCase();
+    if (el.isContentEditable) return true;
+    if (tag === "input" || tag === "textarea") return true;
+    // alles innerhalb deines virtuellen Keyboards blocken
+    if (el.closest(".virtual-keyboardNumber")) return true;
+    // optional: per Daten-Attribut global blocken können
+    if (el.closest("[data-hotkeys-block]")) return true;
+    return false;
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    const target = e.target as HTMLElement | null;
+
+    // Wenn Keyboard offen ODER ein Eingabeelement fokussiert ist → nichts tun
+    if (showKeyboard || isTextInputLike(target)) return;
+
+    if (allHorses.length === 0) return;
+
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      setHorseIndex(prev => (prev + 1) % allHorses.length);
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      setHorseIndex(prev => (prev - 1 + allHorses.length) % allHorses.length);
+    }
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+  return () => window.removeEventListener("keydown", handleKeyDown);
+}, [allHorses.length, showKeyboard]);
 
     useEffect(() => {
         if (!token) return;

@@ -184,12 +184,12 @@ export default function Gameoverview() {
             item.action();
             setOpen(false);
           }
-        } else if (e.key === "Tab") {
+        } else if (e.key === "Escape") {
           e.preventDefault();
           setOpen(false);
         }
       } else {
-        if (e.key === "ArrowDown") {
+        if (e.key === "ArrowUp") {
           e.preventDefault();
           setOpen(true);
           setSelectedIndex(0);

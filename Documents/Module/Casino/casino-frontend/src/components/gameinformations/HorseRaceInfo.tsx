@@ -35,9 +35,7 @@ export default function HorseRaceInfo() {
 
             <div className="info-section">
                 <h2>Multiplikatoren</h2>
-                <p>
                     Je unwahrscheinlicher ein Pferd gewinnt, desto höher ist der Multiplikator. Beispiel:
-                </p>
                 <ul>
                     <li><strong>Blitz</strong>: 25% Gewinnchance → 1.2x Auszahlung</li>
                     <li><strong>Pfeil</strong>: 3% Gewinnchance → 12x Auszahlung</li>

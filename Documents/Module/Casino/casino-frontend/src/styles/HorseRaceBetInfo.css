@@ -1,5 +1,5 @@
 .info-page {
-  padding: 2rem;
+  padding: 1rem;
   max-width: 800px;
   margin: 0 auto;
   color: #eaeaea;
@@ -13,11 +13,11 @@
   text-align: center;
   color: #ffcc00;
   font-size: 2.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .info-section {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-align: left;
 }
 

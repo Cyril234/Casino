@@ -74,8 +74,19 @@ export default function MinesGame() {
   }, [soundstatus, volume, authToken]);
 
   const startGame = async () => {
-    if (!playerId || bet <= 0 || bombs >= fields || bombs <= 0) return;
-    setErrorMessage("");
+    if (!playerId || bet <= 0 || bombs >= fields || bombs <= 0) {
+      if(bombs === 0 || bombs >= fields ){
+        alert("Es müssen 0-24 Bomben sein")
+        //setErrorMessage("Es müssen 0-24 Bomben sein");
+      }else if(bet === 0){
+        alert("Sie müssen etwas setzen")
+      }
+
+
+      return;
+    };
+
+    
     try {
       const res = await fetch(
         `http://localhost:8080/mines/${playerId}/start?coins=${bet}&bombs=${bombs}&fields=${fields}`,
@@ -154,6 +165,8 @@ export default function MinesGame() {
       const valNum = Number(newVal);
       if (valNum > 0 && valNum < fields) {
         setBombs(valNum);
+      }else{
+        alert("Es müssen 0-24 Bomben sein")
       }
     }
   };
