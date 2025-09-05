@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { ArrowLeft, Trophy, Medal, Award } from "lucide-react";
+import { Trophy, Medal, Award } from "lucide-react";
 import "../styles/Leaderboard.css";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +17,7 @@ export default function Leaderboard() {
   const [lastKey, setLastKey] = useState<string | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const backBtnRef = useRef<HTMLButtonElement | null>(null);
 
@@ -32,12 +33,13 @@ export default function Leaderboard() {
             "Authorization": `Bearer ${token}`,
           },
         });
-        if (!response.ok) {
-          throw new Error(`HTTP Fehler: ${response.status}`);
-        }
-        const data = await response.json();
-        setUsers(data.filter((user: User) => user.username !== "gast").sort((a: User, b: User) => b.coins - a.coins));
-        console.log(data);
+        if (!response.ok) throw new Error(`HTTP Fehler: ${response.status}`);
+        const data: User[] = await response.json();
+        setUsers(
+          data
+            .filter((u) => u.username !== "gast")
+            .sort((a, b) => b.coins - a.coins)
+        );
       } catch (err) {
         console.error(err);
       }
@@ -52,7 +54,7 @@ export default function Leaderboard() {
       }
       if (e.key === "ArrowUp") {
         setSelectedIndex((prev) => {
-          if (prev === 0) return -1;
+          if (prev === 0) return -1;  // -1 = Zurück-Button
           if (prev === -1) return -1;
           return prev - 1;
         });
@@ -83,7 +85,7 @@ export default function Leaderboard() {
   }, [selectedIndex]);
 
   const handleBackClick = () => {
-
+    navigate("/gameoverview");
   };
 
   const getRankIcon = (index: number) => {
@@ -107,14 +109,18 @@ export default function Leaderboard() {
         <div className="blob pink-blob"></div>
       </div>
       <div className="bg-lines"></div>
+
+      {/* Fix: tabIndex entfernt -> Button ist wieder per Tab erreichbar */}
       <button
-        onClick={() => (navigate("/gameoverview"))}
+        onClick={handleBackClick}
         className={`leaderboard-back-btn${selectedIndex === -1 ? " leaderboard-back-btn-selected" : ""}`}
         ref={backBtnRef}
-        tabIndex={-1}
+        // KEIN tabIndex hier! (Standard = 0 => tabbable)
+        aria-label="Zurück zur Übersicht"
       >
         Zurück
       </button>
+
       <div className="leaderboard-content-wrapper">
         <div className="leaderboard-content">
           <div className="leaderboard-header">
@@ -122,17 +128,21 @@ export default function Leaderboard() {
               <Trophy className="w-8 h-8 text-yellow-500" />
               Rangliste
             </h1>
-            <p className="leaderboard-subtitle">Alle Spieler sortiert anhand von ihren Coins.</p>
+            <p className="leaderboard-subtitle">
+              Alle Spieler sortiert anhand von ihren Coins.
+            </p>
           </div>
+
           <div className="leaderboard-list-wrapper">
             <div className="leaderboard-list">
               {users
-                .sort((a, b) => b.coins - a.coins)
                 .map((user, index) => (
                   <div
                     key={user.playerId}
                     ref={el => { rowRefs.current[index] = el; }}
                     className={`leaderboard-row ${getRankClass(index)}${selectedIndex === index ? " leaderboard-selected" : ""}`}
+                    // bewusst NICHT tabbable, damit Tab nicht „in der Liste hängen“ bleibt.
+                    // Navigation in der Liste steuerst du ja über Pfeiltasten (siehe oben).
                   >
                     <div className="leaderboard-row-left">
                       <span className="leaderboard-rank">{index + 1}</span>
@@ -147,6 +157,7 @@ export default function Leaderboard() {
                 ))}
             </div>
           </div>
+
           <div className="leaderboard-footer">
             <div className="leaderboard-footer-stats">
               <div className="leaderboard-footer-stat">
@@ -161,12 +172,15 @@ export default function Leaderboard() {
               </div>
               <div className="leaderboard-footer-stat">
                 <div className="leaderboard-footer-value">
-                  {users.length > 0 ? Math.round(users.reduce((sum, user) => sum + user.coins, 0) / users.length).toLocaleString() : 0}
+                  {users.length > 0
+                    ? Math.round(users.reduce((sum, user) => sum + user.coins, 0) / users.length).toLocaleString()
+                    : 0}
                 </div>
                 <div>Durchschnittliche Coins pro Spieler</div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>

@@ -138,7 +138,7 @@ export default function SlotGame() {
         setIsSpinning(false);
         setTimeout(() => {
           setShowResult(false);
-          spinButtonRef.current?.focus()
+          spinButtonRef.current?.focus();
         }, 3000);
       }
     }, 2000);
@@ -221,8 +221,12 @@ export default function SlotGame() {
           >
             Zurück
           </button>
-          <div
+
+          {/* HIER: aus <div> wird <button> */}
+          <button
+            type="button"
             className="info-button-2"
+            aria-label="Spielinfo"
             onClick={() => {
               setShowKeyboard(false);
               setFocusedField(null);
@@ -230,7 +234,7 @@ export default function SlotGame() {
             }}
           >
             <MdInfo />
-          </div>
+          </button>
         </div>
 
         <div className="slot-balance">
@@ -265,7 +269,7 @@ export default function SlotGame() {
         </div>
 
         {showKeyboard && (
-          <div ref={keyboardRef}>
+          <div ref={keyboardRef} tabIndex={-1} aria-hidden="true">
             <VirtualKeyboard
               onKeyPress={handleKeyPress}
               onBackspace={handleBackspace}

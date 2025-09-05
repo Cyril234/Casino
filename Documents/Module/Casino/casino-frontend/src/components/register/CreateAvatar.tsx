@@ -271,9 +271,21 @@ export default function CreateAvatar() {
           <ArrowSelector id="trouserscolor-select" label="Hosenfarbe" options={trouserscolorOptions} index={trouserscolorIdx} setIndex={setTrouserscolorIdx} />
           <ArrowSelector id="shoes-select" label="Schuhe" options={shoesOptions} index={shoesIdx} setIndex={setShoesIdx} />
 
+          {/* BART: Enter-Unterstützung */}
           <div className="beard-toggle" style={{ marginTop: "1rem" }}>
             <label className="form-label" htmlFor="beard-checkbox">Bart</label>
-            <input id="beard-checkbox" type="checkbox" checked={beard} onChange={e => setBeard(e.target.checked)} />
+            <input
+              id="beard-checkbox"
+              type="checkbox"
+              checked={beard}
+              onChange={e => setBeard(e.target.checked)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();        // verhindert versehentliches Form-Submit
+                  setBeard(prev => !prev);   // toggle bei Enter
+                }
+              }}
+            />
           </div>
 
           <button className="submit-btn" type="submit" disabled={!enumsLoaded} style={{ marginTop: "2rem" }}>Registrieren</button>

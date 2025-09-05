@@ -84,6 +84,8 @@ export default function LoginWithEmailAndPassword() {
     }
   };
 
+  //
+
   return (
     <main className="casino-login-container">
       <section className="casino-login-card">

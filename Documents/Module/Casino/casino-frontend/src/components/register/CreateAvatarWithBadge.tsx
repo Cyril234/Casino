@@ -50,7 +50,7 @@ export default function CreateAvatarWithBadge() {
       const res = await fetch(`http://localhost:8080/api/enums/${key}`, {
         headers: { Accept: "application/json" },
       });
-      if (!res.ok) throw new Error(`${key}: HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`${key}: HTTP ${res.status}`);
       setter(await res.json());
     } catch (err) {
       console.error(`Fehler beim Laden von ${key}:`, err);
@@ -235,7 +235,8 @@ export default function CreateAvatarWithBadge() {
       </button>
     </div>
   );
-   return (
+
+  return (
     <main className="create-avatar-page">
       <h1 className="create-avatar-title">Konfiguriere deinen Avatar!</h1>
 
@@ -304,6 +305,7 @@ export default function CreateAvatarWithBadge() {
             setIndex={setEyecolorIdx}
           />
         </form>
+
         <div
           className="avatar-preview-container"
           style={{ flex: "0 0 30%", display: "flex", justifyContent: "center" }}
@@ -320,6 +322,7 @@ export default function CreateAvatarWithBadge() {
             beard={beard}
           />
         </div>
+
         <form
           className="create-avatar-form"
           onSubmit={handleSubmit}
@@ -363,7 +366,7 @@ export default function CreateAvatarWithBadge() {
           />
 
           <div className="beard-toggle" style={{ marginTop: "1rem" }}>
-          <label className="form-label" htmlFor="beard-checkbox">
+            <label className="form-label" htmlFor="beard-checkbox">
               Bart
             </label>
             <input
@@ -371,6 +374,12 @@ export default function CreateAvatarWithBadge() {
               type="checkbox"
               checked={beard}
               onChange={(e) => setBeard(e.target.checked)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();         // verhindert versehentliches Submit
+                  setBeard((prev) => !prev);  // Enter toggelt den Bart
+                }
+              }}
             />
           </div>
 
@@ -382,6 +391,7 @@ export default function CreateAvatarWithBadge() {
           </button>
         </form>
       </div>
+
       {showKeyboard && (
         <VirtualKeyboard
           onKeyPress={onKeyPress}
@@ -392,4 +402,3 @@ export default function CreateAvatarWithBadge() {
     </main>
   );
 }
- 

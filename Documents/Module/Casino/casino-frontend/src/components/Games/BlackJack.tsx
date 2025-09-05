@@ -71,6 +71,7 @@ export default function BlackJackGame() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Spieler-Daten laden (nur bei Token/Route-Wechsel)
   useEffect(() => {
     const fetchPlayer = async () => {
       if (!authToken) return;
@@ -89,12 +90,13 @@ export default function BlackJackGame() {
           setCoinsBalance(data.coins);
         }
       } catch (err) {
-        console.error("Fehler beim Laden der Spieler‑Daten:", err);
+        console.error("Fehler beim Laden der Spieler-Daten:", err);
       }
     };
     fetchPlayer();
   }, [authToken, location.key]);
 
+  // Musik an/aus
   useEffect(() => {
     if (!authToken) return;
     const handleSound = async () => {
@@ -107,12 +109,12 @@ export default function BlackJackGame() {
     handleSound();
   }, [soundstatus, volume, authToken]);
 
+  // Redirect nur wenn Token fehlt – mit richtigen Deps
   useEffect(() => {
     if (!authToken) {
       navigate("/");
-      return;
     }
-  });
+  }, [authToken, navigate]);
 
   const handleKeyPress = (key: string) => {
     if (focusedField === "bet") {
@@ -133,7 +135,7 @@ export default function BlackJackGame() {
 
   const handleBlur = () => {
     setTimeout(() => {
-      const active = document.activeElement;
+      const active = document.activeElement as HTMLElement | null;
       if (active?.id !== "bet") {
         setShowKeyboard(false);
         setFocusedField(null);
@@ -261,29 +263,17 @@ export default function BlackJackGame() {
     }
   };
 
-    useEffect(() => {
+  // Globaler Keydown-Listener: nur einmal registrieren, nichts blockieren
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-
-      } else if (e.key === "Enter") {
-        e.preventDefault();
-
-
-      }
+      // Wenn du hier global Enter/Arrows abfangen willst, prüfe genau.
+      // Nichts für Tab/Enter verhindern – Buttons reagieren nativ.
       setKeyDown(false);
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [open]);
-
-
-
-
+  }, []);
 
   const playerValue = calculateHandValue(playerHand);
   const dealerValue = status !== "IN_PROGRESS" ? calculateHandValue(dealerHand) : undefined;
@@ -329,15 +319,11 @@ export default function BlackJackGame() {
         {errorMessage && <div className="error">{errorMessage}</div>}
 
         {showKeyboard && (
-          
-          
           <VirtualKeyboard
             onKeyPress={handleKeyPress}
             onBackspace={handleBackspace}
             onClose={handleCloseKeyboard}
           />
-          
-
         )}
       </div>
 

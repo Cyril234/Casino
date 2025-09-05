@@ -7,8 +7,14 @@ import sounds from '../litleThings/Sounds';
 export default function Loginoverview() {
   // Musik nur einmal stoppen
   useEffect(() => {
-    ["casinomusic.mp3","blackjackmusic.wav","horseracemusic.wav","minesmusic.wav","roulettemusic.wav","slotmusic.wav"]
-      .forEach(s => sounds.stop(s));
+    [
+      "casinomusic.mp3",
+      "blackjackmusic.wav",
+      "horseracemusic.wav",
+      "minesmusic.wav",
+      "roulettemusic.wav",
+      "slotmusic.wav"
+    ].forEach(s => sounds.stop(s));
   }, []);
 
   const navigate = useNavigate();
@@ -26,7 +32,9 @@ export default function Loginoverview() {
 
   const [idx, setIdx] = useState(0);
 
-  const handleBadgeScan = useCallback((scan: string) => { /* ... */ }, []);
+  const handleBadgeScan = useCallback((scan: string) => {
+    // hier Badge-Scan-Logik
+  }, []);
   useBadgeScanner(handleBadgeScan);
 
   // Session nur einmal aufräumen
@@ -63,10 +71,8 @@ export default function Loginoverview() {
       const last = total - 1;
       btnRefs.current[last]?.focus();
       setIdx(last);
-    } else if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault(); // Space nicht scrollen lassen
-      btnRefs.current[idx]?.click();
     }
+    // Enter/Space brauchst du nicht – Buttons handeln das nativ
   };
 
   // Ersten Button nach Mount fokussieren
@@ -80,17 +86,11 @@ export default function Loginoverview() {
         <div className="login-header">Anmeldevariante wählen...</div>
         <div className="login-divider"></div>
 
-        {/* Hier Keydown anbinden + (optional) ARIA-Rollen */}
-        <div
-          className="login-buttons"
-          role="menu"
-          aria-label="Anmeldevariante wählen"
-          onKeyDown={onKeyDown}
-        >
+        <div className="login-buttons" onKeyDown={onKeyDown}>
           <button
             ref={setBtnRef(0)}
             className="login-btn"
-            role="menuitem"
+            onFocus={() => setIdx(0)}
             onClick={goToEmailPwd}
           >
             Anmeldung mit Username und Passwort
@@ -99,7 +99,7 @@ export default function Loginoverview() {
           <button
             ref={setBtnRef(1)}
             className="login-btn"
-            role="menuitem"
+            onFocus={() => setIdx(1)}
             onClick={goToBadge}
           >
             Anmeldung mit Badge
@@ -108,7 +108,7 @@ export default function Loginoverview() {
           <button
             ref={setBtnRef(2)}
             className="login-btn"
-            role="menuitem"
+            onFocus={() => setIdx(2)}
             onClick={goToGuest}
           >
             Anmeldung als Gast
@@ -117,7 +117,7 @@ export default function Loginoverview() {
           <button
             ref={setBtnRef(3)}
             className="login-btn"
-            role="menuitem"
+            onFocus={() => setIdx(3)}
             onClick={goToRegister}
           >
             Noch kein Konto? - Registrieren!
